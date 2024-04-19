@@ -1,2 +1,1 @@
-# imssyang.github.io
-imssyang.github.io
+A static blog based on Hexo.
