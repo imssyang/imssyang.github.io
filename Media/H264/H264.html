@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="H.264视频编码在2003年首次由ITU-T和ISO&#x2F;IEC 联合发布，建立在更早的标准MPEG-2和MPEG-4之上，其定义了一套视频压缩的方法，编解码器可以有选择使用这些方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="H264视频编码">
+<meta property="og:url" content="https://blog.imssyang.com/Media/H264/H264.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="H.264视频编码在2003年首次由ITU-T和ISO&#x2F;IEC 联合发布，建立在更早的标准MPEG-2和MPEG-4之上，其定义了一套视频压缩的方法，编解码器可以有选择使用这些方法。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-frame-codec-view.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-encode-process.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-intra-prediction.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-inter-prediction.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-forward-transform.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-quantization-example.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-4x4-coefficients.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-decode-process.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-inverse-quantization.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-inverse-transform.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-4x4-inverse-coefficients.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-profiles-levels-example.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-syntax-overview.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-syntax-overview2.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-picture-handling-overview.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-picture-orders.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-display-order-type-0.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/H264-display-order-type-1.png">
+<meta property="article:published_time" content="2022-07-26T08:36:22.000Z">
+<meta property="article:modified_time" content="2022-07-26T08:36:30.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="H264">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.imssyang.com/images/Media/H264-frame-codec-view.png">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/Media/H264/H264.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/Media/H264/H264.html","path":"Media/H264/H264.html","title":"H264视频编码"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>H264视频编码 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%A7%A3%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">编解码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A7%E5%86%85%E9%A2%84%E6%B5%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">帧内预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A7%E9%97%B4%E9%A2%84%E6%B5%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">帧间预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E6%8D%A2%E5%92%8C%E9%87%8F%E5%8C%96"><span class="nav-number">1.1.3.</span> <span class="nav-text">变换和量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%86%B5%E7%BC%96%E7%A0%81"><span class="nav-number">1.1.4.</span> <span class="nav-text">熵编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81"><span class="nav-number">1.2.</span> <span class="nav-text">解码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%86%B5%E8%A7%A3%E7%A0%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">熵解码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E9%87%8F%E5%8C%96%E5%92%8C%E5%8F%98%E6%8D%A2"><span class="nav-number">1.2.2.</span> <span class="nav-text">反向量化和变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%BB%BA"><span class="nav-number">1.2.3.</span> <span class="nav-text">重建</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Profiles-amp-Levels"><span class="nav-number">2.</span> <span class="nav-text">Profiles &amp; Levels</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Syntax"><span class="nav-number">3.</span> <span class="nav-text">Syntax</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Frames-amp-Fields-amp-Picture"><span class="nav-number">3.1.</span> <span class="nav-text">Frames &amp; Fields &amp; Picture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Decoding-Order"><span class="nav-number">3.1.1.</span> <span class="nav-text">Decoding Order</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Display-Order"><span class="nav-number">3.1.2.</span> <span class="nav-text">Display Order</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-0"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">Type 0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-1"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">Type 1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-2"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">Type 2</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAL"><span class="nav-number">4.</span> <span class="nav-text">NAL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SPS"><span class="nav-number">4.1.</span> <span class="nav-text">SPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PPS"><span class="nav-number">4.2.</span> <span class="nav-text">PPS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Slice"><span class="nav-number">5.</span> <span class="nav-text">Slice</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Macroblock"><span class="nav-number">6.</span> <span class="nav-text">Macroblock</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Intra-PCM"><span class="nav-number">6.1.</span> <span class="nav-text">Intra_PCM</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/Media/H264/H264.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          H264视频编码
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/Media/H264/" itemprop="url" rel="index"><span itemprop="name">H264</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 7/26/2022 16:36:22 / Modified: 16:36:30" itemprop="dateCreated datePublished" datetime="2022-07-26T16:36:22+08:00">7/26/2022</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>14k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><code>H.264</code>视频编码在2003年首次由<code>ITU-T</code>和<code>ISO/IEC </code>联合发布，建立在更早的标准<code>MPEG-2</code>和<code>MPEG-4</code>之上，其定义了一套视频压缩的方法，编解码器可以有选择使用这些方法。</p>
+<span id="more"></span>
+
+<pre class="mermaid">
+stateDiagram
+direction LR
+VideoSource --&gt; ENCODER
+ENCODER --&gt; DECODER
+DECODER --&gt; VideoOutput
+state ENCODER {
+  direction TB
+  Prediction --&gt; Transform
+  Transform --&gt; EntropyEncoder
+  EntropyEncoder --&gt; CompressedH.264Syntax
+}
+state DECODER {
+  direction BT
+  CompressedH264 : CompressedH.264Syntax
+  CompressedH264 --&gt; EntropyDecode
+  EntropyDecode --&gt; InverseTransfrom
+  InverseTransfrom --&gt; Reconstruct
+}
+</pre>
+
+<h1 id="编解码"><a href="#编解码" class="headerlink" title="编解码"></a>编解码</h1><img data-src="/images/Media/H264-frame-codec-view.png" class="" width="1000" height="250" title="H264 frame codec high level view">
+
+<ul>
+<li>Encoder和Decoder有同样的预测过程</li>
+<li>Encoder将<code>A</code>的预测结果<code>A&#39;</code>缓存到CPB，供后续的帧间预测使用</li>
+<li>Decoder将根据从Bitstream中获取运动矢量和残差帧，预测后得到<code>A&#39;</code>，同时缓存到DPB，供后续的预测其他帧时使用</li>
+</ul>
+<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><img data-src="/images/Media/H264-encode-process.png" class="" width="700" height="300" title="H264 encode process">
+
+<ul>
+<li>Frame被分割为MacroBlock(MB)，例如16x16、4x4</li>
+<li>Encoder进行帧内和帧间预测以生成PredictionMB，计算得到<br>  残差MB：<code>ResidualMB = CurrentMB - PredictionMB</code><br>  运动矢量MB：<code>MotionVectorMB = f(CurrentMB, PredictionMB)</code></li>
+<li>Encoder对ResidualMB、MotionVector、预测参数等数据进行变换（transform）以产生更紧凑的表示，然后量化（quantize）后剔除不重要的值</li>
+<li>Encoder对量化后的数据执行反向操作获取DecodedResidualMB，用于计算<br>  编码MB&#x2F;重建MB：<code>CodedMB/ReconstructMB = DecodedResidualMB + PredictionMB</code><br>编码MB被缓存起来，供后续的帧间预测使用</li>
+<li>同时，量化后的数据经熵编码（entropy encoder）后得到编码字节流（coded bitstream）</li>
+</ul>
+<h3 id="帧内预测"><a href="#帧内预测" class="headerlink" title="帧内预测"></a>帧内预测</h3><img data-src="/images/Media/H264-intra-prediction.png" class="" width="290" height="265" title="Intra prediction">
+
+<ul>
+<li>利用周边的CodedMB预测当前块，通常为16x16或4x4的块大小</li>
+</ul>
+<h3 id="帧间预测"><a href="#帧间预测" class="headerlink" title="帧间预测"></a>帧间预测</h3><img data-src="/images/Media/H264-inter-prediction.png" class="" width="642" height="216" title="Inter prediction">
+
+<ul>
+<li>从CodedFrame中寻找最相似的位置，可以是显示序列（display order）上的之前帧，也可以是之后的帧</li>
+<li>匹配的块大小可以从16x16到4x4，以获取最佳匹配，得到能量最小的残差帧</li>
+<li>MB1（16x16）从之前的帧中匹配到最相似的位置16x16</li>
+<li>MB2（16x16）从之前的帧中匹配到8x16的最相似位置，又从之后的帧中匹配到另外的8x16的最相似位置</li>
+</ul>
+<h3 id="变换和量化"><a href="#变换和量化" class="headerlink" title="变换和量化"></a>变换和量化</h3><img data-src="/images/Media/H264-forward-transform.png" class="" width="600" height="400" title="Forward Transform">
+
+<ul>
+<li>对残差块（ResidualMB）进行4x4或8x8类似离散余弦变换（DCT，Discrete Cosine Transform）的整型变换后，得到一系列加权系数（coefficient）</li>
+<li>可以用这些系数（coefficient）变换回残差块（ResidualMB）</li>
+</ul>
+<img data-src="/images/Media/H264-quantization-example.png" class="" width="600" height="200" title="Example: quantization">
+<img data-src="/images/Media/H264-4x4-coefficients.png" class="" width="600" height="200" title="Example: 4x4 coefficients">
+
+<ul>
+<li>根据量化参数（QP, quantization parameter）对系数（coefficient）进行量化以降低精度，例如都除以<code>8</code>后再四舍五入</li>
+<li>量化的结果是，不重要的系数多被量化为零值，重要系数为非零值。在残差帧中多数系数不重要，因此量化结果中多数为零值</li>
+<li>量化参数影响图像质量，QP越大，零值越多，压缩率越高，图像质量越差</li>
+</ul>
+<h3 id="熵编码"><a href="#熵编码" class="headerlink" title="熵编码"></a>熵编码</h3><p>编码过程产生的数据必须被编码为压缩的字节流（compressed bitstream），其中的值（values）、参数（parameters）和语法元素（syntax elements）通过变长编码（variable length coding）或算术编码（arithmetic coding）转换为二进制代码，具体数据包括：</p>
+<ul>
+<li>量化的变换系数</li>
+<li>使Decoder能重建预测器的信息</li>
+<li>压缩数据的结构和编码时用到的压缩工具</li>
+<li>整个视频序列的信息</li>
+</ul>
+<h2 id="解码"><a href="#解码" class="headerlink" title="解码"></a>解码</h2><img data-src="/images/Media/H264-decode-process.png" class="" width="700" height="300" title="H264 decode process">
+
+<ul>
+<li>Decoder对CodedBitStream依次进行熵解码（entropy decoder）、反向量化（inverse quantize）和反向变换（inverse transform）后得到DecodedResidualMB</li>
+<li>Decoder进行同样的帧内和帧间预测以生成PredictionMB，计算得到<br>  解码MB：<code>DecodedMB = DecodedResidualMB + PredictionMB</code><br>解码MB被缓存起来，供后续的帧间预测使用</li>
+</ul>
+<h3 id="熵解码"><a href="#熵解码" class="headerlink" title="熵解码"></a>熵解码</h3><p>对压缩的字节流（compressed bitstream）进行解码，得到编码过程中产生的数据</p>
+<h3 id="反向量化和变换"><a href="#反向量化和变换" class="headerlink" title="反向量化和变换"></a>反向量化和变换</h3><img data-src="/images/Media/H264-inverse-quantization.png" class="" width="600" height="200" title="Example: inverse quantization">
+
+<ul>
+<li>量化的系数（quantized transform coefficients）被转换为原始值，例如都乘以<code>8</code></li>
+</ul>
+<img data-src="/images/Media/H264-inverse-transform.png" class="" width="600" height="360" title="Example: inverse transform">
+<img data-src="/images/Media/H264-4x4-inverse-coefficients.png" class="" width="600" height="200" title="Example: 4x4 inverse coefficients">
+
+<ul>
+<li>反向变换将反向量化后的数据组合加权参数后变换回（反向DCT）残差块</li>
+</ul>
+<h3 id="重建"><a href="#重建" class="headerlink" title="重建"></a>重建</h3><ul>
+<li>Decoder进行与Encoder同样的帧内和帧间预测，以获取预测块</li>
+<li>Decoder根据预测块和残差块重建（reconstruction）原始的宏块，用于显示</li>
+</ul>
+<h1 id="Profiles-amp-Levels"><a href="#Profiles-amp-Levels" class="headerlink" title="Profiles &amp; Levels"></a>Profiles &amp; Levels</h1><p><strong>Profiles</strong>：H264支持一系列“工具”，例如CABAC或CAVLC熵编码、SI&#x2F;SP、VUI和SEI消息等，Profiles定义了特定的工具子集。Encoder只能使用符合profile内的一些工具，而Decoder必须支持符合profile中每一个工具。<br><strong>Levels</strong>：约束了解码器处理的帧大小（frame size）、处理速度（processing speed）和工作内存（memory capacity）的上限</p>
+<img data-src="/images/Media/H264-profiles-levels-example.png" class="" width="600" height="230" title="Example: profiles and levels">
+
+<ul>
+<li><code>Main/Level 2.2</code>表示解码参数上限为标准清晰度（Standard Definition）、4Mbps码率、<code>Main Profile</code>的比特流</li>
+<li>支持CIF分辨率、2Mbps（Level 2）、<code>Constrained Baseline Profile</code>比特流</li>
+<li>支持SD分辨率（720x576）、4Mbps（Level 2.2）、<code>Main Profile</code>的比特流</li>
+<li>不支持HD分辨率（720p，1280x720，超了）、(Level 3.1，超了)、<code>Main Profile</code>的比特流</li>
+</ul>
+<h1 id="Syntax"><a href="#Syntax" class="headerlink" title="Syntax"></a>Syntax</h1><img data-src="/images/Media/H264-syntax-overview.png" class="" width="660" height="670" title="Syntax Overview">
+
+<ul>
+<li>H264序列（sequence）由一系列网络包（NALUs, Network Adaptation Layer Units）组成</li>
+<li>每个网络包（NALU）由解码时使用的参数集（parameter sets）和一些分片（slices）构成</li>
+<li>每个分片（slice）可以是整个视频帧或帧中的一部分，其由一系列宏块（macroblocks）组成</li>
+<li>每个宏块（macroblock）包含预测信息（例如运动矢量）和残差帧</li>
+</ul>
+<img data-src="/images/Media/H264-syntax-overview2.png" class="" width="660" height="670" title="Syntax Overview (detail)">
+
+<ul>
+<li>编码层（VCL, Video Coding Layer)由一系列slice组成</li>
+<li>网络层（NAL, Network Abstraction Layer)由SPS、PPS和一系列Slice组成<ul>
+<li>RBSP (Raw Byte Sequence Payload)：包含语法元素的字节序列<ul>
+<li>SPS (Sequence Parameter Sets)</li>
+<li>PPS (Picture Parameter Sets)</li>
+<li>SEI (Supplement Enhancement Information)：包含可以有助于解码或显示的信息（可选）</li>
+<li>IDR (Instantaneous Decoder Refresh)：标识编码序列的开始，是帧内（intra）编码的slice<ul>
+<li>当收到一个新的IDR分片时，表示上一个编码序列结束了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>RBSP trailing bits</code>：补充一些零bit，使序列按byte对齐</li>
+</ul>
+</li>
+<li>分片层 (Slice layer)由头部和一系列MB组成</li>
+<li>宏块层 (Macroblock layer)<ul>
+<li>宏块类型: I（帧内编码）、P（有一个参考帧的帧间编码）、B（有一个或两个参考帧的帧间编码）</li>
+<li>预测信息：I（预测模式）、P&#x2F;B（选择的参考帧和运动矢量）</li>
+<li>编码块模式（CBP, Coded Block Pattern）：指出非零残差系数是亮度（luma）还是色度（chroma）块的</li>
+<li>量化参数（QP, Quantization Parameter）</li>
+<li>残差数据（Residual Data）</li>
+</ul>
+</li>
+</ul>
+<h2 id="Frames-amp-Fields-amp-Picture"><a href="#Frames-amp-Fields-amp-Picture" class="headerlink" title="Frames &amp; Fields &amp; Picture"></a>Frames &amp; Fields &amp; Picture</h2><p>帧（<strong>Frame</strong>）：包括一组亮度（luma）样本和两组色度（chroma）样本的数据<br>场（<strong>Field</strong>）：分为顶场（top field）和低场（bottom field）</p>
+<ul>
+<li>逐行扫描（progressive scan）时两个场是同一时间点采样</li>
+<li>交错扫描（interlaced scan）时两场在不同时间点采样</li>
+</ul>
+<p>图片（<strong>Picture</strong>）：指一个Frame或Field，由一个或多个slice组成<br>访问单元（<strong>AU，access unit</strong>）：指编码后的Picture</p>
+<img data-src="/images/Media/H264-picture-handling-overview.png" class="" width="700" height="238" title="Picture Handling Overview">
+
+<ul>
+<li>Frame或Field被编码后得到编码的图片（coded picture，or access unit）<ul>
+<li><code>SPS.frame_mbs_only_flag=0</code>时，使用隔行视频（interlaced video）编码<ul>
+<li>视频序列中的一帧可能被编码为一个完整帧（frame)或两个场（field）</li>
+<li><code>SliceHeader.field_pic_flag</code>标识当前编码的picture是frame还是field</li>
+</ul>
+</li>
+<li>编码器也可以采用图片自适应帧域编码（PAFF，Picture Adaptive Frame Field Coding）<ul>
+<li>picture按场编码（field coding），用于快速运动场景中</li>
+<li>picture按帧编码（frame coding），用于静态场景中</li>
+</ul>
+</li>
+<li>编码器也可以采用宏块自适应帧域编码（MBAFF，Macroblock Adaptive Frame Field Coding）<ul>
+<li>MBAFF使得在帧内编码时，可以在场编码（field coding）和帧编码（frame coding）间自适应切换</li>
+<li><code>UpperMacrobloackOfPair.mb_field_decoding_flag</code>标识<em>MB pair</em>是frame宏块对还是field宏块对</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>每个Picture有一个或多个slice组成</li>
+<li>Slices被解码为图片（decoded picture），然后缓存到DPB（Decoded Picture Buffer）中<ul>
+<li>DPB中的picture也可能是一个完整帧（frame)或两个场（field）</li>
+</ul>
+</li>
+</ul>
+<img data-src="/images/Media/H264-picture-orders.png" class="" width="550" height="360" title="Picture Orders">
+
+<p>三种图片（picture）顺序</p>
+<ul>
+<li><code>DecodingOrder</code>：从bitstream中解码图片的顺序</li>
+<li><code>DisplayOrder</code>：图片输出到显示器中的顺序</li>
+<li><code>ReferenceOrder</code>：供其他图片进行帧间预测时图片排列的顺序<ul>
+<li>解码<code>P slice</code>时用一个有序列表即可</li>
+<li>解码<code>B slice</code>时用两个表示不同方向的有序列表</li>
+</ul>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.vcodex.com/h264avc-picture-management">H.264&#x2F;AVC Picture Management</a></p>
+<h3 id="Decoding-Order"><a href="#Decoding-Order" class="headerlink" title="Decoding Order"></a>Decoding Order</h3><p><a target="_blank" rel="noopener" href="https://www.ramugedia.com/frame-num-is-not-frame-counter">frame_num is not frame counter - benefits and rationale</a></p>
+<p>由<code>SliceHeader</code>中的<code>frame_num</code>参数决定AU的解码顺序，其变化规律为：</p>
+<ul>
+<li>遇到IDR帧时，重置为0</li>
+<li>遇到引用帧（I&#x2F;P）时，累加1</li>
+<li>遇到非引用帧（B）时，保持不变</li>
+</ul>
+<p>$I_0 \text{  } P_1 \text{  } B_2 \text{  } B_2 \text{  } P_2 \text{  } P_3$</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SliceHeader.frame_num:</span><br><span class="line">  if IDR:</span><br><span class="line">    frame_num = 0</span><br><span class="line">  if referenceFrame:</span><br><span class="line">    frame_num += 1</span><br></pre></td></tr></table></figure>
+
+<h3 id="Display-Order"><a href="#Display-Order" class="headerlink" title="Display Order"></a>Display Order</h3><p>由POC (Picture Order Count)参数决定<code>decoded frames</code>的显示顺序，其变化规律：</p>
+<ul>
+<li>遇到IDR帧时，重置为0</li>
+<li>POC分为高位（POC_MSB）和低位（POC_LSB）</li>
+<li>每一帧（有顶场和底场）的POC增量（delta）为2</li>
+<li><code>SliceHeader</code>中的<code>TopFieldOrderCount</code>和<code>BottomFieldOrderCount</code>参数从POC换算得到（三种方法）</li>
+</ul>
+<h4 id="Type-0"><a href="#Type-0" class="headerlink" title="Type 0"></a><code>Type 0</code></h4><p>POC的最低有效位在每个<code>slice header</code>中都携带</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SliceHeader.POC:</span><br><span class="line">  if IDR:</span><br><span class="line">    POC_MSB = POC_LSB = 0</span><br><span class="line">  if POC_LSB to MAX_VALUE:</span><br><span class="line">    POC_MSB += 1</span><br><span class="line">    POC_LSB = 0</span><br><span class="line">  if FRAME:</span><br><span class="line">    POC_LSB += 2</span><br><span class="line">  TopFieldOrderCount = POC_MSB + POC_LSB</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">Slice</th>
+<th align="left">Type</th>
+<th align="left">Used for reference</th>
+<th align="left">frame num</th>
+<th align="left">POC LSBs</th>
+<th align="left">Display order</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1st</td>
+<td align="left">I</td>
+<td align="left">Yes</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">2nd</td>
+<td align="left">P</td>
+<td align="left">Yes</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">3rd</td>
+<td align="left">B</td>
+<td align="left">No</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">4th</td>
+<td align="left">P</td>
+<td align="left">Yes</td>
+<td align="left">2</td>
+<td align="left">8</td>
+<td align="left">4</td>
+</tr>
+<tr>
+<td align="left">5th</td>
+<td align="left">B</td>
+<td align="left">No</td>
+<td align="left">3</td>
+<td align="left">6</td>
+<td align="left">3</td>
+</tr>
+<tr>
+<td align="left">6th</td>
+<td align="left">P</td>
+<td align="left">Yes</td>
+<td align="left">3</td>
+<td align="left">12</td>
+<td align="left">6</td>
+</tr>
+<tr>
+<td align="left">7th</td>
+<td align="left">B</td>
+<td align="left">No</td>
+<td align="left">4</td>
+<td align="left">10</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">8th</td>
+<td align="left">P</td>
+<td align="left">Yes</td>
+<td align="left">4</td>
+<td align="left">16</td>
+<td align="left">8</td>
+</tr>
+</tbody></table>
+<ul>
+<li>$I_1 \text{  } P_2 \text{  } B_3 \text{  } P_4 \text{  } B_5 \text{  } P_6 \text{  } B_7 \text{  } P_8$ (AU的传输顺序&#x2F;Slice编号)</li>
+<li>$I_0 \text{  } P_4 \text{  } B_2 \text{  } P_8 \text{  } B_6 \text{  } P_{12} \text{  } B_{10} \text{  } P_{16}$ (POC_LSB值，决定显示顺序)</li>
+<li>显示顺序为：$IBPBPBPBPB…$</li>
+</ul>
+<img data-src="/images/Media/H264-display-order-type-0.png" class="" width="700" height="205" title="Example: picture orders for type 0">
+
+<h4 id="Type-1"><a href="#Type-1" class="headerlink" title="Type 1"></a><code>Type 1</code></h4><p>在SPS中携带POC增量：delta_pic_order_cnt[0] &#x3D; 2<br>上一个参考帧和下一个参考帧的偏移量：offset_for_next_ref_frame &#x3D; +6<br>上一个参考帧和下一个非参考帧的偏移量：offset_for_non_ref_pic &#x3D; -4</p>
+<table>
+<thead>
+<tr>
+<th align="left">Slice</th>
+<th align="left">Type</th>
+<th align="left">Used for reference</th>
+<th align="left">frame num</th>
+<th align="left">Delta POC</th>
+<th align="left">Offset</th>
+<th align="left">POC</th>
+<th align="left">Display order</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1st</td>
+<td align="left">I</td>
+<td align="left">Yes</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">2nd</td>
+<td align="left">P</td>
+<td align="left">Yes</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">+6</td>
+<td align="left">6</td>
+<td align="left">3</td>
+</tr>
+<tr>
+<td align="left">3rd</td>
+<td align="left">B</td>
+<td align="left">No</td>
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left">−4</td>
+<td align="left">2</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">4th</td>
+<td align="left">B</td>
+<td align="left">No</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">−4+2</td>
+<td align="left">4</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">5th</td>
+<td align="left">P</td>
+<td align="left">Yes</td>
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left">+6</td>
+<td align="left">12</td>
+<td align="left">6</td>
+</tr>
+<tr>
+<td align="left">6th</td>
+<td align="left">B</td>
+<td align="left">No</td>
+<td align="left">3</td>
+<td align="left">0</td>
+<td align="left">−4</td>
+<td align="left">8</td>
+<td align="left">4</td>
+</tr>
+<tr>
+<td align="left">7th</td>
+<td align="left">B</td>
+<td align="left">No</td>
+<td align="left">3</td>
+<td align="left">2</td>
+<td align="left">−4+2</td>
+<td align="left">10</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">8th</td>
+<td align="left">P</td>
+<td align="left">Yes</td>
+<td align="left">3</td>
+<td align="left">0</td>
+<td align="left">+6</td>
+<td align="left">18</td>
+<td align="left">9</td>
+</tr>
+</tbody></table>
+<ul>
+<li>第4和第7个slice头部携带了POC增量</li>
+<li>显示顺序为：$IBBPBBPBBP…$</li>
+</ul>
+<img data-src="/images/Media/H264-display-order-type-1.png" class="" width="700" height="205" title="Example: picture orders for type 1">
+
+<h4 id="Type-2"><a href="#Type-2" class="headerlink" title="Type 2"></a><code>Type 2</code></h4><p>POC直接从<code>frame_num</code>中派生，此时DisplayOrder与DecodingOrder一致</p>
+<h1 id="NAL"><a href="#NAL" class="headerlink" title="NAL"></a>NAL</h1><p>NAULs (Network Abstraction Layer Units)是存储或传输编码的H264数据的包。</p>
+<table>
+<thead>
+<tr>
+<th align="left">Header</th>
+<th align="left">NAL Unit</th>
+<th align="left">VCL</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">01 &#x3D; 61&amp;1F</td>
+<td align="left">Coded slice, non-IDR</td>
+<td align="left">Yes</td>
+<td align="left">A typical coded slice</td>
+</tr>
+<tr>
+<td align="left">02 &#x3D; 62&amp;1F</td>
+<td align="left">Coded slice data partition A</td>
+<td align="left">Yes</td>
+<td align="left">Part of a data partitioned slice</td>
+</tr>
+<tr>
+<td align="left">03 &#x3D; 63&amp;1F</td>
+<td align="left">Coded slice data partition B</td>
+<td align="left">Yes</td>
+<td align="left">Part of a data partitioned slice</td>
+</tr>
+<tr>
+<td align="left">04 &#x3D; 64&amp;1F</td>
+<td align="left">Coded slice data partition C</td>
+<td align="left">Yes</td>
+<td align="left">Part of a data partitioned slice</td>
+</tr>
+<tr>
+<td align="left">05 &#x3D; 65&amp;1F</td>
+<td align="left">Coded slice, IDR</td>
+<td align="left">Yes</td>
+<td align="left">Part of the Access Unit at the start of a coded video sequence</td>
+</tr>
+<tr>
+<td align="left">06 &#x3D; 66&amp;1F</td>
+<td align="left">SEI</td>
+<td align="left">No</td>
+<td align="left">Supplemental Enhancement Information</td>
+</tr>
+<tr>
+<td align="left">07 &#x3D; 67&amp;1F</td>
+<td align="left">SPS</td>
+<td align="left">No</td>
+<td align="left">Sequence Parameter Set, one per sequence</td>
+</tr>
+<tr>
+<td align="left">08 &#x3D; 68&amp;1F</td>
+<td align="left">PPS</td>
+<td align="left">No</td>
+<td align="left">Picture Parameter Set</td>
+</tr>
+<tr>
+<td align="left">09 &#x3D; 69&amp;1F</td>
+<td align="left">Access unit delimiter</td>
+<td align="left">No</td>
+<td align="left">Indicates type of the slices in the next coded picture (optional)</td>
+</tr>
+<tr>
+<td align="left">10 &#x3D; 10&amp;1F</td>
+<td align="left">End of sequence</td>
+<td align="left">No</td>
+<td align="left">Indicates that the next access unit is IDR (optional)</td>
+</tr>
+<tr>
+<td align="left">11 &#x3D; 11&amp;1F</td>
+<td align="left">End of stream</td>
+<td align="left">No</td>
+<td align="left">Indicates the end of the coded bitstream (optional)</td>
+</tr>
+<tr>
+<td align="left">12 &#x3D; 12&amp;1F</td>
+<td align="left">Filler</td>
+<td align="left">No</td>
+<td align="left">Filler bytes (optional)</td>
+</tr>
+</tbody></table>
+<h2 id="SPS"><a href="#SPS" class="headerlink" title="SPS"></a>SPS</h2><p><strong>Example: A SPS for a Baseline Profile, QCIF coded sequence</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Parameter</th>
+<th align="right">Binary code</th>
+<th align="right">Symbol</th>
+<th align="left">Discussion</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">profile_idc</td>
+<td align="right">1000010</td>
+<td align="right">66</td>
+<td align="left">Baseline Profile</td>
+</tr>
+<tr>
+<td align="left">constrained_set0_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Bistream might not obey all the constraints of the Baseline Profile</td>
+</tr>
+<tr>
+<td align="left">constrained_set1_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">As above, Main Profile</td>
+</tr>
+<tr>
+<td align="left">constrained_set2_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">As above, Extended Profile</td>
+</tr>
+<tr>
+<td align="left">constrained_set3_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Used to specify the special case of Level 1b</td>
+</tr>
+<tr>
+<td align="left">reserved_zero_4bits</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Not used</td>
+</tr>
+<tr>
+<td align="left">level_idc</td>
+<td align="right">11110</td>
+<td align="right">30</td>
+<td align="left">Level 3</td>
+</tr>
+<tr>
+<td align="left">seq_parameter_set_id</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">Sequence Parameter Set 0</td>
+</tr>
+<tr>
+<td align="left">log2_max_frame_num_minus4</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">frame num will not exceed 16.</td>
+</tr>
+<tr>
+<td align="left">pic_order_cnt_type</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">Default POC</td>
+</tr>
+<tr>
+<td align="left">log2_max_pic_order_cnt_lsb_minus4</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">LSB of POC will not exceed 16.</td>
+</tr>
+<tr>
+<td align="left">num_ref_frames</td>
+<td align="right">1011</td>
+<td align="right">10</td>
+<td align="left">Up to 10 reference frames.</td>
+</tr>
+<tr>
+<td align="left">gaps_in_frame_num_value_allowed_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No gaps in frame num.</td>
+</tr>
+<tr>
+<td align="left">pic_width_in_mbs_minus1</td>
+<td align="right">1011</td>
+<td align="right">10</td>
+<td align="left">11 macroblocks wide &#x3D; QCIF</td>
+</tr>
+<tr>
+<td align="left">pic_height_in_map_units_minus1</td>
+<td align="right">1001</td>
+<td align="right">8</td>
+<td align="left">9 MBs high &#x3D; QCIF</td>
+</tr>
+<tr>
+<td align="left">frame_mbs_only_flag</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">No field slices or field MBs</td>
+</tr>
+<tr>
+<td align="left">direct_8×8_inference_flag</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Specifies how certain B macroblock motion vectors are derived</td>
+</tr>
+<tr>
+<td align="left">frame_cropping_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Frames are not cropped</td>
+</tr>
+<tr>
+<td align="left">vui_parameters_present_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">VUI parameters not present</td>
+</tr>
+</tbody></table>
+<ul>
+<li>SPS对于正确的解码视频序列至关重要，包括Profile和Level、视频帧的大小、参考帧的数量等</li>
+<li>seq_parameter_set_id是SPS的唯一标识</li>
+<li>帧宽：(pic_width_in_mbs_minus1 + 1) * mb_width &#x3D; (10 + 1) * 16 &#x3D; 176</li>
+<li>帧高：(pic_height_in_map_units_minus1) * mb_height &#x3D; (8 + 1) * 16 &#x3D; 144</li>
+</ul>
+<h2 id="PPS"><a href="#PPS" class="headerlink" title="PPS"></a>PPS</h2><p><strong>Example: A PPS</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Parameter</th>
+<th align="right">Binary code</th>
+<th align="right">Symbol</th>
+<th align="left">Discussion</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">pic_parameter_set_id</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">Picture Parameter Set  0</td>
+</tr>
+<tr>
+<td align="left">seq_parameter_set_id</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">Use SPS 0</td>
+</tr>
+<tr>
+<td align="left">entropy_coding_mode_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">CAVLC entropy coding</td>
+</tr>
+<tr>
+<td align="left">pic_order_present_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">POC not present</td>
+</tr>
+<tr>
+<td align="left">num_slice_groups_minus1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">One slice group</td>
+</tr>
+<tr>
+<td align="left">num_ref_idx_l0_active_minus1</td>
+<td align="right">1010</td>
+<td align="right">9</td>
+<td align="left">10 reference pictures in  list0</td>
+</tr>
+<tr>
+<td align="left">num_ref_idx_l1_active_minus1</td>
+<td align="right">1010</td>
+<td align="right">9</td>
+<td align="left">10 reference pictures in  list1</td>
+</tr>
+<tr>
+<td align="left">weighted_pred_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Weighted prediction not used</td>
+</tr>
+<tr>
+<td align="left">weighted_bipred_idc</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Weighted biprediction not used</td>
+</tr>
+<tr>
+<td align="left">pic_init_qp_minus26</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">Initial QP (luma) &#x3D; 26</td>
+</tr>
+<tr>
+<td align="left">pic_init_qs_minus26</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">Initial SI&#x2F;SP QP &#x3D; 26</td>
+</tr>
+<tr>
+<td align="left">chroma_qp_index_offset</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">No chroma QP offset</td>
+</tr>
+<tr>
+<td align="left">deblocking_filter_control_present_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Use default filter  parameters</td>
+</tr>
+<tr>
+<td align="left">constrained_intra_pred_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Intra prediction is not constrained</td>
+</tr>
+<tr>
+<td align="left">redundant_pic_cnt_present_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Redundant picture count parameter  is not used</td>
+</tr>
+</tbody></table>
+<ul>
+<li>PPS包含编码帧序列的公共参数，例如熵编码类型、初始化参数等</li>
+<li>pic_parameter_set_id是PPS的唯一标识</li>
+<li>seq_parameter_set_id指PPS继承自哪个SPS。在解码过程中，通过此关系联动激活SPS。</li>
+</ul>
+<h1 id="Slice"><a href="#Slice" class="headerlink" title="Slice"></a>Slice</h1><p>每个编码的frame或field，均由一个或多个slice组成，每个slice由header后跟随整数个macroblocks组成，可能的场景：</p>
+<ul>
+<li>每个编码的picture只由一个slice组成（常见做法）</li>
+<li>每个编码的picture由N个slice组成，每个slice由M个macroblock组成<ul>
+<li>slice包含的字节大小会随着picture中motion和detail的变化而变化</li>
+</ul>
+</li>
+<li>每个编码的picture由N个slice组成，每个slice可包含不同数量的macroblock，以使slice包含的字节大小大致不变<ul>
+<li>适合每个slice映射到固定大小的网络包的场景</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Slice type</th>
+<th align="left">Contains MB types</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">I (including IDR)</td>
+<td align="left">I only</td>
+<td align="left">Intra prediction only.</td>
+</tr>
+<tr>
+<td align="left">P</td>
+<td align="left">I and&#x2F;or P</td>
+<td align="left">Intra prediction (I) and&#x2F;or pred from one-ref per MB partition (P).</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">I, P and&#x2F;or B</td>
+<td align="left">Intra prediction (I), pred from one-refer (P) or bipred from two-refers (B)</td>
+</tr>
+<tr>
+<td align="left">SP</td>
+<td align="left">P and&#x2F;or I</td>
+<td align="left">Switching P slice</td>
+</tr>
+<tr>
+<td align="left">SI</td>
+<td align="left">SI</td>
+<td align="left">Switching I slice</td>
+</tr>
+</tbody></table>
+<ul>
+<li>slice的类型决定了允许出现在其内的macroblock类型</li>
+</ul>
+<p><strong>Example (Frame 0): Header from an I (IDR) slice with frame_mbs_only_flag&#x3D;1 (no field coding)</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Slice Header Parameter</th>
+<th align="right">Binary code</th>
+<th align="right">Symbol</th>
+<th align="left">Discussion</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">first_mb_in_slice</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">First MB is at pos 0, the top-left pos in the slice.</td>
+</tr>
+<tr>
+<td align="left">slice_type</td>
+<td align="right">1000</td>
+<td align="right">7</td>
+<td align="left">I slice, contains only I MBs</td>
+</tr>
+<tr>
+<td align="left">pic_parameter_set_id</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">Use PPS 0</td>
+</tr>
+<tr>
+<td align="left">frame_num</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Slice is in frame 0</td>
+</tr>
+<tr>
+<td align="left">idr_pic_id</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">IDR #0: only present in IDR picture</td>
+</tr>
+<tr>
+<td align="left">pic_order_cnt_lsb</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Picture order count &#x3D; 0</td>
+</tr>
+<tr>
+<td align="left">no_output_of_prior_pics_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Not used</td>
+</tr>
+<tr>
+<td align="left">long_term_reference_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Not used</td>
+</tr>
+<tr>
+<td align="left">slice_qp_delta</td>
+<td align="right">1000</td>
+<td align="right">4</td>
+<td align="left">QP &#x3D; initial QP + 4 &#x3D; 26 + 4 &#x3D; 30</td>
+</tr>
+</tbody></table>
+<ul>
+<li>slice头包括了其内的所有macroblocks公共的信息，例如slice类型、slice对应的frame编号等</li>
+</ul>
+<p><strong>Example (Frame 1): Header from an P slice with picture_order_count(POC)&#x3D;2</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Parameter</th>
+<th align="right">Binary code</th>
+<th align="right">Symbol</th>
+<th align="left">Discussion</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">first_mb_in_slice</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">First MB at position 0</td>
+</tr>
+<tr>
+<td align="left">slice_type</td>
+<td align="right">110</td>
+<td align="right">5</td>
+<td align="left">P slice, can contain I or P MBs</td>
+</tr>
+<tr>
+<td align="left">pic_parameter_set_id</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">Use PPS 0</td>
+</tr>
+<tr>
+<td align="left">frame_num</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Frame 1</td>
+</tr>
+<tr>
+<td align="left">pic_order_cnt_lsb</td>
+<td align="right">10</td>
+<td align="right">2</td>
+<td align="left">Picture 2</td>
+</tr>
+<tr>
+<td align="left">num_ref_idx_active_override_flag</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Default number of ref-pictures overridden by following parameter</td>
+</tr>
+<tr>
+<td align="left">num_ref_idx_l0_active_minus1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">One reference picture in List 0</td>
+</tr>
+<tr>
+<td align="left">ref_pic_list_reordering_flag_l0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No re-ordering of reference pictures</td>
+</tr>
+<tr>
+<td align="left">adaptive_ref_pic_buffering_flag</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Ref-pictures handled as ‘first in&#x2F;first out’ (default)</td>
+</tr>
+<tr>
+<td align="left">slice_qp_delta</td>
+<td align="right">1000</td>
+<td align="right">4</td>
+<td align="left">QP &#x3D; 26 + 4 &#x3D; 30</td>
+</tr>
+</tbody></table>
+<ul>
+<li>pic_parameter_set_id指slice使用哪个PPS参数。在解码过程中，通过此关系联动激活PPS</li>
+<li>num_ref_idx_l0_active_minus1标识在DPB的<em>List 0</em>有一个参考picture (Frame 0)</li>
+</ul>
+<p><em>P, SP or B slice</em>包含的MB中可能会出现*skip macroblock (containing no data)*：</p>
+<ul>
+<li>mb_skip_run标识CAVLC熵编码模式中<em>skipped macroblocks</em>的计数</li>
+<li>mb_skip_flag标识CABAC熵编码模式中有一个<em>skipped macroblock</em></li>
+</ul>
+<h1 id="Macroblock"><a href="#Macroblock" class="headerlink" title="Macroblock"></a>Macroblock</h1><pre class="mermaid">
+stateDiagram-v2
+direction TB
+[*] --&gt; mb_type
+mb_type --&gt; transform_size_8x8_flag
+mb_type --&gt; sub_mb_pred
+transform_size_8x8_flag --&gt; mb_pred
+mb_pred --&gt; coded_block_pattern
+sub_mb_pred --&gt; coded_block_pattern
+coded_block_pattern --&gt; transform_size_8x8_flag_(optional)
+transform_size_8x8_flag_(optional) --&gt; delta_qp
+delta_qp --&gt; residual
+residual --&gt; [*]
+note left of transform_size_8x8_flag
+  (optional) High Profile only
+end note
+note right of mb_pred
+  Not P&#x2F;B_8x8
+end note
+note right of sub_mb_pred
+  P&#x2F;B_8x8
+end note
+note right of coded_block_pattern
+  (optional) Not Intra_16x16 only
+end note
+note left of residual
+  (optional) If present
+end note
+</pre>
+
+<ul>
+<li><strong>mb_type</strong>标识macroblock类型、prediction信息和coding信息<table>
+  <thead>
+    <tr>
+      <th>MB coding type</th>
+      <th>Info signalled in mb_type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan=4>I</td>
+      <td>4×4</td>
+      <td>indicates 4×4 Intra prediction mode.</td>
+    </tr>
+    <tr>
+      <td>8×8</td>
+      <td>indicates 8×8 Intra prediction mode.</td>
+    </tr>
+    <tr>
+      <td>16×16</td>
+      <td>
+      indicates 16×16 Intra prediction mode;
+      luma and chroma coded block pattern is also indicated by mb_type.
+      </td>
+    </tr>
+    <tr>
+      <td>PCM</td>
+      <td>indicates that the special PCM mode is used.</td>
+    </tr>
+    <tr>
+      <td rowspan=1>SI</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td rowspan=5>P</td>
+      <td>16×16</td>
+      <td rowspan=3>indicates partition size.</td>
+    </tr>
+    <tr>
+      <td>16×8</td>
+    </tr>
+    <tr>
+      <td>8×16</td>
+    </tr>
+    <tr>
+      <td>8×8</td>
+      <td>indicates 8×8 partition size, a further syntax element sub_mb_type and optionally a reference index are also transmitted.</td>
+    </tr>
+    <tr>
+      <td>P_Skip (inferred)</td>
+      <td>indicates Skip mode, no further data transmitted.</td>
+    </tr>
+    <tr>
+      <td rowspan=5>B</td>
+      <td>16×16</td>
+      <td>
+      indicates 16×16 partition size. Prediction mode may be Direct,
+      no motion vectors or references transmitted, Pred, 
+      prediction from one reference picture in list 0 or list 1, or BiPred, 
+      prediction from two references, one from list 0 and one from list 1.
+      </td>
+    </tr>
+    <tr>
+      <td>16×8</td>
+      <td>indicates 16×8 partition size plus prediction modes of each partition, either Pred from L0, Pred from L1 or BiPred.</td>
+    </tr>
+    <tr>
+      <td>8×16</td>
+      <td>indicates 8×16 partition size plus prediction modes of each partition, Pred from L0 or L1, or BiPred.</td>
+    </tr>
+    <tr>
+      <td>8×8</td>
+      <td>indicates 8×8 partition size. A further syntax element sub_mb_type is sent for each 8×8 partition.</td>
+    </tr>
+    <tr>
+      <td>B_Skip (inferred)</td>
+      <td>indicates Skip mode, no further data transmitted.</td>
+    </tr>
+  </tbody>
+</table>
+- I (macroblock)可以出现在任何slice类型中，而且不需要参考其他的slice
+- SI (SIntra MB)只出现在switching或SI类型的slice中
+- P (macroblock)可以出现在P或SP类型的slice中，且在帧间预测时需要一个参考
+- B (BiPredicted macroblock)可以出现在B类型的slice中，且在帧间预测时需要两个参考</li>
+<li><strong>transform_size_8×8_flag</strong>标识在HighProfile字节流中，对luma块使用8x8代替默认的4x4整数变换，此标记不会出现在16x16的帧内编码中</li>
+<li><strong>mb_pred</strong>表示非8x8的P&#x2F;B宏块在帧内或帧间预测时的类型</li>
+<li><strong>sub_mb_pred</strong>表示8x8的P&#x2F;B宏块在帧内或帧间预测时的类型</li>
+<li><strong>coded_block_pattern</strong>出现在非intra_16x16类型的宏块中，是宏块内出现非零系数的十进制表示，取值范围为[0, 47]</li>
+<li><strong>delta_qp</strong>表示量化参数（QP）与之前的值相比的增量（正或负）</li>
+<li><strong>residual_data</strong>表示残差数据</li>
+</ul>
+<h2 id="Intra-PCM"><a href="#Intra-PCM" class="headerlink" title="Intra_PCM"></a>Intra_PCM</h2><p>Intra_PCM (Pulse Code Modulation) 是编码macroblock的可选模式，由mb_type中的I_PCM标识，此模式下通常的prediction、transform和coding过程被绕过，直接传输每个luma和chroma样本：</p>
+<ul>
+<li>字节流按byte对齐，缺少的bit位置补0</li>
+<li>默认BitDepth为8, 每个样本1byte。在SPS中可设置更高的位深</li>
+<li>每256个luma样本作为一个独立的$BitDepth_Y\text{-}bit$值，表示未压缩luma样本的bit数量</li>
+<li>每64个4:2:0采样的chroma样本作为一个独立的$BitDepth_C\text{-}bit$值，表示未压缩chroma样本的bit数量</li>
+</ul>
+<p>备注：</p>
+<ul>
+<li>适用需要编码很高的感知质量（very low QP）的场景。此时，经过预测、变换和熵编码后的bit数量可能会比未压缩视频更多</li>
+<li>I_PCM模式下，H264字节流等同于未压缩视频的容器，此时在保留原始视频的同时，也可利用H264中的特性，例如包处理、帧编号和传输支持</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="#">THE H.264 ADVANCED VIDEO COMPRESSION STANDARD, Second Edition, 2010, Iain E. Richardson</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/H264/" rel="tag"><i class="fa fa-tag"></i> H264</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Media/FFmpeg.html" rel="prev" title="FFmpeg视频处理">
+                  <i class="fa fa-chevron-left"></i> FFmpeg视频处理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Media/OpenGL.html" rel="next" title="OpenGL基础">
+                  OpenGL基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/Media/H264/H264.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"5e959fd2d90c9254113d4ed2570fb699"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

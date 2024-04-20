@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="cuda编程基础，其内容主要源自nvidia的编程指南，提取重要概念与设计，结合实例与测试数据于以说明。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA基础">
+<meta property="og:url" content="https://blog.imssyang.com/CUDA/Basic.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="cuda编程基础，其内容主要源自nvidia的编程指南，提取重要概念与设计，结合实例与测试数据于以说明。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-02-20T14:29:30.000Z">
+<meta property="article:modified_time" content="2022-02-19T16:00:00.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="cuda">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/CUDA/Basic.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/CUDA/Basic.html","path":"CUDA/Basic.html","title":"CUDA基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CUDA基础 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU-vs-GPU"><span class="nav-number">1.</span> <span class="nav-text">CPU vs GPU</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CUDA%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">CUDA模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">硬件设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E7%8E%AF%E5%A2%83"><span class="nav-number">4.</span> <span class="nav-text">编程环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows"><span class="nav-number">4.1.</span> <span class="nav-text">Windows</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Runtime"><span class="nav-number">4.2.</span> <span class="nav-text">Runtime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Toolkit"><span class="nav-number">4.3.</span> <span class="nav-text">Toolkit</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B-c"><span class="nav-number">5.</span> <span class="nav-text">编程模型(c++)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80%E6%89%A9%E5%B1%95"><span class="nav-number">5.1.</span> <span class="nav-text">语言扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E5%B1%9E%E6%80%A7"><span class="nav-number">5.2.</span> <span class="nav-text">设备属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.3.</span> <span class="nav-text">内存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.4.</span> <span class="nav-text">计算模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.5.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95"><span class="nav-number">5.5.1.</span> <span class="nav-text">矩阵乘法</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/CUDA/Basic.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CUDA基础
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2/20/2022 22:29:30 / Modified: 00:00:00" itemprop="dateCreated datePublished" datetime="2022-02-20T22:29:30+08:00">2/20/2022</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>14k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>13 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>cuda编程基础，其内容主要源自nvidia的编程指南，提取重要概念与设计，结合实例与测试数据于以说明。</p>
+<span id="more"></span>
+
+<h1 id="CPU-vs-GPU"><a href="#CPU-vs-GPU" class="headerlink" title="CPU vs GPU"></a>CPU vs GPU</h1><ul>
+<li>cpu被设计为在线程（thread）中执行一系列顺序（sequential）操作，可支持几十个线程并行执行<ul>
+<li>更多的晶体管用于缓存大数据和复杂的流控制，以支持一系列顺序操作，内存访问延迟较高</li>
+</ul>
+</li>
+<li>gpu被设计为支持成千上万个并行执行序列，常用于分摊较慢的线程，以获取更大的吞吐量<ul>
+<li>更多的晶体管用于数据处理（例如浮点计算），以支持高度并行（parallel）计算，内存访问延迟较低</li>
+</ul>
+</li>
+</ul>
+<h1 id="CUDA模型"><a href="#CUDA模型" class="headerlink" title="CUDA模型"></a>CUDA模型</h1><p>CUDA: A General-Purpose Parallel Computing Platform and Programming Model</p>
+<ul>
+<li>2006年被NVIDIA推出的并行计算平台和编程模型，可利用NVIDIA GPUs更好的解决许多复杂的计算问题</li>
+<li>CUDA是一种可伸缩（scalable）的编程模型，随着处理器核心数的增加可透明的扩展并行性</li>
+<li>CUDA为<code>C</code>程序员保持较低的学习曲线，在语言上扩展的核心概念有：<ul>
+<li>线程组的层次结构（a hierarchy of thread groups）</li>
+<li>共享内存（shared memories）</li>
+<li>栅栏同步（barrier synchronization）</li>
+</ul>
+</li>
+</ul>
+<pre class="mermaid">
+flowchart LR
+%% GPU key abstractions
+classDef group fill:#fff,color:#33f,stroke:#f66,stroke-width:1px,stroke-dasharray: 5 5
+classDef drive fill:#fff,stroke-width:0,color:green
+classDef cas fill:#fff,stroke-width:0,color:red
+exec0[execute]:::drive
+exec1[execute]:::drive
+drive0[resolve]:::drive
+drive1[resolve]:::drive
+cas0[cooperatively and scalability]:::cas
+cas1[cooperatively and scalability]:::cas
+SM-A0 --- exec0 --- BK-0 --- drive0 --- CG-0
+SM-A1 --- exec1 --- BK-1 --- drive1 --- CG-1
+TD-A0 -.- cas0 -.- FG-A0
+TD-A1 -.- cas0 -.- FG-A1
+TD-A2 -.- cas0 -.- FG-A2
+TD-B0 -.- cas1 -.- FG-B0
+TD-B1 -.- cas1 -.- FG-B1
+TD-B2 -.- cas1 -.- FG-B2
+DE-0:::group
+subgraph DE-0[GPU-0]
+  SM-A0([SM-0])
+  SM-A1([SM-1])
+end
+BK-0:::group
+subgraph BK-0[Block-0]
+  TD-A0([Thread-0])
+  TD-A1([Thread-1])
+  TD-A2([Thread-2])
+end
+CG-0:::group
+subgraph CG-0[coarse-grained-0]
+  FG-A0([finer-piece-0])
+  FG-A1([finer-piece-1])
+  FG-A2([finer-piece-2])
+end
+BK-1:::group
+subgraph BK-1[Block-1]
+  TD-B0([Thread-0])
+  TD-B1([Thread-1])
+  TD-B2([Thread-2])
+end
+CG-1:::group
+subgraph CG-1[coarse-grained-1]
+  FG-B0([finer-piece-0])
+  FG-B1([finer-piece-1])
+  FG-B2([finer-piece-2])
+end
+</pre>
+
+<ul>
+<li><strong>SM</strong>: streaming multiprocessors</li>
+<li><strong>Block</strong>: block of threads</li>
+<li><strong>Thread</strong>: thread within the block</li>
+<li><strong>coarse-grained</strong>: coarse sub-problems that can be solved independently in parallel by blocks of threads</li>
+<li><strong>finer-piece</strong>: finer pieces that can be solved cooperatively in parallel by all threads within the block</li>
+</ul>
+<h1 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h1><ul>
+<li>NVIDIA GPU架构是围绕一个可扩展的多线程流多处理器阵列（SMs）构建的<ul>
+<li>一个多处理器（multiprocessors）被设计成可并发执行数百个线程（thread）</li>
+<li>线程块（thread block）或线程块中的线程（threads）均可在一个多处理器中并发执行</li>
+<li>采用SIMT (Single-Instruction, Multiple-Thread) 架构，小端（little-endian）表示</li>
+</ul>
+</li>
+</ul>
+<h1 id="编程环境"><a href="#编程环境" class="headerlink" title="编程环境"></a>编程环境</h1><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#env-vars">CUDA Environment Variables</a></p>
+<ul>
+<li><strong>PTX</strong> - CUDA instruction set architecture</li>
+</ul>
+<h2 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h2><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html">CUDA Installation Guide for Microsoft Windows</a><br><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/cuda-samples">NVIDIA&#x2F;cuda-samples</a></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/geforce/drivers">GeForce Experience</a> - 自动安装或更新驱动<ul>
+<li>安装驱动后在<code>NVIDIA Control Panel - Help - System Information</code>可查看CUDA版本</li>
+<li><code>control /name Microsoft.DeviceManager</code>打开设备管理工具，检查显卡状态</li>
+<li><code>nvidia-smi</code>工具查看GPU信息</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit">CUDA Toolkit</a> - 开发套件（默认在<code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA</code>）<ul>
+<li><code>nvcc -V</code>查看CUDA Toolkit版本</li>
+<li><code>CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.6</code> 环境变量</li>
+</ul>
+</li>
+</ul>
+<h2 id="Runtime"><a href="#Runtime" class="headerlink" title="Runtime"></a>Runtime</h2><ul>
+<li>windows: cudart.lib&#x2F;dll</li>
+<li>linux: cudart.a&#x2F;so</li>
+</ul>
+<h2 id="Toolkit"><a href="#Toolkit" class="headerlink" title="Toolkit"></a>Toolkit</h2><p><a target="_blank" rel="noopener" href="https://developer.download.nvidia.com/compute/cuda/redist/">单个组件压缩包</a></p>
+<ul>
+<li><strong>cudart</strong> - CUDA Runtime libraries</li>
+<li><strong>cuobjdump</strong> - Extracts information from cubin files</li>
+<li><strong>cupti</strong> - CUDA Profiling Tools Interface</li>
+<li><strong>cuxxfilt</strong> - CUDA <code>cu++filt</code> demangler tool</li>
+<li><strong>memcheck</strong> - Functional correctness checking suite</li>
+<li><strong>nvcc</strong> - compile CUDA C++ device code<ul>
+<li>workflow:<ol>
+<li>分离<em>host code</em>和<em>device code</em></li>
+<li>将<em>device code</em>编译成<em>assembly form (PTX code)</em> 和 <em>binary form (cubin object)</em></li>
+<li>将<em>host code</em>中的<code>&lt;&lt;&lt;...&gt;&gt;&gt;</code>语法替换为cuda运行时函数，然后对 PTX code 或 cubin 对象发起编译</li>
+<li>与已编译的<em>host code</em>链接在一起</li>
+</ol>
+</li>
+<li>options:<ul>
+<li><code>-code=sm_35</code>指定cubin的目标设备架构（compute capability 3.[&gt;&#x3D;5]的设备）</li>
+<li><code>-arch=compute_30</code>指定PTX代码(例如 WarpShuffleFunctions &gt;&#x3D; 3.0)对应的计算能力（宏<code>__CUDA_ARCH__</code>的值为300）</li>
+<li><code>-gencode arch=compute_50,code=sm_50</code>指定嵌入cuda应用程序中的PTX和cubin代码</li>
+<li><code>-m64</code>指定按64bit模式编译<em>device code</em></li>
+<li><code>-m32</code>指定按32bit模式编译<em>device code</em></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>nvdisasm</strong> - Extracts information from standalone cubin files</li>
+<li><strong>nvml_dev</strong> - NVML development libraries and headers</li>
+<li><strong>nvprof</strong> - Tool for collecting and viewing CUDA application profiling data</li>
+<li><strong>nvprune</strong> - Prunes host object files and libraries to only contain device code</li>
+<li><strong>nvrtc</strong> - compile CUDA C++ device code to PTX at runtime</li>
+<li><strong>nvtx</strong> - NVTX on Windows</li>
+<li><strong>visual_profiler</strong> - Visual Profiler</li>
+<li><strong>sanitizer</strong> - Compute Sanitizer API</li>
+<li><strong>thrust</strong> - CUDA Thrust</li>
+<li><strong>cublas</strong> - cuBLAS runtime libraries</li>
+<li><strong>cufft</strong> - cuFFT runtime libraries</li>
+<li><strong>curand</strong> - cuRAND runtime libraries</li>
+<li><strong>cusolver</strong> - cuSOLVER runtime libraries</li>
+<li><strong>cusparse</strong> - cuSPARSE runtime libraries</li>
+<li><strong>npp</strong> - NPP runtime libraries</li>
+<li><strong>nvjpeg</strong> - nvJPEG libraries</li>
+<li><strong>nsight_compute</strong> - Nsight Compute</li>
+<li><strong>nsight_systems</strong> - Nsight Systems</li>
+</ul>
+<h1 id="编程模型-c"><a href="#编程模型-c" class="headerlink" title="编程模型(c++)"></a>编程模型(c++)</h1><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#c-language-extensions">C++ Language Extensions</a><br><a target="_blank" rel="noopener" href="https://nvidia.github.io/libcudacxx/">libcu++: NVIDIA C++ Standard Library</a></p>
+<h2 id="语言扩展"><a href="#语言扩展" class="headerlink" title="语言扩展"></a>语言扩展</h2><ul>
+<li>FunctionExecutionSpace:<ul>
+<li><code>__global__</code>：声明可被kernel调用的函数，只能返回void，且不能是类成员函数，只能从host调用它</li>
+<li><code>__device__</code>：声明在device上执行的函数，只能从device调用它</li>
+<li><code>__host__</code>：声明在host上执行的函数，只能从host调用它（可与<code>__device__</code>一起使用）</li>
+<li><code>__CUDA_ARCH__</code>：定义代码兼容的计算能力（SM）</li>
+<li><code>__noinline__</code>：提示编译器尽可能不要内联该函数</li>
+<li><code>__forceinline__</code>：强制编译器内联该函数</li>
+</ul>
+</li>
+<li>VariableMemorySpace:<ul>
+<li><code>__device__</code>：声明驻留在device上的变量</li>
+<li><code>__constant__</code>：声明驻留在常量内存空间的变量</li>
+<li><code>__shared__</code>：声明驻留在一个线程块的共享内存空间的变量</li>
+<li><code>__managed__</code>：声明可被device和host代码直接读写的变量</li>
+<li><code>__restrict__</code>：告知编译器指针参数不存在别名，可以优化函数代码</li>
+</ul>
+</li>
+</ul>
+<h2 id="设备属性"><a href="#设备属性" class="headerlink" title="设备属性"></a>设备属性</h2><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">GPU Compute Capability</a></p>
+<ul>
+<li><code>SM version (x.x)</code>用于表示设备的<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capabilities">计算能力</a>，在运行时可用于检测硬件特性或指令的可用性<ul>
+<li><code>major revision number</code>标识核心架构</li>
+<li><code>minor revision number</code>标识核心架构的增量更新</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="cpp-drive-basic"><ul class="nav-tabs"><li class="tab active"><a href="#cpp-drive-basic-1">Basic</a></li><li class="tab"><a href="#cpp-drive-basic-2">SM</a></li></ul><div class="tab-content"><div class="tab-pane active" id="cpp-drive-basic-1"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span> </span>&#123;</span><br><span class="line">    cudaError_t err = cudaSuccess;</span><br><span class="line">    <span class="type">int</span> device_count;</span><br><span class="line">    err = <span class="built_in">cudaGetDeviceCount</span>(&amp;device_count); <span class="comment">// 获取显卡数量</span></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> devID = <span class="number">0</span>; <span class="comment">// 显卡ID (&gt;=0)</span></span><br><span class="line">    <span class="type">int</span> computeMode = <span class="number">-1</span>;</span><br><span class="line">    err = <span class="built_in">cudaDeviceGetAttribute</span>(&amp;computeMode, cudaDevAttrComputeMode, devID); <span class="comment">// 获取显卡计算模式</span></span><br><span class="line">    <span class="keyword">if</span> (computeMode == cudaComputeModeProhibited) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Error: device is running in &lt;Compute Mode Prohibited&gt;, no threads can use cudaSetDevice().\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> major = <span class="number">0</span>, minor = <span class="number">0</span>;</span><br><span class="line">    err = <span class="built_in">cudaDeviceGetAttribute</span>(&amp;major, cudaDevAttrComputeCapabilityMajor, devID); <span class="comment">// 获取显卡SM主版本</span></span><br><span class="line">    err = <span class="built_in">cudaDeviceGetAttribute</span>(&amp;minor, cudaDevAttrComputeCapabilityMinor, devID); <span class="comment">// 获取显卡SM子版本</span></span><br><span class="line">    sm_per_multiproc = _SM2Cores(major,  minor); <span class="comment">// 根据SM版本查表获取每个SM的CUDA核心数（见SM）</span></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> multiProcessorCount = <span class="number">0</span>, clockRate = <span class="number">0</span>;</span><br><span class="line">    err = <span class="built_in">cudaDeviceGetAttribute</span>(&amp;multiProcessorCount, cudaDevAttrMultiProcessorCount, devID); <span class="comment">// 获取显卡SM数量</span></span><br><span class="line">    err = <span class="built_in">cudaDeviceGetAttribute</span>(&amp;clockRate, cudaDevAttrClockRate, devID); <span class="comment">// 获取显卡时钟频率</span></span><br><span class="line">    <span class="type">uint64_t</span> compute_perf = (<span class="type">uint64_t</span>)multiProcessorCount * sm_per_multiproc * clockRate; <span class="comment">// 显卡计算能力 = SM数量 * CUDA核心数/SM * 时钟频率</span></span><br><span class="line"></span><br><span class="line">    err = <span class="built_in">cudaSetDevice</span>(devID); <span class="comment">// 设置用于GPU计算的显卡 (默认ID: 0)</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="cpp-drive-basic-2"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="type">int</span> SM;           <span class="comment">// (0xMm) M = SM Major version, m = SM minor version</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* name; <span class="comment">// GPU Architecture name</span></span><br><span class="line">    <span class="type">int</span> cores;        <span class="comment">// CUDA Cores per SM</span></span><br><span class="line">&#125; SMInfo;</span><br><span class="line"></span><br><span class="line">SMInfo smInfos[] = &#123;</span><br><span class="line">    &#123;<span class="number">0x30</span>, <span class="string">&quot;Kepler&quot;</span>, <span class="number">192</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x32</span>, <span class="string">&quot;Kepler&quot;</span>, <span class="number">192</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x35</span>, <span class="string">&quot;Kepler&quot;</span>, <span class="number">192</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x37</span>, <span class="string">&quot;Kepler&quot;</span>, <span class="number">192</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x50</span>, <span class="string">&quot;Maxwell&quot;</span>, <span class="number">128</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x52</span>, <span class="string">&quot;Maxwell&quot;</span>, <span class="number">128</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x53</span>, <span class="string">&quot;Maxwell&quot;</span>, <span class="number">128</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x60</span>, <span class="string">&quot;Pascal&quot;</span>, <span class="number">64</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x61</span>, <span class="string">&quot;Pascal&quot;</span>, <span class="number">128</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x62</span>, <span class="string">&quot;Pascal&quot;</span>, <span class="number">128</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x70</span>, <span class="string">&quot;Volta&quot;</span>, <span class="number">64</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x72</span>, <span class="string">&quot;Xavier&quot;</span>, <span class="number">64</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x75</span>, <span class="string">&quot;Turing&quot;</span>, <span class="number">64</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x80</span>, <span class="string">&quot;Ampere&quot;</span>, <span class="number">64</span>&#125;,</span><br><span class="line">    &#123;<span class="number">0x86</span>, <span class="string">&quot;Ampere&quot;</span>, <span class="number">128</span>&#125;,</span><br><span class="line">    &#123;<span class="number">-1</span>, <span class="string">&quot;Graphics Device&quot;</span>, <span class="number">0</span>&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h2><ul>
+<li>DeviceMemory &#x2F; GlobalMemory:<ul>
+<li>linear memory: <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-memory">寻址空间大小</a>取决于主机系统和GPU的计算能力<ul>
+<li><code>cudaMalloc()</code> 申请</li>
+<li><code>cudaFree()</code> 释放</li>
+<li><code>cudaMemcpy()</code> 主机内存和设备内存间拷贝</li>
+</ul>
+</li>
+<li>CUDA arrays:</li>
+</ul>
+</li>
+<li>SharedMemory:</li>
+<li>Page-lockedHostMemory:</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="built_in">cudaMemcpy</span>(d_A, h_A, size, cudaMemcpyHostToDevice);</span><br><span class="line"><span class="built_in">cudaMemcpy</span>(h_B, d_B, size, cudaMemcpyDeviceToHost);</span><br></pre></td></tr></table></figure>
+
+<h2 id="计算模型"><a href="#计算模型" class="headerlink" title="计算模型"></a>计算模型</h2><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html">cuda-c-programming-guide</a></p>
+<ul>
+<li><strong>Kernels</strong>: <code>__global__</code>修饰的c++函数<ul>
+<li>内建变量：<ul>
+<li><code>gridDim.x/y/z</code> 一个grid中block的数量（各方向）</li>
+<li><code>blockDim.x/y/z</code> 一个block中thread的数量（各方向）</li>
+<li><code>blockIdx.x/y/z</code> 一个grid中的block索引（各方向从0开始）</li>
+<li><code>threadIdx.x/y/z</code> 一个block中的thread索引（各方向从0开始）</li>
+<li><code>gridDim.x * blockDim.x</code> 一个grid中线程的数量（x方向）</li>
+</ul>
+</li>
+<li>调用语法：<code>&lt;&lt;&lt;blocksPreGrid, threadPreBlock&gt;&gt;&gt;</code></li>
+</ul>
+</li>
+<li><strong>ThreadHierarchy</strong>: grid -&gt; block -&gt; thread，各层级均有三个维度 (x, y, z)<ul>
+<li>三个维度分别用于<code>vector, matrix, volume</code>的计算<ul>
+<li>一维<code>I(x)</code>：<code>ThreadID = I.x</code></li>
+<li>二维<code>I(x,y)</code>：<code>ThreadID = I.x + I.y * D.x</code></li>
+<li>三维<code>I(x,y,z)</code>：<code>ThreadID = I.x + I.y * D.x + I.z * D.x * D.y</code></li>
+</ul>
+</li>
+<li>每个block是独立执行的：可以并行（in parallel），也可以串行（in series）</li>
+<li>一个block上的所有thread限制在同一块显卡上分配核心且共享显存，因此thread数量（&lt;&#x3D;1024）是有限的</li>
+<li>一个block上的所有thread之间通过<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#shared-memory">SharedMemory</a>共享数据，并通过<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#cooperative-groups">Cooperative Groups API</a>协调内存访问<ul>
+<li><code>__syncthreads()</code>等待一个block内的所有thread都执行到此位置后，才允许继续执行（barrier同步）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>MemoryHierarchy</strong>:<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-memory-accesses">GlobalMemorySpace</a><ul>
+<li>global memory - access by grid0, grid1, …</li>
+<li>per-block shared memory</li>
+<li>per-thread local memory</li>
+</ul>
+</li>
+<li>ConstantMemorySpace</li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#texture-and-surface-memory">TextureMemorySpace</a></li>
+</ul>
+</li>
+<li><strong>HeterogeneousProgramming</strong>:<ul>
+<li>cuda线程在协处理器（coprocessor）上运行，即c++程序中kernals并行跑在gpu上时，其余串行部分同时跑在cpu上</li>
+<li>cpu和gpu分别跑在各自独立的内存空间中，并通过<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-unified-memory-programming-hd">Unified Memory</a>桥接它们</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="kernel"><ul class="nav-tabs"><li class="tab active"><a href="#kernel-1">KernelPrint</a></li><li class="tab"><a href="#kernel-2">VectorAdd</a></li><li class="tab"><a href="#kernel-3">MatrixAdd</a></li><li class="tab"><a href="#kernel-4">MatrixAdd-multiBlock</a></li></ul><div class="tab-content"><div class="tab-pane active" id="kernel-1"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">testKernel</span><span class="params">(<span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> blockId = blockIdx.y * gridDim.x + blockIdx.x;</span><br><span class="line">    <span class="type">int</span> threadId = threadIdx.z * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;[%d, %d]: %d\n&quot;</span>, blockId, threadId, val);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// two-dimensional grid and three-dimensional blocks</span></span><br><span class="line">  <span class="function">dim3 <span class="title">dimGrid</span><span class="params">(<span class="number">2</span>, <span class="number">2</span>)</span></span>;</span><br><span class="line">  <span class="function">dim3 <span class="title">dimBlock</span><span class="params">(<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>)</span></span>;</span><br><span class="line">  testKernel&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt;(<span class="number">10</span>);</span><br><span class="line">  <span class="built_in">cudaDeviceSynchronize</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">[1, 0]: 10</span></span><br><span class="line"><span class="comment">[1, 1]: 10</span></span><br><span class="line"><span class="comment">[1, 2]: 10</span></span><br><span class="line"><span class="comment">[1, 3]: 10</span></span><br><span class="line"><span class="comment">[1, 4]: 10</span></span><br><span class="line"><span class="comment">[1, 5]: 10</span></span><br><span class="line"><span class="comment">[2, 0]: 10</span></span><br><span class="line"><span class="comment">[2, 1]: 10</span></span><br><span class="line"><span class="comment">[2, 2]: 10</span></span><br><span class="line"><span class="comment">[2, 3]: 10</span></span><br><span class="line"><span class="comment">[2, 4]: 10</span></span><br><span class="line"><span class="comment">[2, 5]: 10</span></span><br><span class="line"><span class="comment">[0, 0]: 10</span></span><br><span class="line"><span class="comment">[0, 1]: 10</span></span><br><span class="line"><span class="comment">[0, 2]: 10</span></span><br><span class="line"><span class="comment">[0, 3]: 10</span></span><br><span class="line"><span class="comment">[0, 4]: 10</span></span><br><span class="line"><span class="comment">[0, 5]: 10</span></span><br><span class="line"><span class="comment">[3, 0]: 10</span></span><br><span class="line"><span class="comment">[3, 1]: 10</span></span><br><span class="line"><span class="comment">[3, 2]: 10</span></span><br><span class="line"><span class="comment">[3, 3]: 10</span></span><br><span class="line"><span class="comment">[3, 4]: 10</span></span><br><span class="line"><span class="comment">[3, 5]: 10</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="kernel-2"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Kernel definition</span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">VecAdd</span><span class="params">(<span class="type">float</span>* A, <span class="type">float</span>* B, <span class="type">float</span>* C)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> i = threadIdx.x;</span><br><span class="line">    C[i] = A[i] + B[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Kernel invocation with N threads in 1 block</span></span><br><span class="line">    VecAdd&lt;&lt;&lt;<span class="number">1</span>, N&gt;&gt;&gt;(A, B, C);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="kernel-3"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Kernel definition</span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatAdd</span><span class="params">(<span class="type">float</span> A[N][N], <span class="type">float</span> B[N][N], <span class="type">float</span> C[N][N])</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> i = threadIdx.x;</span><br><span class="line">    <span class="type">int</span> j = threadIdx.y;</span><br><span class="line">    C[i][j] = A[i][j] + B[i][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Kernel invocation with one block of N * N * 1 threads</span></span><br><span class="line">    <span class="type">int</span> numBlocks = <span class="number">1</span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(N, N)</span></span>;</span><br><span class="line">    MatAdd&lt;&lt;&lt;numBlocks, threadsPerBlock&gt;&gt;&gt;(A, B, C);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="kernel-4"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Kernel definition</span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatAdd</span><span class="params">(<span class="type">float</span> A[N][N], <span class="type">float</span> B[N][N], <span class="type">float</span> C[N][N])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> i = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> j = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="keyword">if</span> (i &lt; N &amp;&amp; j &lt; N)</span><br><span class="line">        C[i][j] = A[i][j] + B[i][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Kernel invocation with 16x16=256 threads pre block</span></span><br><span class="line">    <span class="function">dim3 <span class="title">threadsPerBlock</span><span class="params">(<span class="number">16</span>, <span class="number">16</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">numBlocks</span><span class="params">(N / threadsPerBlock.x, N / threadsPerBlock.y)</span></span>;</span><br><span class="line">    MatAdd&lt;&lt;&lt;numBlocks, threadsPerBlock&gt;&gt;&gt;(A, B, C);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/imssyang/cuda/tree/master/sample/vector_add">sample_vector_add (cpu vs gpu)</a></p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="矩阵乘法"><a href="#矩阵乘法" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h3><p><a target="_blank" rel="noopener" href="https://github.com/imssyang/cuda/tree/master/sample/vector_mul">sample_vector_mul</a></p>
+<div class="tabs" id="matrixmultiplication"><ul class="nav-tabs"><li class="tab active"><a href="#matrixmultiplication-1">GlobalMemory</a></li><li class="tab"><a href="#matrixmultiplication-2">SharedMemory</a></li></ul><div class="tab-content"><div class="tab-pane active" id="matrixmultiplication-1"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C[B.width, A.height] = B[width, height] * A[width, height]，且A.width == B.height</span></span><br><span class="line"><span class="comment">// C[列维度]：将B.width均分成blockDim.x个块，块索引为blockIdx.x，块中的列索引为threadIdx.x</span></span><br><span class="line"><span class="comment">// C[行维度]：将A.height均分成blockDim.y个块，块索引为blockIdx.y，块中的行索引为threadIdx.y</span></span><br><span class="line"><span class="comment">// C[一个元素] = B[一列元素] * A[一行元素]</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BLOCK_SIZE 16</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Matrix</span> &#123;</span><br><span class="line">    <span class="type">int</span> width;</span><br><span class="line">    <span class="type">int</span> height;</span><br><span class="line">    <span class="type">float</span>* elements;</span><br><span class="line">    <span class="built_in">Matrix</span>(width, height) &#123; <span class="keyword">this</span>.width = width; <span class="keyword">this</span>.height = height; &#125;</span><br><span class="line">    <span class="function"><span class="type">size_t</span> <span class="title">size</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> width * height * <span class="built_in">sizeof</span>(<span class="type">float</span>); &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatMulKernel</span><span class="params">(Matrix A, Matrix B, Matrix C)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> col = blockIdx.x * blockDim.x + threadIdx.x; <span class="comment">// &lt; B.width</span></span><br><span class="line">    <span class="type">int</span> row = blockIdx.y * blockDim.y + threadIdx.y; <span class="comment">// &lt; A.height</span></span><br><span class="line">    <span class="type">float</span> Cvalue = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> e = <span class="number">0</span>; e &lt; A.width; ++e) <span class="comment">// A.width == B.height</span></span><br><span class="line">        Cvalue += B.elements[e * B.width + col]</span><br><span class="line">                * A.elements[row * A.width + e];</span><br><span class="line">    C.elements[row * C.width + col] = Cvalue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// eg: C[2,2] = B[2,3] * A[3,2]</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MatMul</span><span class="params">(<span class="type">const</span> Matrix A, <span class="type">const</span> Matrix B, Matrix C)</span> </span>&#123;</span><br><span class="line">    <span class="function">Matrix <span class="title">d_A</span><span class="params">(A.width, A.height)</span></span>;</span><br><span class="line">    <span class="built_in">cudaMalloc</span>(&amp;d_A.elements, d_A.<span class="built_in">size</span>());</span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(d_A.elements, A.elements, d_A.<span class="built_in">size</span>(), cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line">    <span class="function">Matrix <span class="title">d_B</span><span class="params">(B.width, B.height)</span></span>;</span><br><span class="line">    <span class="built_in">cudaMalloc</span>(&amp;d_B.elements, d_B.<span class="built_in">size</span>());</span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(d_B.elements, B.elements, d_B.<span class="built_in">size</span>(), cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line">    <span class="function">Matrix <span class="title">d_C</span><span class="params">(B.width, A.height)</span></span>;</span><br><span class="line">    <span class="built_in">cudaMalloc</span>(&amp;d_C.elements, d_C.<span class="built_in">size</span>());</span><br><span class="line"></span><br><span class="line">    <span class="function">dim3 <span class="title">dimBlock</span><span class="params">(BLOCK_SIZE, BLOCK_SIZE)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">dimGrid</span><span class="params">(B.width / dimBlock.x, A.height / dimBlock.y)</span></span>;</span><br><span class="line">    MatMulKernel&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt;(d_A, d_B, d_C);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(C.elements, d_C.elements, size, cudaMemcpyDeviceToHost);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaFree</span>(d_A.elements);</span><br><span class="line">    <span class="built_in">cudaFree</span>(d_B.elements);</span><br><span class="line">    <span class="built_in">cudaFree</span>(d_C.elements);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="matrixmultiplication-2"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C[B.width, A.height] = B[width, height] * A[width, height]，且A.width == B.height</span></span><br><span class="line"><span class="comment">// C[列维度]：将B.width均分成块，块的列索引为blockIdx.x，块中元素的列索引为threadIdx.x</span></span><br><span class="line"><span class="comment">// C[行维度]：将A.height均分成块，块的行索引为blockIdx.y，块中元素的行索引为threadIdx.y</span></span><br><span class="line"><span class="comment">// C[块中一个元素] = B[所有块的每一列元素] * A[所有块的每一行元素]</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BLOCK_SIZE 16</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Matrix</span> &#123;</span><br><span class="line">    <span class="type">int</span> width;</span><br><span class="line">    <span class="type">int</span> height;</span><br><span class="line">    <span class="type">int</span> stride;</span><br><span class="line">    <span class="type">float</span>* elements;</span><br><span class="line">    <span class="built_in">Matrix</span>(width, height, stride) &#123; <span class="keyword">this</span>.width = width; <span class="keyword">this</span>.height = height; <span class="keyword">this</span>.stride = stride; &#125;</span><br><span class="line">    <span class="function"><span class="type">size_t</span> <span class="title">size</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> width * height * <span class="built_in">sizeof</span>(<span class="type">float</span>); &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">__device__ Matrix <span class="title">GetSubMatrix</span><span class="params">(Matrix M, <span class="type">int</span> blockRow, <span class="type">int</span> blockCol)</span> </span>&#123;</span><br><span class="line">    Matrix Msub;</span><br><span class="line">    Msub.width    = BLOCK_SIZE;</span><br><span class="line">    Msub.height   = BLOCK_SIZE;</span><br><span class="line">    Msub.stride   = M.stride;</span><br><span class="line">    Msub.elements = &amp;M.elements[M.stride * BLOCK_SIZE * blockRow + BLOCK_SIZE * blockCol]; <span class="comment">// from upper-left corner of M</span></span><br><span class="line">    <span class="keyword">return</span> Msub;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">MatMulKernel</span><span class="params">(Matrix A, Matrix B, Matrix C)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> blockCol = blockIdx.x;</span><br><span class="line">    <span class="type">int</span> blockRow = blockIdx.y;</span><br><span class="line">    <span class="type">int</span> col = threadIdx.x; <span class="comment">// &lt; BLOCK_SIZE</span></span><br><span class="line">    <span class="type">int</span> row = threadIdx.y; <span class="comment">// &lt; BLOCK_SIZE</span></span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> Cvalue = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> m = <span class="number">0</span>; m &lt; (A.width / BLOCK_SIZE); ++m) &#123; <span class="comment">// A.width == B.height</span></span><br><span class="line">        __shared__ <span class="type">float</span> As[BLOCK_SIZE][BLOCK_SIZE]; <span class="comment">// shared memory</span></span><br><span class="line">        __shared__ <span class="type">float</span> Bs[BLOCK_SIZE][BLOCK_SIZE]; <span class="comment">// shared memory</span></span><br><span class="line"></span><br><span class="line">        Matrix Asub = <span class="built_in">GetSubMatrix</span>(A, blockRow, m);</span><br><span class="line">        Matrix Bsub = <span class="built_in">GetSubMatrix</span>(B, m, blockCol);</span><br><span class="line">        As[row][col] = Asub.elements[row * Asub.stride + col]; <span class="comment">// one thread copies one element from global memory to shared memory</span></span><br><span class="line">        Bs[row][col] = Bsub.elements[row * Bsub.stride + col]; <span class="comment">// one thread copies one element from global memory to shared memory</span></span><br><span class="line"></span><br><span class="line">        __syncthreads(); <span class="comment">// Synchronize to make sure the sub-matrices are loaded before starting the computation</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> e = <span class="number">0</span>; e &lt; BLOCK_SIZE; ++e)</span><br><span class="line">            Cvalue += As[row][e] * Bs[e][col];</span><br><span class="line"></span><br><span class="line">        __syncthreads(); <span class="comment">// Synchronize to make sure that the preceding computation is done</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Matrix Csub = <span class="built_in">GetSubMatrix</span>(C, blockRow, blockCol);</span><br><span class="line">    Csub.elements[row * Csub.stride + col] = Cvalue; <span class="comment">// result to global memory</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// eg: C[2,2] = B[2,3] * A[3,2]</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MatMul</span><span class="params">(<span class="type">const</span> Matrix A, <span class="type">const</span> Matrix B, Matrix C)</span> </span>&#123;</span><br><span class="line">    <span class="function">Matrix <span class="title">d_A</span><span class="params">(A.width, A.height, A.width)</span></span>;</span><br><span class="line">    <span class="built_in">cudaMalloc</span>(&amp;d_A.elements, d_A.<span class="built_in">size</span>());</span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(d_A.elements, A.elements, d_A.<span class="built_in">size</span>(), cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line">    <span class="function">Matrix <span class="title">d_B</span><span class="params">(B.width, B.height, B.width)</span></span>;</span><br><span class="line">    <span class="built_in">cudaMalloc</span>(&amp;d_B.elements, d_B.<span class="built_in">size</span>());</span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(d_B.elements, B.elements, d_B.<span class="built_in">size</span>(), cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line">    <span class="function">Matrix <span class="title">d_C</span><span class="params">(B.width, A.height, B.width)</span></span>;</span><br><span class="line">    <span class="built_in">cudaMalloc</span>(&amp;d_C.elements, d_C.<span class="built_in">size</span>());</span><br><span class="line"></span><br><span class="line">    <span class="function">dim3 <span class="title">dimBlock</span><span class="params">(BLOCK_SIZE, BLOCK_SIZE)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">dimGrid</span><span class="params">(B.width / dimBlock.x, A.height / dimBlock.y)</span></span>;</span><br><span class="line">    MatMulKernel&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt;(d_A, d_B, d_C);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(C.elements, d_C.elements, size, cudaMemcpyDeviceToHost);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaFree</span>(d_A.elements);</span><br><span class="line">    <span class="built_in">cudaFree</span>(d_B.elements);</span><br><span class="line">    <span class="built_in">cudaFree</span>(d_C.elements);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cuda/" rel="tag"><i class="fa fa-tag"></i> cuda</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Node/npm.html" rel="prev" title="npm包管理工具">
+                  <i class="fa fa-chevron-left"></i> npm包管理工具
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/NeuralNetwork/Basic.html" rel="next" title="神经网络基础">
+                  神经网络基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/CUDA/Basic.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"c1a530052d0eb6afeb5e27756cb882f4"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

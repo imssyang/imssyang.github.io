@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Make构建基础.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile基础">
+<meta property="og:url" content="https://blog.imssyang.com/Automate/make/Makefile.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="Make构建基础.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-19T14:10:22.000Z">
+<meta property="article:modified_time" content="2024-04-20T17:25:14.907Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="Makefile">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/Automate/make/Makefile.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/Automate/make/Makefile.html","path":"Automate/make/Makefile.html","title":"Makefile基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Makefile基础 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%EF%BC%88execution%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">执行（execution）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%EF%BC%88variable%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">变量（variable）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Make"><span class="nav-number">2.1.</span> <span class="nav-text">Make</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%8F%98%E9%87%8F%EF%BC%88automatic%EF%BC%89"><span class="nav-number">2.1.1.</span> <span class="nav-text">自动变量（automatic）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shell"><span class="nav-number">2.2.</span> <span class="nav-text">Shell</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%EF%BC%88target%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">目标（target）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6%EF%BC%88wildcard%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">通配符（wildcard）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">4.1.</span> <span class="nav-text">*</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#-1"><span class="nav-number">4.2.</span> <span class="nav-text">%</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%84%E5%88%99%EF%BC%88rule%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">规则（rule）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E8%A7%84%E5%88%99%EF%BC%88Implicit%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">隐式规则（Implicit）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99%EF%BC%88Static-Pattern%EF%BC%89"><span class="nav-number">5.2.</span> <span class="nav-text">静态匹配规则（Static Pattern）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99%EF%BC%88Custom-Pattern%EF%BC%89"><span class="nav-number">5.3.</span> <span class="nav-text">定义匹配规则（Custom Pattern）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E5%86%92%E5%8F%B7%E8%A7%84%E5%88%99%EF%BC%88Double-Colon%EF%BC%89"><span class="nav-number">5.4.</span> <span class="nav-text">双冒号规则（Double-Colon）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%EF%BC%88if-else%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">条件（if-else）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%EF%BC%88function%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">函数（function）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/Automate/make/Makefile.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Makefile基础
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/Automate/make/" itemprop="url" rel="index"><span itemprop="name">make</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 9/19/2022 22:10:22" itemprop="dateCreated datePublished" datetime="2022-09-19T22:10:22+08:00">9/19/2022</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 4/21/2024 01:25:14" itemprop="dateModified" datetime="2024-04-21T01:25:14+08:00">4/21/2024</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>6.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Make构建基础.</p>
+<span id="more"></span>
+
+<h1 id="执行（execution）"><a href="#执行（execution）" class="headerlink" title="执行（execution）"></a>执行（execution）</h1><p><code>-s</code> 忽略所有命令输出到控制台<br><code>-k</code> 遇到错误继续执行</p>
+<div class="tabs" id="commands-and-execution"><ul class="nav-tabs"><li class="tab active"><a href="#commands-and-execution-1">suppress error</a></li><li class="tab"><a href="#commands-and-execution-2">recursive make</a></li></ul><div class="tab-content"><div class="tab-pane active" id="commands-and-execution-1"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">one:</span></span><br><span class="line">    <span class="comment"># This error will be printed but ignored, and make will continue to run</span></span><br><span class="line">    -false</span><br><span class="line">    touch one</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="commands-and-execution-2"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">new_contents = <span class="string">&quot;hello:\n\ttouch inside_file&quot;</span></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    mkdir -p subdir</span><br><span class="line">    printf <span class="variable">$(new_contents)</span> | sed -e &#x27;s/^ //&#x27; &gt; subdir/makefile</span><br><span class="line">    <span class="comment"># MAKE variable will pass the make flags</span></span><br><span class="line">    cd subdir &amp;&amp; <span class="variable">$(MAKE)</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -rf subdir</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="变量（variable）"><a href="#变量（variable）" class="headerlink" title="变量（variable）"></a>变量（variable）</h1><h2 id="Make"><a href="#Make" class="headerlink" title="Make"></a>Make</h2><ul>
+<li>变量只支持字符串，未定义变量为空字符串<ul>
+<li><code>=</code> 使用此变量时，其左侧的值才会被解析</li>
+<li><code>:=</code> 定义此变量时，其左侧的值才会被解析</li>
+<li><code>?=</code> 变量未定义时，才会赋值给它</li>
+<li><code>+=</code> 追加字符串</li>
+<li><code>override</code> 允许覆盖来自命令行参数中的变量</li>
+<li><code>\</code> 反斜杠字符支持将长字符串写成多行</li>
+</ul>
+</li>
+<li>单引号或双引号没有特殊意义，只标识字符串</li>
+<li>引用变量可通过<code>$&#123;&#125;</code>和<code>$()</code></li>
+</ul>
+<div class="tabs" id="variable-make"><ul class="nav-tabs"><li class="tab active"><a href="#variable-make-1">basic</a></li><li class="tab"><a href="#variable-make-2">:=</a></li><li class="tab"><a href="#variable-make-3">?=</a></li><li class="tab"><a href="#variable-make-4">+=</a></li><li class="tab"><a href="#variable-make-5">override</a></li></ul><div class="tab-content"><div class="tab-pane active" id="variable-make-1"><figure class="highlight make"><figcaption><span>Makefile</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">a := 1</span><br><span class="line">b := &#x27;2&#x27;</span><br><span class="line">c := a b</span><br><span class="line">d := hello   <span class="comment"># with 3 space</span></span><br><span class="line"><span class="section">all: <span class="variable">$(c)</span> e</span></span><br><span class="line">    echo <span class="variable">$(c)</span></span><br><span class="line">    echo [<span class="variable">$(d)</span>]</span><br><span class="line"><span class="section">a:</span></span><br><span class="line">    echo &#x27;$a&#x27; &#x27;<span class="variable">$(a)</span>&#x27;</span><br><span class="line"><span class="section">b:</span></span><br><span class="line">    echo $b $&#123;b&#125;</span><br><span class="line"><span class="section">e:</span></span><br><span class="line">    echo Too long, so \</span><br><span class="line">        use multiple lines!</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><figcaption><span>$ make -s</span></figcaption><table><tr><td class="code"><pre><span class="line">1 1</span><br><span class="line">2 2</span><br><span class="line">Too long, so use multiple lines!</span><br><span class="line">a b</span><br><span class="line">[hello ]</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="variable-make-2"><figure class="highlight make"><figcaption><span>MakefileVar</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Recursive variable, looks for it when the command is used</span></span><br><span class="line">one = 1-$&#123;later_variable&#125;</span><br><span class="line"><span class="comment"># Simply expanded variable, expand it when is defined</span></span><br><span class="line">two := 2-$&#123;later_variable&#125;</span><br><span class="line"></span><br><span class="line">later_variable = later</span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    echo <span class="variable">$(one)</span></span><br><span class="line">    echo <span class="variable">$(two)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><figcaption><span>$ make -s -f MakefileVar</span></figcaption><table><tr><td class="code"><pre><span class="line">1-later</span><br><span class="line">2-</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="variable-make-3"><figure class="highlight make"><figcaption><span>MakefileVar</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">one = hello</span><br><span class="line">one ?= will not be set</span><br><span class="line">two ?= will be set</span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    echo <span class="variable">$(one)</span></span><br><span class="line">    echo <span class="variable">$(two)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><figcaption><span>$ make -s -f MakefileVar</span></figcaption><table><tr><td class="code"><pre><span class="line">hello</span><br><span class="line">will be <span class="built_in">set</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="variable-make-4"><figure class="highlight make"><figcaption><span>MakefileVar</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">foo := start</span><br><span class="line">foo += more</span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    echo <span class="variable">$(foo)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><figcaption><span>$ make -s -f MakefileVar</span></figcaption><table><tr><td class="code"><pre><span class="line">start more</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="variable-make-5"><figure class="highlight make"><figcaption><span>MakefileOverride</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Overrides command line arguments</span></span><br><span class="line"><span class="keyword">override</span> option_one = did_override</span><br><span class="line"><span class="comment"># Does not override command line arguments</span></span><br><span class="line">option_two = not_override</span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    echo <span class="variable">$(option_one)</span></span><br><span class="line">    echo <span class="variable">$(option_two)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><figcaption><span>$ make option_one=1 option_two=2 -s -f MakefileOverride</span></figcaption><table><tr><td class="code"><pre><span class="line">did_override</span><br><span class="line">2</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h3 id="自动变量（automatic）"><a href="#自动变量（automatic）" class="headerlink" title="自动变量（automatic）"></a>自动变量（automatic）</h3><p><a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html#Automatic-Variables">10.5.3 Automatic Variables</a></p>
+<ul>
+<li><code>$@</code> 目标（target）的文件名称，例如 <code>%.c:</code> -&gt; <code>xxx.c</code></li>
+<li><code>$*</code> 目标的匹配名称，例如 <code>%.c:</code> -&gt; <code>xxx</code></li>
+<li><code>$&lt;</code> 第一个先决条件（prerequisite）的名称，例如 <code>x.o: a.c b.c</code> -&gt; <code>a.c</code></li>
+<li><code>$^</code> 由空格分隔的所有先决条件的名称，例如 <code>x.o: a.c b.c</code> -&gt; <code>a.c b.c</code></li>
+<li><code>$?</code> 由空格分隔的所有新于目标的先决条件的名称</li>
+<li><code>$|</code> 由空格分隔的所有order-only的先决条件的名称</li>
+<li><code>$%</code> 归档（archive）目标的成员名称，例如 <code>foo.a(bar.o):</code> -&gt; <code>bar.o</code></li>
+<li><code>$+</code> 同<code>$^</code>，已排序</li>
+</ul>
+<h2 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h2><ul>
+<li>默认SHELL&#x3D;&#x2F;bin&#x2F;sh</li>
+<li>环境变量既可作为make变量，又可作为shell变量</li>
+<li><code>$$</code> 引用shell变量</li>
+<li><code>export</code> 将一个make变量转换为环境变量</li>
+<li><code>EXPORT_ALL_VARIABLES</code> 将所有make变量转换为环境变量</li>
+</ul>
+<div class="tabs" id="variable-bash"><ul class="nav-tabs"><li class="tab active"><a href="#variable-bash-1">set-shell</a></li><li class="tab"><a href="#variable-bash-2">make&shell-variable</a></li><li class="tab"><a href="#variable-bash-3">env-variable</a></li></ul><div class="tab-content"><div class="tab-pane active" id="variable-bash-1"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Set shell</span></span><br><span class="line">SHELL=/bin/bash</span><br><span class="line"></span><br><span class="line"><span class="section">cool:</span></span><br><span class="line">    <span class="comment"># Ignore the command to console</span></span><br><span class="line">    @echo <span class="string">&quot;Hello from bash&quot;</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="variable-bash-2"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">make_var = I am a make variable</span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    <span class="comment"># Same as running &quot;sh_var=&#x27;I am a shell variable&#x27;; echo $sh_var&quot; in the shell</span></span><br><span class="line">    sh_var=&#x27;I am a shell variable&#x27;; echo $$sh_var</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Same as running &quot;echo I am a amke variable&quot; in the shell</span></span><br><span class="line">    echo <span class="variable">$(make_var)</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="variable-bash-3"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Run this with &quot;export shell_env_var=&#x27;I am an environment variable&#x27;; make&quot;</span></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    <span class="comment"># Print out the Shell variable</span></span><br><span class="line">    @echo $$shell_env_var</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Print out the Make variable</span></span><br><span class="line">    @echo <span class="variable">$(shell_env_var)</span></span><br><span class="line"></span><br><span class="line">    @echo <span class="variable">$(shell_env_var_inside)</span></span><br><span class="line">    @echo $$shell_env_var_inside</span><br><span class="line"></span><br><span class="line">    @echo <span class="variable">$(one)</span></span><br><span class="line">    @echo $$one</span><br><span class="line">    @echo <span class="variable">$(two)</span></span><br><span class="line">    @echo $$two</span><br><span class="line"></span><br><span class="line"><span class="comment"># Note the variable and exports, are set/affected globally.</span></span><br><span class="line">shell_env_var_inside=shell env var that created inside of Make</span><br><span class="line"><span class="keyword">export</span> shell_env_var_inside  <span class="comment"># <span class="doctag">NOTE:</span> should comment when EXPORT_ALL_VARIABLES exist</span></span><br><span class="line"></span><br><span class="line"><span class="section">.EXPORT_ALL_VARIABLES:</span></span><br><span class="line">one=1</span><br><span class="line">two=2</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ export shell_env_var='an env variable'; make -f MakefileEnv</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="comment"># Print out the Shell variable</span></span><br><span class="line">an env variable</span><br><span class="line"><span class="comment"># Print out the Make variable</span></span><br><span class="line">an env variable</span><br><span class="line">shell env var that created inside of Make</span><br><span class="line">shell env var that created inside of Make</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">2</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="目标（target）"><a href="#目标（target）" class="headerlink" title="目标（target）"></a>目标（target）</h1><ul>
+<li><code>$@</code>是构建目标名称</li>
+<li><code>TARGET: xxx</code> 定义特定于某个目标的make变量</li>
+</ul>
+<div class="tabs" id="shell-target"><ul class="nav-tabs"><li class="tab active"><a href="#shell-target-1">basic</a></li><li class="tab"><a href="#shell-target-2">target-variable</a></li></ul><div class="tab-content"><div class="tab-pane active" id="shell-target-1"><figure class="highlight make"><figcaption><span>MakefileTarget</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all: f1.o f2.o</span></span><br><span class="line"></span><br><span class="line">f1.o f2.o:</span><br><span class="line">    echo <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -f MakefileTarget</span></figcaption><table><tr><td class="code"><pre><span class="line">echo f1.o</span><br><span class="line">f1.o</span><br><span class="line">echo f2.o</span><br><span class="line">f2.o</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="shell-target-2"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">%.c: one = cool</span></span><br><span class="line"></span><br><span class="line"><span class="section">this.c:</span></span><br><span class="line">    echo one is defined: <span class="variable">$(one)</span></span><br><span class="line"></span><br><span class="line"><span class="section">other:</span></span><br><span class="line">    echo one is nothing: <span class="variable">$(one)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -s -f MakefileTarget this.c</span></figcaption><table><tr><td class="code"><pre><span class="line">one is defined: cool</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -s -f MakefileTarget other</span></figcaption><table><tr><td class="code"><pre><span class="line">one is nothing:</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="通配符（wildcard）"><a href="#通配符（wildcard）" class="headerlink" title="通配符（wildcard）"></a>通配符（wildcard）</h1><h2 id=""><a href="#" class="headerlink" title="*"></a><code>*</code></h2><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Print out file information about every .c file</span></span><br><span class="line"><span class="section">print: $(wildcard *.c)</span></span><br><span class="line">    ls -la  <span class="variable">$?</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="-1"><a href="#-1" class="headerlink" title="%"></a><code>%</code></h2><p>Static Pattern Rules<br>Pattern Rules<br>String Substitution<br>The vpath Directive</p>
+<h1 id="规则（rule）"><a href="#规则（rule）" class="headerlink" title="规则（rule）"></a>规则（rule）</h1><h2 id="隐式规则（Implicit）"><a href="#隐式规则（Implicit）" class="headerlink" title="隐式规则（Implicit）"></a>隐式规则（Implicit）</h2><p><code>CC</code>: C编译器，默认<code>cc</code><br><code>CXX</code>: C++编译器，默认<code>g++</code><br><code>CFLAGS</code>: C编译选项<br><code>CXXFLAGS</code>: C++编译选项<br><code>CPPFLAGS</code>: C预处理器选项<br><code>LDFLAGS</code>: 链接选项</p>
+<p><code>$(CC) -c $(CPPFLAGS) $(CFLAGS)</code> (n.c -&gt; n.o)<br><code>$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)</code> (n.cc&#x2F;n.cpp -&gt; n.o)<br><code>$(CC) $(LDFLAGS) n.o $(LOADLIBES) $(LDLIBS)</code> (n.o -&gt; n)</p>
+<figure class="highlight make"><table><tr><td class="code"><pre><span class="line">objects = foo.o bar.o all.o</span><br><span class="line"><span class="section">all: <span class="variable">$(objects)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment"># These files compile via implicit rules</span></span><br><span class="line"><span class="section">foo.o: foo.c</span></span><br><span class="line"><span class="section">bar.o: bar.c</span></span><br><span class="line"><span class="section">all.o: all.c</span></span><br><span class="line"></span><br><span class="line"><span class="section">all.c:</span></span><br><span class="line">    echo <span class="string">&quot;int main() &#123; return 0; &#125;&quot;</span> &gt; all.c</span><br><span class="line"></span><br><span class="line"><span class="section">%.c:</span></span><br><span class="line">    touch <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f *.c *.o all</span><br></pre></td></tr></table></figure>
+
+<h2 id="静态匹配规则（Static-Pattern）"><a href="#静态匹配规则（Static-Pattern）" class="headerlink" title="静态匹配规则（Static Pattern）"></a>静态匹配规则（Static Pattern）</h2><figure class="highlight make"><table><tr><td class="code"><pre><span class="line"><span class="section">targets...: target-pattern: prereq-patterns ...</span></span><br><span class="line">    commands</span><br></pre></td></tr></table></figure>
+
+<div class="tabs" id="static-pattern-rules"><ul class="nav-tabs"><li class="tab active"><a href="#static-pattern-rules-1">basic</a></li><li class="tab"><a href="#static-pattern-rules-2">filter</a></li></ul><div class="tab-content"><div class="tab-pane active" id="static-pattern-rules-1"><figure class="highlight make"><table><tr><td class="code"><pre><span class="line">objects = foo.o bar.o all.o</span><br><span class="line"><span class="section">all: <span class="variable">$(objects)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment"># These files compile via implicit rules</span></span><br><span class="line"><span class="variable">$(objects)</span>: %.o: %.c</span><br><span class="line"></span><br><span class="line"><span class="section">all.c:</span></span><br><span class="line">    echo <span class="string">&quot;int main() &#123; return 0; &#125;&quot;</span> &gt; all.c</span><br><span class="line"></span><br><span class="line"><span class="section">%.c:</span></span><br><span class="line">    touch <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f *.c *.o all</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="static-pattern-rules-2"><figure class="highlight make"><table><tr><td class="code"><pre><span class="line">obj_files = foo.result bar.o lose.o</span><br><span class="line">src_files = foo.raw bar.c lose.c</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(obj_files)</span></span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(<span class="built_in">filter</span> %.o,<span class="variable">$(obj_files)</span>)</span>: %.o: %.c</span><br><span class="line">    echo <span class="string">&quot;target: <span class="variable">$@</span> prereq: <span class="variable">$&lt;</span>&quot;</span></span><br><span class="line"><span class="variable">$(<span class="built_in">filter</span> %.result,<span class="variable">$(obj_files)</span>)</span>: %.result: %.raw</span><br><span class="line">    echo <span class="string">&quot;target: <span class="variable">$@</span> prereq: <span class="variable">$&lt;</span>&quot;</span> </span><br><span class="line"></span><br><span class="line">%.c %.raw:</span><br><span class="line">    touch <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f <span class="variable">$(src_files)</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="定义匹配规则（Custom-Pattern）"><a href="#定义匹配规则（Custom-Pattern）" class="headerlink" title="定义匹配规则（Custom Pattern）"></a>定义匹配规则（Custom Pattern）</h2><figure class="highlight make"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Define a pattern rule that compiles every .c file into a .o file</span></span><br><span class="line">%.o : %.c</span><br><span class="line">        <span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> <span class="variable">$(CPPFLAGS)</span> <span class="variable">$&lt;</span> -o <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="双冒号规则（Double-Colon）"><a href="#双冒号规则（Double-Colon）" class="headerlink" title="双冒号规则（Double-Colon）"></a>双冒号规则（Double-Colon）</h2><figure class="highlight make"><figcaption><span>Makefile</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all: blah</span></span><br><span class="line"></span><br><span class="line"><span class="section">blah::</span></span><br><span class="line">    echo <span class="string">&quot;hello&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">blah::</span></span><br><span class="line">    echo <span class="string">&quot;hello again&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -f MakefileColon</span></figcaption><table><tr><td class="code"><pre><span class="line">hello</span><br><span class="line">hello again</span><br></pre></td></tr></table></figure>
+
+<h1 id="条件（if-else）"><a href="#条件（if-else）" class="headerlink" title="条件（if-else）"></a>条件（if-else）</h1><div class="tabs" id="condition-if-else"><ul class="nav-tabs"><li class="tab active"><a href="#condition-if-else-1">var-is-defined</a></li><li class="tab"><a href="#condition-if-else-2">var-is-empty</a></li><li class="tab"><a href="#condition-if-else-3">findstring</a></li></ul><div class="tab-content"><div class="tab-pane active" id="condition-if-else-1"><figure class="highlight make"><figcaption><span>MakefileDefine</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">bar =</span><br><span class="line">foo = <span class="variable">$(bar)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line"><span class="keyword">ifdef</span> foo</span><br><span class="line">    echo <span class="string">&quot;foo is defined&quot;</span></span><br><span class="line"><span class="keyword">endif</span></span><br><span class="line"><span class="keyword">ifndef</span> bar</span><br><span class="line">    echo <span class="string">&quot;but bar is not&quot;</span></span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -s -f MakefileDefine</span></figcaption><table><tr><td class="code"><pre><span class="line">foo is defined</span><br><span class="line">but bar is not</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="condition-if-else-2"><figure class="highlight make"><figcaption><span>MakefileEmpty</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">nullstring =</span><br><span class="line">foo = <span class="variable">$(nullstring)</span> <span class="comment"># end of line; there is a space here</span></span><br><span class="line">bar = ok</span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    echo [<span class="variable">$(nullstring)</span>] [<span class="variable">$(foo)</span>] [<span class="variable">$(bar)</span>]</span><br><span class="line"><span class="keyword">ifeq</span> (<span class="variable">$(<span class="built_in">strip</span> <span class="variable">$(foo)</span>)</span>,)</span><br><span class="line">    echo <span class="string">&quot;foo is empty after being stripped&quot;</span></span><br><span class="line"><span class="keyword">endif</span></span><br><span class="line"><span class="keyword">ifeq</span> (<span class="variable">$(nullstring)</span>,)</span><br><span class="line">    echo <span class="string">&quot;nullstring doesn&#x27;t even have spaces&quot;</span></span><br><span class="line"><span class="keyword">endif</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ifeq</span> (<span class="variable">$(foo)</span>, ok)</span><br><span class="line">    echo <span class="string">&quot;foo equals ok&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    echo <span class="string">&quot;nope&quot;</span></span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -s -f MakefileEmpty</span></figcaption><table><tr><td class="code"><pre><span class="line">[] [ ] [ok]</span><br><span class="line">foo is empty after being stripped</span><br><span class="line">nullstring doesn&#x27;t even have spaces</span><br><span class="line">nope</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="condition-if-else-3"><figure class="highlight make"><figcaption><span>MakefileFlags</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">bar =</span><br><span class="line">foo = <span class="variable">$(bar)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line"><span class="comment"># Search for the &quot;-i&quot; flag in MAKEFLAGS.</span></span><br><span class="line"><span class="keyword">ifneq</span> (,<span class="variable">$(<span class="built_in">findstring</span> i, <span class="variable">$(MAKEFLAGS)</span>)</span>)</span><br><span class="line">    echo <span class="string">&quot;i was passed to MAKEFLAGS&quot;</span></span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -s -i -f MakefileFlags</span></figcaption><table><tr><td class="code"><pre><span class="line">i was passed to MAKEFLAGS</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="函数（function）"><a href="#函数（function）" class="headerlink" title="函数（function）"></a>函数（function）</h1><p><a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Functions.html">8 Functions for Transforming Text</a></p>
+<div class="tabs" id="function-text"><ul class="nav-tabs"><li class="tab active"><a href="#function-text-1">subst</a></li><li class="tab"><a href="#function-text-2">patsubst</a></li><li class="tab"><a href="#function-text-3">if</a></li><li class="tab"><a href="#function-text-4">foreach</a></li><li class="tab"><a href="#function-text-5">call</a></li><li class="tab"><a href="#function-text-6">shell</a></li></ul><div class="tab-content"><div class="tab-pane active" id="function-text-1"><figure class="highlight make"><figcaption><span>MakefileSubst</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">comma := ,</span><br><span class="line">empty :=</span><br><span class="line">space := <span class="variable">$(empty)</span> <span class="variable">$(empty)</span></span><br><span class="line">foo := a b c</span><br><span class="line">bar := <span class="variable">$(<span class="built_in">subst</span> <span class="variable">$(space)</span>,<span class="variable">$(comma)</span>,<span class="variable">$(foo)</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    @echo [<span class="variable">$(bar)</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -f MakefileSubst</span></figcaption><table><tr><td class="code"><pre><span class="line">[a,b,c]</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="function-text-2"><figure class="highlight make"><figcaption><span>MakefilePatsubst</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">foo := a.o b.o l.a c.o</span><br><span class="line">one := <span class="variable">$(<span class="built_in">patsubst</span> %.o,%.c,<span class="variable">$(foo)</span>)</span></span><br><span class="line"><span class="comment"># This is a shorthand for the above</span></span><br><span class="line">two := $(foo:%.o=%.c)</span><br><span class="line"><span class="comment"># This is the suffix-only shorthand, and is also equivalent to the above.</span></span><br><span class="line">three := $(foo:.o=.c)</span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    echo <span class="variable">$(one)</span></span><br><span class="line">    echo <span class="variable">$(two)</span></span><br><span class="line">    echo <span class="variable">$(three)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -s -f MakefilePatsubst</span></figcaption><table><tr><td class="code"><pre><span class="line">a.c b.c l.a c.c</span><br><span class="line">a.c b.c l.a c.c</span><br><span class="line">a.c b.c l.a c.c</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="function-text-3"><figure class="highlight make"><figcaption><span>MakefileIf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">foo := <span class="variable">$(<span class="built_in">if</span> this-is-not-empty,then!,else!)</span></span><br><span class="line">empty :=</span><br><span class="line">bar := <span class="variable">$(<span class="built_in">if</span> <span class="variable">$(empty)</span>,then!,else!)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    @echo <span class="variable">$(foo)</span></span><br><span class="line">    @echo <span class="variable">$(bar)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight make"><figcaption><span>$ make -s -f MakefileIf</span></figcaption><table><tr><td class="code"><pre><span class="line">then!</span><br><span class="line"><span class="keyword">else</span>!</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="function-text-4"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">foo := who are you</span><br><span class="line"><span class="comment"># For each &quot;word&quot; in foo, output that same word with an exclamation after</span></span><br><span class="line">bar := <span class="variable">$(<span class="built_in">foreach</span> wrd,<span class="variable">$(foo)</span>,<span class="variable">$(wrd)</span>!)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    <span class="comment"># Output is &quot;who! are! you!&quot;</span></span><br><span class="line">    @echo <span class="variable">$(bar)</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="function-text-5"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sweet_new_fn = Variable Name: $(0) First: $(1) Second: $(2) Empty Variable: $(3)</span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    <span class="comment"># Outputs &quot;Variable Name: sweet_new_fn First: go Second: tigers Empty Variable:&quot;</span></span><br><span class="line">    @echo <span class="variable">$(<span class="built_in">call</span> sweet_new_fn, go, tigers)</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="function-text-6"><figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all:</span></span><br><span class="line">    @echo <span class="variable">$(<span class="built_in">shell</span> ls -la)</span> <span class="comment"># Very ugly because the newlines are gone!</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>[1] <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/">GNU make manual</a><br>[2] <a target="_blank" rel="noopener" href="https://makefiletutorial.com/">Learn Makefiles With the tastiest examples</a><br>[3] <a target="_blank" rel="noopener" href="https://spin.atomicobject.com/2016/08/26/makefile-c-projects/">A Super-Simple Makefile for Medium-Sized C&#x2F;C++ Projects</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Makefile/" rel="tag"><i class="fa fa-tag"></i> Makefile</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DataStructure/LinkedList/SinglyLinkedList.html" rel="prev" title="单链表">
+                  <i class="fa fa-chevron-left"></i> 单链表
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Media/Mediainfo.html" rel="next" title="mediainfo视频信息">
+                  mediainfo视频信息 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/Automate/make/Makefile.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"64b928ef71f93f546b1a28b705ed4d37"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

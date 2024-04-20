@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Go标准库梳理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go标准库">
+<meta property="og:url" content="https://blog.imssyang.com/ProgrammingLanguage/Go/StandardLibrary.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="Go标准库梳理。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-05-06T05:49:22.000Z">
+<meta property="article:modified_time" content="2023-05-06T12:08:30.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/ProgrammingLanguage/Go/StandardLibrary.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/ProgrammingLanguage/Go/StandardLibrary.html","path":"ProgrammingLanguage/Go/StandardLibrary.html","title":"Go标准库"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Go标准库 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#runtime"><span class="nav-number">1.</span> <span class="nav-text">runtime</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pprof"><span class="nav-number">1.1.</span> <span class="nav-text">pprof</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#testing"><span class="nav-number">2.</span> <span class="nav-text">testing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unit"><span class="nav-number">2.1.</span> <span class="nav-text">unit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#benchmark"><span class="nav-number">2.2.</span> <span class="nav-text">benchmark</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sync"><span class="nav-number">3.</span> <span class="nav-text">sync</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel"><span class="nav-number">3.1.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WaitGroup"><span class="nav-number">3.2.</span> <span class="nav-text">WaitGroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mutex"><span class="nav-number">3.3.</span> <span class="nav-text">Mutex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cond"><span class="nav-number">3.4.</span> <span class="nav-text">Cond</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Once"><span class="nav-number">3.5.</span> <span class="nav-text">Once</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pool"><span class="nav-number">3.6.</span> <span class="nav-text">Pool</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/ProgrammingLanguage/Go/StandardLibrary.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go标准库
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/ProgrammingLanguage/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 5/6/2023 13:49:22 / Modified: 20:08:30" itemprop="dateCreated datePublished" datetime="2023-05-06T13:49:22+08:00">5/6/2023</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>14k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>13 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Go标准库梳理。</p>
+<span id="more"></span>
+
+<h1 id="runtime"><a href="#runtime" class="headerlink" title="runtime"></a>runtime</h1><h2 id="pprof"><a href="#pprof" class="headerlink" title="pprof"></a>pprof</h2><ul>
+<li>pprof用于分析程序的cpu和memory性能，由两部分组成：<ul>
+<li>运行时库：<code>import runtime/pprof</code></li>
+<li>分析工具：<code>go tool pprof</code><ul>
+<li><code>go tool pprof xxx.pprof</code>   以交互命令行模式</li>
+<li><code>go tool pprof -no_browser -http=0.0.0.0:9999 xxx.pprof</code> 以web-ui模式</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="go-pprof"><ul class="nav-tabs"><li class="tab active"><a href="#go-pprof-1">CPU</a></li><li class="tab"><a href="#go-pprof-2">Memory</a></li></ul><div class="tab-content"><div class="tab-pane active" id="go-pprof-1"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dep/sort.go</span></span><br><span class="line"><span class="keyword">package</span> dep</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;math/rand&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Generate</span><span class="params">(n <span class="type">int</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">    rand.Seed(time.Now().UnixNano())</span><br><span class="line">    nums := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">        nums = <span class="built_in">append</span>(nums, rand.Int())</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> nums</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Bubble</span><span class="params">(nums []<span class="type">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(nums); i++ &#123;</span><br><span class="line">        <span class="keyword">for</span> j := <span class="number">1</span>; j &lt; <span class="built_in">len</span>(nums)-i; j++ &#123;</span><br><span class="line">            <span class="keyword">if</span> nums[j] &lt; nums[j<span class="number">-1</span>] &#123;</span><br><span class="line">                nums[j], nums[j<span class="number">-1</span>] = nums[j<span class="number">-1</span>], nums[j]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main/main.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">    <span class="string">&quot;runtime/pprof&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;example.com/dep&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    f, _ := os.OpenFile(<span class="string">&quot;cpu.pprof&quot;</span>, os.O_CREATE|os.O_RDWR, <span class="number">0644</span>)</span><br><span class="line">    <span class="keyword">defer</span> f.Close()</span><br><span class="line">    pprof.StartCPUProfile(f)</span><br><span class="line">    <span class="keyword">defer</span> pprof.StopCPUProfile()</span><br><span class="line"></span><br><span class="line">    n := <span class="number">10</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        nums := dep.Generate(n)</span><br><span class="line">        dep.Bubble(nums)</span><br><span class="line">        n *= <span class="number">10</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-pprof-2"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dep/sort.go</span></span><br><span class="line"><span class="keyword">package</span> dep</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;math/rand&quot;</span></span><br><span class="line">    <span class="string">&quot;strings&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> letterBytes = <span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">randomString</span><span class="params">(n <span class="type">int</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    b := <span class="built_in">make</span>([]<span class="type">byte</span>, n)</span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> b &#123;</span><br><span class="line">        b[i] = letterBytes[rand.Intn(<span class="built_in">len</span>(letterBytes))]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="type">string</span>(b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ConcatRandomString</span><span class="params">(n <span class="type">int</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    s := <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">        s += randomString(n)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ConcatRandomStringByBuilder</span><span class="params">(n <span class="type">int</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> s strings.Builder</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">        s.WriteString(randomString(n))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s.String()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main/main.go</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;example.com/dep&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/pkg/profile&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> profile.Start(</span><br><span class="line">        profile.MemProfile,</span><br><span class="line">        profile.MemProfileRate(<span class="number">1</span>),</span><br><span class="line">        profile.ProfilePath(<span class="string">&quot;.&quot;</span>)).Stop()</span><br><span class="line">    dep.ConcatRandomString(<span class="number">100</span>)</span><br><span class="line">    dep.ConcatRandomStringByBuilder(<span class="number">100</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="testing"><a href="#testing" class="headerlink" title="testing"></a>testing</h1><ul>
+<li>package 可定制测试进程的入口函数<code>func TestMain(m *testing.M)</code><ul>
+<li><code>TestMain</code> 影响package内的每一个测试用例</li>
+<li><code>TestMain</code> 实现中可以封装setup和teardown功能</li>
+</ul>
+</li>
+<li><code>go test</code> 命令通用选项：<ul>
+<li><code>-v</code> 显示每个用例的测试结果</li>
+<li><code>-cover</code> 查看覆盖率</li>
+</ul>
+</li>
+<li>辅助函数：<ul>
+<li><code>t.Error()</code> 错误提示，不会中断测试过程</li>
+<li><code>t.Fatal()</code> 错误提示，会终止测试过程</li>
+<li><code>t.Helper()</code>  标注为帮助函数后，报错信息回溯到上一级行号，有助于定位</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="go-testing"><ul class="nav-tabs"><li class="tab active"><a href="#go-testing-1">TestMain</a></li><li class="tab"><a href="#go-testing-2">t.Helper</a></li></ul><div class="tab-content"><div class="tab-pane active" id="go-testing-1"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dep/main_test.go</span></span><br><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">setup</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Before all tests&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">teardown</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;After all tests&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestMain</span><span class="params">(m *testing.M)</span></span> &#123;</span><br><span class="line">    setup()</span><br><span class="line">    code := m.Run()</span><br><span class="line">    teardown()</span><br><span class="line">    os.Exit(code)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-testing-2"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dep/calc.go</span></span><br><span class="line"><span class="keyword">package</span> dep</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Mul</span><span class="params">(a <span class="type">int</span>, b <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> a * b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// dep/calc_test.go</span></span><br><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;example.com/dep&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> calcCase <span class="keyword">struct</span>&#123; A, B, Expected <span class="type">int</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">createMulTestCase</span><span class="params">(t *testing.T, c *calcCase)</span></span> &#123;</span><br><span class="line">    t.Helper() <span class="comment">// 标注为帮助函数，报错时会提示堆栈上一级行号，提示更清晰</span></span><br><span class="line">    <span class="keyword">if</span> ans := dep.Mul(c.A, c.B); ans != c.Expected &#123;</span><br><span class="line">        t.Fatalf(<span class="string">&quot;%d * %d expected %d, but %d got&quot;</span>,</span><br><span class="line">            c.A, c.B, c.Expected, ans)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestMulOnHelper</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    createMulTestCase(t, &amp;calcCase&#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>&#125;)</span><br><span class="line">    createMulTestCase(t, &amp;calcCase&#123;<span class="number">2</span>, <span class="number">-3</span>, <span class="number">-6</span>&#125;)</span><br><span class="line">    createMulTestCase(t, &amp;calcCase&#123;<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>&#125;) <span class="comment">// wrong case</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="unit"><a href="#unit" class="headerlink" title="unit"></a>unit</h2><ul>
+<li>支持根据测试场景使用 <code>t.Run()</code> 创建不同的子测试用例</li>
+<li><code>go test</code> 命令用于单元测试选项：<ul>
+<li><code>-run TestAdd</code> 过滤测试用例（支持正则表达式）</li>
+</ul>
+</li>
+<li>示例：<ul>
+<li><code>go test -run=&quot;TestConcatByBuilder&quot; . -v</code></li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="go-testing-test"><ul class="nav-tabs"><li class="tab active"><a href="#go-testing-test-1">Basic</a></li><li class="tab"><a href="#go-testing-test-2">Subtest</a></li></ul><div class="tab-content"><div class="tab-pane active" id="go-testing-test-1"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dep/str.go</span></span><br><span class="line"><span class="keyword">package</span> dep</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;math/rand&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> letterBytes = <span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RandomString</span><span class="params">(n <span class="type">int</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    b := <span class="built_in">make</span>([]<span class="type">byte</span>, n)</span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> b &#123;</span><br><span class="line">        b[i] = letterBytes[rand.Intn(<span class="built_in">len</span>(letterBytes))]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="type">string</span>(b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// dep/str_test.go</span></span><br><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;strings&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;example.com/dep&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestConcatByBuilder</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> str = dep.RandomString(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">var</span> builder strings.Builder</span><br><span class="line">    <span class="built_in">cap</span> := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">if</span> builder.Cap() != <span class="built_in">cap</span> &#123;</span><br><span class="line">            fmt.Print(builder.Cap(), <span class="string">&quot; &quot;</span>)</span><br><span class="line">            <span class="built_in">cap</span> = builder.Cap()</span><br><span class="line">        &#125;</span><br><span class="line">        builder.WriteString(str)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">strings.Builder内存申请过程:</span></span><br><span class="line"><span class="comment">16 32 64 128 256 512 896 1408 2048 3072 4096 5376 6912 9472 ...</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-testing-test-2"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dep/calc_test.go</span></span><br><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;example.com/dep&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestMulOnTableDriven</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    cases := []<span class="keyword">struct</span> &#123;</span><br><span class="line">        Name           <span class="type">string</span></span><br><span class="line">        A, B, Expected <span class="type">int</span></span><br><span class="line">    &#125;&#123;</span><br><span class="line">        &#123;<span class="string">&quot;pos&quot;</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;neg&quot;</span>, <span class="number">2</span>, <span class="number">-3</span>, <span class="number">-6</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;zero&quot;</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>&#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> _, c := <span class="keyword">range</span> cases &#123;</span><br><span class="line">        t.Run(c.Name, <span class="function"><span class="keyword">func</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">            <span class="keyword">if</span> ans := dep.Mul(c.A, c.B); ans != c.Expected &#123;</span><br><span class="line">                t.Fatalf(<span class="string">&quot;%d * %d expected %d, but %d got&quot;</span>,</span><br><span class="line">                    c.A, c.B, c.Expected, ans)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="benchmark"><a href="#benchmark" class="headerlink" title="benchmark"></a>benchmark</h2><ul>
+<li>基准测试用于度量某个函数的性能，函数名以<em>Benchmark</em>开头</li>
+<li>测试命令（<code>-bench</code>参数，默认<code>-cpu=GOMAXPROCS -benchtime=1s -count=1</code>）：<ul>
+<li><code>go test -bench=&#39;.*&#39; abc_test.go</code> 运行abc_test.go中的用例</li>
+<li><code>go test -bench=&#39;Fib$&#39; .</code> 运行正则匹配’Fib$’的用例（当前package内）</li>
+<li><code>go test -bench=&#39;.*&#39; -cpu=2,4 .</code> 以2核和4核cpu运行用例</li>
+<li><code>go test -bench=&#39;.*&#39; -benchtime=5s .</code> 以5s作为基准运行用例</li>
+<li><code>go test -bench=&#39;.*&#39; -benchtime=30x .</code> 以30次作为基准运行用例</li>
+<li><code>go test -bench=&#39;.*&#39; -count=3 .</code> 运行3轮benchmark用例</li>
+<li><code>go test -bench=&#39;.*&#39; -benchmem .</code> 运行用例时度量内存分配的次数</li>
+<li><code>go test -bench=&#39;.*&#39; -cpuprofile=cpu.pprof .</code> 运行用例时生成cpu.pprof文件</li>
+<li><code>go test -bench=&#39;.*&#39; -blockprofile=block.pprof .</code> 运行用例时生成block.pprof文件</li>
+<li><code>go test -bench=&#39;.*&#39; -memprofile=mem.pprof .</code> 运行用例时生成mem.pprof文件</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="go-testing-benchmark"><ul class="nav-tabs"><li class="tab active"><a href="#go-testing-benchmark-1">Accuracy</a></li><li class="tab"><a href="#go-testing-benchmark-2">Memory</a></li><li class="tab"><a href="#go-testing-benchmark-3">Timer</a></li></ul><div class="tab-content"><div class="tab-pane active" id="go-testing-benchmark-1"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dep/fib.go</span></span><br><span class="line"><span class="keyword">package</span> dep</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Fib</span><span class="params">(n <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span> || n == <span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Fib(n<span class="number">-2</span>) + Fib(n<span class="number">-1</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// dep/fib_test.go</span></span><br><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;example.com/x/dep&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkFib</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">    time.Sleep(time.Second * <span class="number">3</span>)</span><br><span class="line">    b.ResetTimer() <span class="comment">// 消除上面sleep的影响</span></span><br><span class="line">    <span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">        dep.Fib(<span class="number">30</span>) <span class="comment">// run fib(30) b.N times</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-testing-benchmark-2"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dep/mem_test.go</span></span><br><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;math/rand&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">generate</span><span class="params">(n <span class="type">int</span>, hasCap <span class="type">bool</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">    rand.Seed(time.Now().UnixNano())</span><br><span class="line">    <span class="keyword">var</span> nums []<span class="type">int</span></span><br><span class="line">    <span class="keyword">if</span> hasCap &#123;</span><br><span class="line">        nums = <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">0</span>, n)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        nums = <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">        nums = <span class="built_in">append</span>(nums, rand.Int())</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> nums</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BmGenerate</span><span class="params">(n <span class="type">int</span>, hasCap <span class="type">bool</span>, b *testing.B)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; b.N; i++ &#123;</span><br><span class="line">        generate(n, hasCap)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkGenerateNoCap1</span><span class="params">(b *testing.B)</span></span>        &#123; BmGenerate(<span class="number">1</span>, <span class="literal">false</span>, b) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkGenerateNoCap10</span><span class="params">(b *testing.B)</span></span>       &#123; BmGenerate(<span class="number">10</span>, <span class="literal">false</span>, b) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkGenerateNoCap100</span><span class="params">(b *testing.B)</span></span>      &#123; BmGenerate(<span class="number">100</span>, <span class="literal">false</span>, b) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkGenerateNoCap1000</span><span class="params">(b *testing.B)</span></span>     &#123; BmGenerate(<span class="number">1000</span>, <span class="literal">false</span>, b) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkGenerateNoCap10000</span><span class="params">(b *testing.B)</span></span>    &#123; BmGenerate(<span class="number">10000</span>, <span class="literal">false</span>, b) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkGenerateNoCap100000</span><span class="params">(b *testing.B)</span></span>   &#123; BmGenerate(<span class="number">100000</span>, <span class="literal">false</span>, b) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkGenerateNoCap1000000</span><span class="params">(b *testing.B)</span></span>  &#123; BmGenerate(<span class="number">1000000</span>, <span class="literal">false</span>, b) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkGenerateHasCap1000000</span><span class="params">(b *testing.B)</span></span> &#123; BmGenerate(<span class="number">1000000</span>, <span class="literal">true</span>, b) &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">$ go test -bench=&#x27;Generate&#x27; -benchtime=10x -benchmem .</span></span><br><span class="line"><span class="comment">BenchmarkGenerateNoCap1-4         10          11355 ns/op             8 B/op       1 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkGenerateNoCap10-4        10           9826 ns/op           248 B/op       5 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkGenerateNoCap100-4       10          10926 ns/op          2040 B/op       8 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkGenerateNoCap1000-4      10          37334 ns/op         25208 B/op      12 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkGenerateNoCap10000-4     10         291248 ns/op        357624 B/op      19 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkGenerateNoCap100000-4    10        3306200 ns/op       4101413 B/op      28 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkGenerateNoCap1000000-4   10       60037981 ns/op      41678156 B/op      38 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkGenerateHasCap1000000-4  10       20238641 ns/op       8003593 B/op       1 allocs/op</span></span><br><span class="line"><span class="comment">Note: NameOfBenchmark-CPU    NumOfIter(b.N)       Time/op  BytesAllocated/op   NumOfMemAllocation/op</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-testing-benchmark-3"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sort_test.go</span></span><br><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;math/rand&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">generateHasCap</span><span class="params">(n <span class="type">int</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">    rand.Seed(time.Now().UnixNano())</span><br><span class="line">    nums := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">0</span>, n)</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">        nums = <span class="built_in">append</span>(nums, rand.Int())</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> nums</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">bubbleSort</span><span class="params">(nums []<span class="type">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(nums); i++ &#123;</span><br><span class="line">        <span class="keyword">for</span> j := <span class="number">1</span>; j &lt; <span class="built_in">len</span>(nums)-i; j++ &#123;</span><br><span class="line">            <span class="keyword">if</span> nums[j] &lt; nums[j<span class="number">-1</span>] &#123;</span><br><span class="line">                nums[j], nums[j<span class="number">-1</span>] = nums[j<span class="number">-1</span>], nums[j]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkBubbleSort</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">        b.StopTimer()</span><br><span class="line">        nums := generateHasCap(<span class="number">10000</span>)</span><br><span class="line">        b.StartTimer()</span><br><span class="line"></span><br><span class="line">        bubbleSort(nums)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="sync"><a href="#sync" class="headerlink" title="sync"></a>sync</h1><h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><ul>
+<li>无缓冲（unbuffered）通道（S先等R就绪，然后R等S发送）：<ol>
+<li>sender会阻塞等待，直到receiver准备就绪后才会发送数据</li>
+<li>receiver会阻塞等待，直到sender发送了数据</li>
+</ol>
+</li>
+<li>有缓冲（buffered）通道（类似semaphore）：<ol>
+<li>buffer满了后，sender才会阻塞等待，直到buffer再次有空余</li>
+<li>buffer空了后，receiver才会阻塞等待，直到buffer再次有数据</li>
+</ol>
+</li>
+<li>关闭通道后，receiver才会接收到zero值（零值表示通道被关闭了）</li>
+</ul>
+<div class="tabs" id="go-sync-channel"><ul class="nav-tabs"><li class="tab active"><a href="#go-sync-channel-1">UnbufferedChannelSync</a></li><li class="tab"><a href="#go-sync-channel-2">BufferedChannelSync</a></li><li class="tab"><a href="#go-sync-channel-3">CloseChannel</a></li></ul><div class="tab-content"><div class="tab-pane active" id="go-sync-channel-1"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> c = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>) <span class="comment">// (unbuffered channel)</span></span><br><span class="line"><span class="keyword">var</span> a <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">    a = <span class="string">&quot;Hi&quot;</span></span><br><span class="line">    &lt;-c <span class="comment">// (synchronized: receiver is executed after that sender is complete)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> f()</span><br><span class="line">    c &lt;- <span class="number">0</span>   <span class="comment">// (sender)</span></span><br><span class="line">    <span class="built_in">print</span>(a) <span class="comment">// Hi</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-sync-channel-2"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Example_1</span></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> c = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">10</span>) <span class="comment">// (buffered channel)</span></span><br><span class="line"><span class="keyword">var</span> a <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">    a = <span class="string">&quot;Hi&quot;</span></span><br><span class="line">    c &lt;- <span class="number">0</span> <span class="comment">// (sender)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> f()</span><br><span class="line">    &lt;-c      <span class="comment">// (synchronized: receiver wait until sender is complete)</span></span><br><span class="line">    <span class="built_in">print</span>(a) <span class="comment">// Hi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Example_2: Limit concurrency by buffered channel</span></span><br><span class="line"><span class="keyword">var</span> limit = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> _, w := <span class="keyword">range</span> work &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(w <span class="keyword">func</span>()</span></span>) &#123;</span><br><span class="line">            limit &lt;- <span class="number">1</span></span><br><span class="line">            w()</span><br><span class="line">            &lt;-limit</span><br><span class="line">        &#125;(w)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">select</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-sync-channel-3"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> c = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">10</span>) <span class="comment">// (buffered channel)</span></span><br><span class="line"><span class="keyword">var</span> a <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">    a = <span class="string">&quot;Hi&quot;</span></span><br><span class="line">    <span class="built_in">close</span>(c)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> f()</span><br><span class="line">    &lt;-c      <span class="comment">// (synchronized: closing of c is synchronized before receiver that return a zero value)</span></span><br><span class="line">    <span class="built_in">print</span>(a) <span class="comment">// Hi</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="WaitGroup"><a href="#WaitGroup" class="headerlink" title="WaitGroup"></a>WaitGroup</h2><ul>
+<li><code>sync.WaitGroup</code>用于等待一组goroutine完成</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            <span class="comment">// do some work</span></span><br><span class="line">            fmt.Println(<span class="string">&quot;goroutine&quot;</span>, i)</span><br><span class="line">        &#125;(i)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Println(<span class="string">&quot;all goroutines done&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*[OUTPUT]</span></span><br><span class="line"><span class="comment">goroutine 4</span></span><br><span class="line"><span class="comment">goroutine 2</span></span><br><span class="line"><span class="comment">goroutine 3</span></span><br><span class="line"><span class="comment">goroutine 0</span></span><br><span class="line"><span class="comment">goroutine 1</span></span><br><span class="line"><span class="comment">all goroutines done</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Mutex"><a href="#Mutex" class="headerlink" title="Mutex"></a>Mutex</h2><ul>
+<li>两个互斥锁（mutex）互相等待会产生死锁（deadlock）<ul>
+<li>通过<code>sync.TryLock()</code>虽然可以避免死锁，但不建议这样处理，使用这个方法意味着程序有更深层次的问题</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="go-sync-mutex"><ul class="nav-tabs"><li class="tab active"><a href="#go-sync-mutex-1">DeadLock</a></li><li class="tab"><a href="#go-sync-mutex-2">TryLock</a></li></ul><div class="tab-content"><div class="tab-pane active" id="go-sync-mutex-1"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    m1 sync.Mutex</span><br><span class="line">    m2 sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// deadlock (goroutine 1和2互相等待产生死锁，直到main goroutine退出)</span></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;goroutine 1S&quot;</span>)</span><br><span class="line">        m1.Lock()</span><br><span class="line">        <span class="keyword">defer</span> m1.Unlock()</span><br><span class="line">        time.Sleep(time.Second)</span><br><span class="line">        m2.Lock()</span><br><span class="line">        <span class="keyword">defer</span> m2.Unlock()</span><br><span class="line">        fmt.Println(<span class="string">&quot;goroutine 1E&quot;</span>)</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;goroutine 2S&quot;</span>)</span><br><span class="line">        m2.Lock()</span><br><span class="line">        <span class="keyword">defer</span> m2.Unlock()</span><br><span class="line">        time.Sleep(time.Second)</span><br><span class="line">        m1.Lock()</span><br><span class="line">        <span class="keyword">defer</span> m1.Unlock()</span><br><span class="line">        fmt.Println(<span class="string">&quot;goroutine 2E&quot;</span>)</span><br><span class="line">    &#125;()</span><br><span class="line">    time.Sleep(<span class="number">5</span> * time.Second)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*[OUTPUT]</span></span><br><span class="line"><span class="comment">goroutine 2S</span></span><br><span class="line"><span class="comment">goroutine 1S</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-sync-mutex-2"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    m1 sync.Mutex</span><br><span class="line">    m2 sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">for</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> m1.TryLock() &#123;</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">            time.Sleep(time.Millisecond)</span><br><span class="line">        &#125;</span><br><span class="line">        time.Sleep(time.Second)</span><br><span class="line">        m1.Unlock()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> m2.TryLock() &#123;</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">            time.Sleep(time.Millisecond)</span><br><span class="line">        &#125;</span><br><span class="line">        fmt.Println(<span class="string">&quot;goroutine 1&quot;</span>)</span><br><span class="line">        m2.Unlock()</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">for</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> m2.TryLock() &#123;</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">            time.Sleep(time.Millisecond)</span><br><span class="line">        &#125;</span><br><span class="line">        time.Sleep(time.Second)</span><br><span class="line">        m2.Unlock()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> m1.TryLock() &#123;</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">            time.Sleep(time.Millisecond)</span><br><span class="line">        &#125;</span><br><span class="line">        fmt.Println(<span class="string">&quot;goroutine 2&quot;</span>)</span><br><span class="line">        m1.Unlock()</span><br><span class="line">    &#125;()</span><br><span class="line">    time.Sleep(<span class="number">5</span> * time.Second)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*[OUTPUT]</span></span><br><span class="line"><span class="comment">goroutine 2</span></span><br><span class="line"><span class="comment">goroutine 1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="Cond"><a href="#Cond" class="headerlink" title="Cond"></a>Cond</h2><ul>
+<li>Cond实现了条件变量（condition variable），相关的Locker可以是Mutex或RWMutex<ul>
+<li>简单场景下，使用Channel比Cond更合适<ul>
+<li><code>Broadcast()</code>相当于关闭通道（closing a channel）</li>
+<li><code>Signal()</code>相当于向通道发送数据（sending on a channel）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="go-sync-cond"><ul class="nav-tabs"><li class="tab active"><a href="#go-sync-cond-1">DeadLock</a></li></ul><div class="tab-content"><div class="tab-pane active" id="go-sync-cond-1"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;log&quot;</span></span><br><span class="line">    <span class="string">&quot;os&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    log.SetFlags(log.Flags()&amp;^(log.Ldate|log.Ltime) | log.Lmicroseconds)</span><br><span class="line">    log.SetOutput(os.Stdout)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> mu sync.Mutex</span><br><span class="line">    cond := sync.NewCond(&amp;mu)</span><br><span class="line">    <span class="keyword">var</span> ready <span class="type">bool</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">            mu.Lock()</span><br><span class="line">            <span class="keyword">defer</span> mu.Unlock()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> !ready &#123;</span><br><span class="line">                log.Printf(<span class="string">&quot;goroutine %d wait\n&quot;</span>, i)</span><br><span class="line">                cond.Wait()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            log.Printf(<span class="string">&quot;goroutine %d done\n&quot;</span>, i)</span><br><span class="line">        &#125;(i)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    log.Println(<span class="string">&quot;main: signal&quot;</span>)</span><br><span class="line">    time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">    mu.Lock()</span><br><span class="line">    ready = <span class="literal">true</span></span><br><span class="line">    cond.Signal()</span><br><span class="line">    mu.Unlock()</span><br><span class="line"></span><br><span class="line">    fmt.Scanln()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">11:01:40.562508 main: signal</span></span><br><span class="line"><span class="comment">11:01:40.562617 goroutine 2 wait</span></span><br><span class="line"><span class="comment">11:01:40.562627 goroutine 0 wait</span></span><br><span class="line"><span class="comment">11:01:40.562631 goroutine 1 wait</span></span><br><span class="line"><span class="comment">11:01:41.563386 goroutine 2 done</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="Once"><a href="#Once" class="headerlink" title="Once"></a>Once</h2><ul>
+<li>在多个goroutine中执行同一个<code>sync.Once</code>对象，其只会执行一次</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;once&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> once sync.Once</span><br><span class="line">    done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">bool</span>)</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            once.Do(f)</span><br><span class="line">            done &lt;- <span class="literal">true</span></span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">        &lt;-done</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*[OUTPUT]</span></span><br><span class="line"><span class="comment">once</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Pool"><a href="#Pool" class="headerlink" title="Pool"></a>Pool</h2><ul>
+<li>sync.Pool是对象重用的机制，可伸缩的，并发安全的，其大小仅受限于内存的大小</li>
+<li>sync.Pool用于保存和复用临时对象，减少内存分配，降低 GC 压力</li>
+</ul>
+<div class="tabs" id="go-sync-pool"><ul class="nav-tabs"><li class="tab active"><a href="#go-sync-pool-1">Buffer</a></li><li class="tab"><a href="#go-sync-pool-2">json.Unmarshal</a></li></ul><div class="tab-content"><div class="tab-pane active" id="go-sync-pool-1"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;bytes&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> data = <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">10000</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkBuffer</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">        <span class="keyword">var</span> buf bytes.Buffer</span><br><span class="line">        buf.Write(data)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> bufPool = sync.Pool&#123;</span><br><span class="line">    New: <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="keyword">interface</span>&#123;&#125; &#123;</span><br><span class="line">        <span class="keyword">return</span> &amp;bytes.Buffer&#123;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkBufferByPool</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">        buf := bufPool.Get().(*bytes.Buffer)</span><br><span class="line">        buf.Write(data)</span><br><span class="line">        buf.Reset()</span><br><span class="line">        bufPool.Put(buf)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">$ go test -bench=&quot;Buffer&quot; -benchmem</span></span><br><span class="line"><span class="comment">BenchmarkBuffer-4           384044      2639 ns/op   10240 B/op       1 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkBufferByPool-4   10302880     121.2 ns/op       0 B/op       0 allocs/op</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="go-sync-pool-2"><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dep_test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;encoding/json&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">    Name   <span class="type">string</span></span><br><span class="line">    Age    <span class="type">int32</span></span><br><span class="line">    Remark [<span class="number">4096</span>]<span class="type">byte</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> j, _ = json.Marshal(Student&#123;Name: <span class="string">&quot;Geektutu&quot;</span>, Age: <span class="number">25</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkUnmarshal</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">        s := &amp;Student&#123;&#125;</span><br><span class="line">        json.Unmarshal(j, s)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> pool = sync.Pool&#123;</span><br><span class="line">    New: <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="keyword">interface</span>&#123;&#125; &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">new</span>(Student)</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BenchmarkUnmarshalByPool</span><span class="params">(b *testing.B)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> n := <span class="number">0</span>; n &lt; b.N; n++ &#123;</span><br><span class="line">        s := pool.Get().(*Student)</span><br><span class="line">        json.Unmarshal(j, s)</span><br><span class="line">        pool.Put(s)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">$ go test -bench=&quot;Unmarshal&quot; -benchmem</span></span><br><span class="line"><span class="comment">BenchmarkUnmarshal-4             3055    415878 ns/op    5112 B/op       8 allocs/op</span></span><br><span class="line"><span class="comment">BenchmarkUnmarshalByPool-4       2894    425744 ns/op     248 B/op       7 allocs/op</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>[1] <a target="_blank" rel="noopener" href="https://go.dev/ref/spec">The Go Programming Language Specification</a><br>[2] <a target="_blank" rel="noopener" href="https://go.dev/doc/gc-guide">A Guide to the Go Garbage Collector</a><br>[3] <a target="_blank" rel="noopener" href="https://go.dev/ref/mem">The Go Memory Model</a><br>[4] <a target="_blank" rel="noopener" href="https://gfw.go101.org/">Go语言101</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/ProgrammingLanguage/Go/Basic.html" rel="prev" title="Go语言基础">
+                  <i class="fa fa-chevron-left"></i> Go语言基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/ProgrammingLanguage/Go/StandardLibrary.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"6caaa14a0786a43dbc8a90b79054b11f"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

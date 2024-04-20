@@ -1,1 +1,1 @@
-A static blog based on Hexo.
+I's Ssyang.

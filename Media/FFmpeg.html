@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="FFmpeg功能梳理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFmpeg视频处理">
+<meta property="og:url" content="https://blog.imssyang.com/Media/FFmpeg.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="FFmpeg功能梳理。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-18T12:15:22.000Z">
+<meta property="article:modified_time" content="2022-06-18T12:27:30.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="FFmpeg">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/Media/FFmpeg.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/Media/FFmpeg.html","path":"Media/FFmpeg.html","title":"FFmpeg视频处理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>FFmpeg视频处理 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ffplay"><span class="nav-number">1.</span> <span class="nav-text">ffplay</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ffprobe"><span class="nav-number">2.</span> <span class="nav-text">ffprobe</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ffmpeg"><span class="nav-number">3.</span> <span class="nav-text">ffmpeg</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Filtering"><span class="nav-number">3.1.</span> <span class="nav-text">Filtering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#simple"><span class="nav-number">3.1.1.</span> <span class="nav-text">simple</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#idet"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">idet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tinterlace"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">tinterlace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#yadif"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">yadif</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#complex"><span class="nav-number">3.1.2.</span> <span class="nav-text">complex</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#psnr"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">psnr</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vmaf"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">vmaf</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-number">3.2.</span> <span class="nav-text">Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#copy"><span class="nav-number">3.2.1.</span> <span class="nav-text">copy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#selection"><span class="nav-number">3.2.2.</span> <span class="nav-text">selection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#specifier"><span class="nav-number">3.2.3.</span> <span class="nav-text">specifier</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Video"><span class="nav-number">3.3.</span> <span class="nav-text">Video</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rawvideo"><span class="nav-number">3.4.</span> <span class="nav-text">rawvideo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Audio"><span class="nav-number">3.5.</span> <span class="nav-text">Audio</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A0%81%E7%8E%87%E6%8E%A7%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">码率控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E5%8F%82%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">量化参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%92%E5%AE%9A%E7%A0%81%E7%8E%87"><span class="nav-number">4.2.</span> <span class="nav-text">恒定码率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E5%8F%98%E7%A0%81%E7%8E%87"><span class="nav-number">4.3.</span> <span class="nav-text">可变码率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B3%E5%9D%87%E7%A0%81%E7%8E%87"><span class="nav-number">4.3.1.</span> <span class="nav-text">平均码率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E6%AC%A1%E5%B9%B3%E5%9D%87%E7%A0%81%E7%8E%87"><span class="nav-number">4.3.2.</span> <span class="nav-text">两次平均码率</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%92%E5%AE%9A%E8%B4%A8%E9%87%8F"><span class="nav-number">4.4.</span> <span class="nav-text">恒定质量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E7%A0%81%E7%8E%87"><span class="nav-number">4.5.</span> <span class="nav-text">约束码率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%A7%E6%95%B0%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="nav-number">5.</span> <span class="nav-text">帧数量控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x264%E7%9B%B8%E5%85%B3"><span class="nav-number">6.</span> <span class="nav-text">x264相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CAVLC%E5%92%8CCABAC"><span class="nav-number">6.1.</span> <span class="nav-text">CAVLC和CABAC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%87%E5%88%86%E4%B8%8E%E5%90%88%E5%B9%B6"><span class="nav-number">7.</span> <span class="nav-text">切分与合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E7%9B%B8%E5%85%B3"><span class="nav-number">8.</span> <span class="nav-text">图片相关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9F%B3%E9%A2%91%E7%9B%B8%E5%85%B3"><span class="nav-number">9.</span> <span class="nav-text">音频相关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HLS%E7%9B%B8%E5%85%B3"><span class="nav-number">10.</span> <span class="nav-text">HLS相关</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/Media/FFmpeg.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FFmpeg视频处理
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/Media/" itemprop="url" rel="index"><span itemprop="name">Media</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 6/18/2022 20:15:22 / Modified: 20:27:30" itemprop="dateCreated datePublished" datetime="2022-06-18T20:15:22+08:00">6/18/2022</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>27k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>25 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>FFmpeg功能梳理。</p>
+<span id="more"></span>
+
+<h1 id="ffplay"><a href="#ffplay" class="headerlink" title="ffplay"></a>ffplay</h1><p><a target="_blank" rel="noopener" href="https://ffmpeg.org/ffplay-all.html">ffplay Documentation</a></p>
+<ul>
+<li><code>-x 800</code> 窗口宽</li>
+<li><code>-y 600</code> 窗口高</li>
+<li><code>-left 100</code> 窗口位置距离左边100像素</li>
+<li><code>-top 100</code> 窗口位置距离顶部100像素</li>
+<li><code>-an</code> 禁用音频</li>
+<li><code>-vn</code> 禁用视频</li>
+<li><code>-sn</code> 禁用字幕</li>
+<li><code>-ss 60</code> 跳转到60s位置</li>
+<li><code>-t 30</code> 播放30s</li>
+<li><code>-seek_interval 10</code> 播放过程中左右方向键跳转间隔为10s(默认)</li>
+<li><code>-volume 50</code> 播放音量为50（0~100）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">While playing:</span><br><span class="line">q, ESC              quit</span><br><span class="line">f                   toggle full screen</span><br><span class="line">p, SPC              pause</span><br><span class="line">space               toggle pause</span><br><span class="line">m                   toggle mute</span><br><span class="line">9, 0                decrease and increase volume respectively</span><br><span class="line">/, *                decrease and increase volume respectively</span><br><span class="line">a                   cycle audio channel in the current program</span><br><span class="line">v                   cycle video channel</span><br><span class="line">t                   cycle subtitle channel in the current program</span><br><span class="line">c                   cycle program</span><br><span class="line">w                   cycle video filters or show modes</span><br><span class="line">s                   activate frame-step mode</span><br><span class="line">left/right          seek backward/forward 10 seconds (set by -seek_interval)</span><br><span class="line">down/up             seek backward/forward 1 minute</span><br><span class="line">page down/page up   seek backward/forward 10 minutes</span><br><span class="line">right mouse click   seek to percentage in file corresponding to fraction of width</span><br><span class="line">left double-click   toggle full screen</span><br></pre></td></tr></table></figure>
+
+<h1 id="ffprobe"><a href="#ffprobe" class="headerlink" title="ffprobe"></a>ffprobe</h1><p><a target="_blank" rel="noopener" href="https://ffmpeg.org/ffprobe-all.html">ffprobe Documentation</a></p>
+<ul>
+<li><code>-v error</code> 设置日志输出级别（info, warning, error）</li>
+<li><code>-of, -print_format json</code> 设置输出格式为json<ul>
+<li><code>-of default=nokey=1:noprint_wrappers=1 (简写为nk=1:nw=1)</code> 只输出值（去掉key和section标识）</li>
+</ul>
+</li>
+<li><code>-show_format</code> 显示封装信息</li>
+<li><code>-show_streams</code> 显示流信息<ul>
+<li><code>-select_streams v:0</code> 选择第一条视频流（a音频，v视频，s字幕）</li>
+</ul>
+</li>
+<li><code>-show_packets</code> 显示数据包信息</li>
+<li><code>-show_frames</code> 显示解码后的帧信息</li>
+<li><code>-show_entries format=start_time:stream=width,height</code> 过滤输出结果</li>
+<li><code>-read_intervals %+20</code> 只读前20s<ul>
+<li><code>-read_intervals %02:30</code> 只读到<code>02:30</code>位置</li>
+<li><code>-read_intervals 01:23%+#42</code> 跳转到<code>01:23</code>位置后只读42个包</li>
+<li><code>-read_intervals 10%+20,01:30%01:45</code> 跳转到10s位置后读20s，然后再跳转到<code>01:30</code>位置后读到<code>01:45</code>位置</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="ffprobe-basic"><ul class="nav-tabs"><li class="tab active"><a href="#ffprobe-basic-1">-v info</a></li><li class="tab"><a href="#ffprobe-basic-2">-show_format</a></li><li class="tab"><a href="#ffprobe-basic-3">-show_streams</a></li><li class="tab"><a href="#ffprobe-basic-4">-show_packets</a></li><li class="tab"><a href="#ffprobe-basic-5">-show_frames</a></li></ul><div class="tab-content"><div class="tab-pane active" id="ffprobe-basic-1"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &#x27;1.mp4&#x27;:</span><br><span class="line">  Metadata:</span><br><span class="line">    major_brand     : isom</span><br><span class="line">    minor_version   : 512</span><br><span class="line">    compatible_brands: isomiso2avc1mp41</span><br><span class="line">    encoder         : Lavf58.29.100</span><br><span class="line">  Duration: 00:01:01.04, start: 0.000000, bitrate: 10285 kb/s</span><br><span class="line">    Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709), 1920x1080 [SAR 1:1 DAR 16:9], 10020 kb/s, 60 fps, 60 tbr, 90k tbn, 120 tbc (default)</span><br><span class="line">    Metadata:</span><br><span class="line">      handler_name    : VideoHandler</span><br><span class="line">    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 256 kb/s (default)</span><br><span class="line">    Metadata:</span><br><span class="line">      handler_name    : SoundHandler</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="ffprobe-basic-2"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[FORMAT]</span><br><span class="line">filename=1.mp4</span><br><span class="line">nb_streams=2</span><br><span class="line">nb_programs=0</span><br><span class="line">format_name=mov,mp4,m4a,3gp,3g2,mj2</span><br><span class="line">format_long_name=QuickTime / MOV</span><br><span class="line">start_time=0:00:00.000000</span><br><span class="line">duration=0:01:01.035000</span><br><span class="line">size=74.837353 Mibyte</span><br><span class="line">bit_rate=10.285593 Mbit/s</span><br><span class="line">probe_score=100</span><br><span class="line">TAG:major_brand=isom</span><br><span class="line">TAG:minor_version=512</span><br><span class="line">TAG:compatible_brands=isomiso2avc1mp41</span><br><span class="line">TAG:encoder=Lavf58.29.100</span><br><span class="line">[/FORMAT]</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="ffprobe-basic-3"><table>
+  <tr>
+    <td>video</td>
+    <td>audio</td>
+  </tr>
+  <tr>
+    <td valign="top">
+    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[STREAM]</span><br><span class="line">index=0</span><br><span class="line">codec_name=h264</span><br><span class="line">codec_long_name=H.264 / AVC / MPEG-4 part 10</span><br><span class="line">profile=High</span><br><span class="line">codec_type=video</span><br><span class="line">codec_time_base=182999/21960000</span><br><span class="line">codec_tag_string=avc1</span><br><span class="line">codec_tag=0x31637661</span><br><span class="line">width=1920</span><br><span class="line">height=1080</span><br><span class="line">coded_width=1920</span><br><span class="line">coded_height=1088</span><br><span class="line">has_b_frames=1</span><br><span class="line">sample_aspect_ratio=1:1</span><br><span class="line">display_aspect_ratio=16:9</span><br><span class="line">pix_fmt=yuv420p</span><br><span class="line">level=42</span><br><span class="line">color_range=tv</span><br><span class="line">color_space=bt709</span><br><span class="line">color_transfer=bt709</span><br><span class="line">color_primaries=bt709</span><br><span class="line">chroma_location=left</span><br><span class="line">field_order=unknown</span><br><span class="line">timecode=N/A</span><br><span class="line">refs=1</span><br><span class="line">is_avc=true</span><br><span class="line">nal_length_size=4</span><br><span class="line">id=N/A</span><br><span class="line">r_frame_rate=60/1</span><br><span class="line">avg_frame_rate=10980000/182999</span><br><span class="line">time_base=1/90000</span><br><span class="line">start_pts=0</span><br><span class="line">start_time=0:00:00.000000</span><br><span class="line">duration_ts=5401440</span><br><span class="line">duration=0:01:00.016000</span><br><span class="line">bit_rate=10.020903 Mbit/s</span><br><span class="line">max_bit_rate=N/A</span><br><span class="line">bits_per_raw_sample=8</span><br><span class="line">nb_frames=3660</span><br><span class="line">nb_read_frames=N/A</span><br><span class="line">nb_read_packets=N/A</span><br><span class="line">DISPOSITION:default=1</span><br><span class="line">DISPOSITION:dub=0</span><br><span class="line">DISPOSITION:original=0</span><br><span class="line">DISPOSITION:comment=0</span><br><span class="line">DISPOSITION:lyrics=0</span><br><span class="line">DISPOSITION:karaoke=0</span><br><span class="line">DISPOSITION:forced=0</span><br><span class="line">DISPOSITION:hearing_impaired=0</span><br><span class="line">DISPOSITION:visual_impaired=0</span><br><span class="line">DISPOSITION:clean_effects=0</span><br><span class="line">DISPOSITION:attached_pic=0</span><br><span class="line">DISPOSITION:timed_thumbnails=0</span><br><span class="line">TAG:language=und</span><br><span class="line">TAG:handler_name=VideoHandler</span><br><span class="line">[/STREAM]</span><br></pre></td></tr></table></figure>
+    </td>
+    <td valign="top">
+    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[STREAM]</span><br><span class="line">index=1</span><br><span class="line">codec_name=aac</span><br><span class="line">codec_long_name=Advanced Audio Coding</span><br><span class="line">profile=LC</span><br><span class="line">codec_type=audio</span><br><span class="line">codec_time_base=1/48000</span><br><span class="line">codec_tag_string=mp4a</span><br><span class="line">codec_tag=0x6134706d</span><br><span class="line">sample_fmt=fltp</span><br><span class="line">sample_rate=48 KHz</span><br><span class="line">channels=2</span><br><span class="line">channel_layout=stereo</span><br><span class="line">bits_per_sample=0</span><br><span class="line">id=N/A</span><br><span class="line">r_frame_rate=0/0</span><br><span class="line">avg_frame_rate=0/0</span><br><span class="line">time_base=1/48000</span><br><span class="line">start_pts=0</span><br><span class="line">start_time=0:00:00.000000</span><br><span class="line">duration_ts=2880672</span><br><span class="line">duration=0:01:00.014000</span><br><span class="line">bit_rate=256.225000 Kbit/s</span><br><span class="line">max_bit_rate=256.225000 Kbit/s</span><br><span class="line">bits_per_raw_sample=N/A</span><br><span class="line">nb_frames=2861</span><br><span class="line">nb_read_frames=N/A</span><br><span class="line">nb_read_packets=N/A</span><br><span class="line">DISPOSITION:default=1</span><br><span class="line">DISPOSITION:dub=0</span><br><span class="line">DISPOSITION:original=0</span><br><span class="line">DISPOSITION:comment=0</span><br><span class="line">DISPOSITION:lyrics=0</span><br><span class="line">DISPOSITION:karaoke=0</span><br><span class="line">DISPOSITION:forced=0</span><br><span class="line">DISPOSITION:hearing_impaired=0</span><br><span class="line">DISPOSITION:visual_impaired=0</span><br><span class="line">DISPOSITION:clean_effects=0</span><br><span class="line">DISPOSITION:attached_pic=0</span><br><span class="line">DISPOSITION:timed_thumbnails=0</span><br><span class="line">TAG:language=und</span><br><span class="line">TAG:handler_name=SoundHandler</span><br><span class="line">[/STREAM]</span><br></pre></td></tr></table></figure>
+    </td>
+  </tr>
+</table></div><div class="tab-pane" id="ffprobe-basic-4"><table>
+  <tr>
+    <td>video (-select_streams v:0)</td>
+    <td>audio (-select_streams a)</td>
+  </tr>
+  <tr>
+    <td valign="top">
+    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[PACKET]</span><br><span class="line">codec_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">pts=-88560</span><br><span class="line">pts_time=0:00:-0.984000</span><br><span class="line">dts=-90000</span><br><span class="line">dts_time=0:00:-1.000000</span><br><span class="line">duration=1500</span><br><span class="line">duration_time=0:00:00.016667</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=277.997070 Kibyte</span><br><span class="line">pos=784</span><br><span class="line">flags=KD</span><br><span class="line">[/PACKET]</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">pts=-83970</span><br><span class="line">pts_time=0:00:-0.933000</span><br><span class="line">dts=-88470</span><br><span class="line">dts_time=0:00:-0.983000</span><br><span class="line">duration=1500</span><br><span class="line">duration_time=0:00:00.016667</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=30.319336 Kibyte</span><br><span class="line">pos=286161</span><br><span class="line">flags=_D</span><br><span class="line">[/PACKET]</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">pts=-87030</span><br><span class="line">pts_time=0:00:-0.967000</span><br><span class="line">dts=-87030</span><br><span class="line">dts_time=0:00:-0.967000</span><br><span class="line">duration=1500</span><br><span class="line">duration_time=0:00:00.016667</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=7.679688 Kibyte</span><br><span class="line">pos=317893</span><br><span class="line">flags=_D</span><br><span class="line">[/PACKET]</span><br><span class="line">...</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">pts=5395500</span><br><span class="line">pts_time=0:00:59.950000</span><br><span class="line">dts=5395500</span><br><span class="line">dts_time=0:00:59.950000</span><br><span class="line">duration=1500</span><br><span class="line">duration_time=0:00:00.016667</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=9.243164 Kibyte</span><br><span class="line">pos=78309869</span><br><span class="line">flags=__</span><br><span class="line">[/PACKET]</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">pts=5401530</span><br><span class="line">pts_time=0:01:00.017000</span><br><span class="line">dts=5397030</span><br><span class="line">dts_time=0:00:59.967000</span><br><span class="line">duration=1500</span><br><span class="line">duration_time=0:00:00.016667</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=33.048828 Kibyte</span><br><span class="line">pos=78320073</span><br><span class="line">flags=_D</span><br><span class="line">[/PACKET]</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">pts=5398470</span><br><span class="line">pts_time=0:00:59.983000</span><br><span class="line">dts=5398470</span><br><span class="line">dts_time=0:00:59.983000</span><br><span class="line">duration=1500</span><br><span class="line">duration_time=0:00:00.016667</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=8.390625 Kibyte</span><br><span class="line">pos=78354609</span><br><span class="line">flags=__</span><br><span class="line">[/PACKET]</span><br></pre></td></tr></table></figure>
+    </td>
+    <td valign="top">
+    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[PACKET]</span><br><span class="line">codec_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">pts=-48976</span><br><span class="line">pts_time=0:00:-1.020333</span><br><span class="line">dts=-48976</span><br><span class="line">dts_time=0:00:-1.020333</span><br><span class="line">duration=1024</span><br><span class="line">duration_time=0:00:00.021333</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=736 byte</span><br><span class="line">pos=48</span><br><span class="line">flags=KD</span><br><span class="line">[SIDE_DATA]</span><br><span class="line">side_data_type=Skip Samples</span><br><span class="line">skip_samples=48976</span><br><span class="line">discard_padding=0</span><br><span class="line">skip_reason=0</span><br><span class="line">discard_reason=0</span><br><span class="line">[/SIDE_DATA]</span><br><span class="line">[/PACKET]</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">pts=-47952</span><br><span class="line">pts_time=0:00:-0.999000</span><br><span class="line">dts=-47952</span><br><span class="line">dts_time=0:00:-0.999000</span><br><span class="line">duration=1024</span><br><span class="line">duration_time=0:00:00.021333</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=708 byte</span><br><span class="line">pos=285453</span><br><span class="line">flags=KD</span><br><span class="line">[/PACKET]</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">pts=-46928</span><br><span class="line">pts_time=0:00:-0.977667</span><br><span class="line">dts=-46928</span><br><span class="line">dts_time=0:00:-0.977667</span><br><span class="line">duration=1024</span><br><span class="line">duration_time=0:00:00.021333</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=685 byte</span><br><span class="line">pos=317208</span><br><span class="line">flags=KD</span><br><span class="line">[/PACKET]</span><br><span class="line">...</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">pts=2877616</span><br><span class="line">pts_time=0:00:59.950333</span><br><span class="line">dts=2877616</span><br><span class="line">dts_time=0:00:59.950333</span><br><span class="line">duration=1024</span><br><span class="line">duration_time=0:00:00.021333</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=739 byte</span><br><span class="line">pos=78319334</span><br><span class="line">flags=K_</span><br><span class="line">[/PACKET]</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">pts=2878640</span><br><span class="line">pts_time=0:00:59.971667</span><br><span class="line">dts=2878640</span><br><span class="line">dts_time=0:00:59.971667</span><br><span class="line">duration=1024</span><br><span class="line">duration_time=0:00:00.021333</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=694 byte</span><br><span class="line">pos=78353915</span><br><span class="line">flags=K_</span><br><span class="line">[/PACKET]</span><br><span class="line">[PACKET]</span><br><span class="line">codec_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">pts=2879664</span><br><span class="line">pts_time=0:00:59.993000</span><br><span class="line">dts=2879664</span><br><span class="line">dts_time=0:00:59.993000</span><br><span class="line">duration=1008</span><br><span class="line">duration_time=0:00:00.021000</span><br><span class="line">convergence_duration=N/A</span><br><span class="line">convergence_duration_time=N/A</span><br><span class="line">size=646 byte</span><br><span class="line">pos=78363201</span><br><span class="line">flags=K_</span><br><span class="line">[/PACKET]</span><br></pre></td></tr></table></figure>
+    </td>
+  </tr>
+</table></div><div class="tab-pane" id="ffprobe-basic-5"><table>
+  <tr>
+    <td>video (-select_streams v:0)</td>
+    <td>audio (-select_streams a)</td>
+  </tr>
+  <tr>
+    <td valign="top">
+    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[FRAME]</span><br><span class="line">media_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">key_frame=0</span><br><span class="line">pkt_pts=0</span><br><span class="line">pkt_pts_time=0:00:00.000000</span><br><span class="line">pkt_dts=0</span><br><span class="line">pkt_dts_time=0:00:00.000000</span><br><span class="line">best_effort_timestamp=0</span><br><span class="line">best_effort_timestamp_time=0:00:00.000000</span><br><span class="line">pkt_duration=1500</span><br><span class="line">pkt_duration_time=0:00:00.016667</span><br><span class="line">pkt_pos=1416588</span><br><span class="line">pkt_size=21.227539 Kibyte</span><br><span class="line">width=1920</span><br><span class="line">height=1080</span><br><span class="line">pix_fmt=yuv420p</span><br><span class="line">sample_aspect_ratio=1:1</span><br><span class="line">pict_type=B</span><br><span class="line">coded_picture_number=60</span><br><span class="line">display_picture_number=0</span><br><span class="line">interlaced_frame=0</span><br><span class="line">top_field_first=0</span><br><span class="line">repeat_pict=0</span><br><span class="line">color_range=tv</span><br><span class="line">color_space=bt709</span><br><span class="line">color_primaries=bt709</span><br><span class="line">color_transfer=bt709</span><br><span class="line">chroma_location=left</span><br><span class="line">[/FRAME]</span><br><span class="line">[FRAME]</span><br><span class="line">media_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">key_frame=0</span><br><span class="line">pkt_pts=1530</span><br><span class="line">pkt_pts_time=0:00:00.017000</span><br><span class="line">pkt_dts=1530</span><br><span class="line">pkt_dts_time=0:00:00.017000</span><br><span class="line">best_effort_timestamp=1530</span><br><span class="line">best_effort_timestamp_time=0:00:00.017000</span><br><span class="line">pkt_duration=1500</span><br><span class="line">pkt_duration_time=0:00:00.016667</span><br><span class="line">pkt_pos=1354937</span><br><span class="line">pkt_size=52.866211 Kibyte</span><br><span class="line">width=1920</span><br><span class="line">height=1080</span><br><span class="line">pix_fmt=yuv420p</span><br><span class="line">sample_aspect_ratio=1:1</span><br><span class="line">pict_type=P</span><br><span class="line">coded_picture_number=58</span><br><span class="line">display_picture_number=0</span><br><span class="line">interlaced_frame=0</span><br><span class="line">top_field_first=0</span><br><span class="line">repeat_pict=0</span><br><span class="line">color_range=tv</span><br><span class="line">color_space=bt709</span><br><span class="line">color_primaries=bt709</span><br><span class="line">color_transfer=bt709</span><br><span class="line">chroma_location=left</span><br><span class="line">[/FRAME]</span><br><span class="line">...</span><br><span class="line">[FRAME]</span><br><span class="line">media_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">key_frame=0</span><br><span class="line">pkt_pts=5397030</span><br><span class="line">pkt_pts_time=0:00:59.967000</span><br><span class="line">pkt_dts=5397030</span><br><span class="line">pkt_dts_time=0:00:59.967000</span><br><span class="line">best_effort_timestamp=5397030</span><br><span class="line">best_effort_timestamp_time=0:00:59.967000</span><br><span class="line">pkt_duration=1500</span><br><span class="line">pkt_duration_time=0:00:00.016667</span><br><span class="line">pkt_pos=78264694</span><br><span class="line">pkt_size=34.530273 Kibyte</span><br><span class="line">width=1920</span><br><span class="line">height=1080</span><br><span class="line">pix_fmt=yuv420p</span><br><span class="line">sample_aspect_ratio=1:1</span><br><span class="line">pict_type=P</span><br><span class="line">coded_picture_number=3655</span><br><span class="line">display_picture_number=0</span><br><span class="line">interlaced_frame=0</span><br><span class="line">top_field_first=0</span><br><span class="line">repeat_pict=0</span><br><span class="line">color_range=tv</span><br><span class="line">color_space=bt709</span><br><span class="line">color_primaries=bt709</span><br><span class="line">color_transfer=bt709</span><br><span class="line">chroma_location=left</span><br><span class="line">[/FRAME]</span><br><span class="line">[FRAME]</span><br><span class="line">media_type=video</span><br><span class="line">stream_index=0</span><br><span class="line">key_frame=0</span><br><span class="line">pkt_pts=5398470</span><br><span class="line">pkt_pts_time=0:00:59.983000</span><br><span class="line">pkt_dts=5398470</span><br><span class="line">pkt_dts_time=0:00:59.983000</span><br><span class="line">best_effort_timestamp=5398470</span><br><span class="line">best_effort_timestamp_time=0:00:59.983000</span><br><span class="line">pkt_duration=1500</span><br><span class="line">pkt_duration_time=0:00:00.016667</span><br><span class="line">pkt_pos=78354609</span><br><span class="line">pkt_size=8.390625 Kibyte</span><br><span class="line">width=1920</span><br><span class="line">height=1080</span><br><span class="line">pix_fmt=yuv420p</span><br><span class="line">sample_aspect_ratio=1:1</span><br><span class="line">pict_type=B</span><br><span class="line">coded_picture_number=3659</span><br><span class="line">display_picture_number=0</span><br><span class="line">interlaced_frame=0</span><br><span class="line">top_field_first=0</span><br><span class="line">repeat_pict=0</span><br><span class="line">color_range=tv</span><br><span class="line">color_space=bt709</span><br><span class="line">color_primaries=bt709</span><br><span class="line">color_transfer=bt709</span><br><span class="line">chroma_location=left</span><br><span class="line">[/FRAME]</span><br></pre></td></tr></table></figure>
+    </td>
+    <td valign="top">
+    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[FRAME]</span><br><span class="line">media_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">key_frame=1</span><br><span class="line">pkt_pts=0</span><br><span class="line">pkt_pts_time=0:00:00.000000</span><br><span class="line">pkt_dts=0</span><br><span class="line">pkt_dts_time=0:00:00.000000</span><br><span class="line">best_effort_timestamp=-848</span><br><span class="line">best_effort_timestamp_time=0:00:-0.017667</span><br><span class="line">pkt_duration=176</span><br><span class="line">pkt_duration_time=0:00:00.003667</span><br><span class="line">pkt_pos=1409072</span><br><span class="line">pkt_size=662 byte</span><br><span class="line">sample_fmt=fltp</span><br><span class="line">nb_samples=176</span><br><span class="line">channels=2</span><br><span class="line">channel_layout=stereo</span><br><span class="line">[/FRAME]</span><br><span class="line">[FRAME]</span><br><span class="line">media_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">key_frame=1</span><br><span class="line">pkt_pts=176</span><br><span class="line">pkt_pts_time=0:00:00.003667</span><br><span class="line">pkt_dts=176</span><br><span class="line">pkt_dts_time=0:00:00.003667</span><br><span class="line">best_effort_timestamp=176</span><br><span class="line">best_effort_timestamp_time=0:00:00.003667</span><br><span class="line">pkt_duration=1024</span><br><span class="line">pkt_duration_time=0:00:00.021333</span><br><span class="line">pkt_pos=1438325</span><br><span class="line">pkt_size=718 byte</span><br><span class="line">sample_fmt=fltp</span><br><span class="line">nb_samples=1024</span><br><span class="line">channels=2</span><br><span class="line">channel_layout=stereo</span><br><span class="line">[/FRAME]</span><br><span class="line">[FRAME]</span><br><span class="line">media_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">key_frame=1</span><br><span class="line">pkt_pts=1200</span><br><span class="line">pkt_pts_time=0:00:00.025000</span><br><span class="line">pkt_dts=1200</span><br><span class="line">pkt_dts_time=0:00:00.025000</span><br><span class="line">best_effort_timestamp=1200</span><br><span class="line">best_effort_timestamp_time=0:00:00.025000</span><br><span class="line">pkt_duration=1024</span><br><span class="line">pkt_duration_time=0:00:00.021333</span><br><span class="line">pkt_pos=1485652</span><br><span class="line">pkt_size=688 byte</span><br><span class="line">sample_fmt=fltp</span><br><span class="line">nb_samples=1024</span><br><span class="line">channels=2</span><br><span class="line">channel_layout=stereo</span><br><span class="line">[/FRAME]</span><br><span class="line">...</span><br><span class="line">[FRAME]</span><br><span class="line">media_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">key_frame=1</span><br><span class="line">pkt_pts=2878640</span><br><span class="line">pkt_pts_time=0:00:59.971667</span><br><span class="line">pkt_dts=2878640</span><br><span class="line">pkt_dts_time=0:00:59.971667</span><br><span class="line">best_effort_timestamp=2878640</span><br><span class="line">best_effort_timestamp_time=0:00:59.971667</span><br><span class="line">pkt_duration=1024</span><br><span class="line">pkt_duration_time=0:00:00.021333</span><br><span class="line">pkt_pos=78353915</span><br><span class="line">pkt_size=694 byte</span><br><span class="line">sample_fmt=fltp</span><br><span class="line">nb_samples=1024</span><br><span class="line">channels=2</span><br><span class="line">channel_layout=stereo</span><br><span class="line">[/FRAME]</span><br><span class="line">[FRAME]</span><br><span class="line">media_type=audio</span><br><span class="line">stream_index=1</span><br><span class="line">key_frame=1</span><br><span class="line">pkt_pts=2879664</span><br><span class="line">pkt_pts_time=0:00:59.993000</span><br><span class="line">pkt_dts=2879664</span><br><span class="line">pkt_dts_time=0:00:59.993000</span><br><span class="line">best_effort_timestamp=2879664</span><br><span class="line">best_effort_timestamp_time=0:00:59.993000</span><br><span class="line">pkt_duration=1008</span><br><span class="line">pkt_duration_time=0:00:00.021000</span><br><span class="line">pkt_pos=78363201</span><br><span class="line">pkt_size=646 byte</span><br><span class="line">sample_fmt=fltp</span><br><span class="line">nb_samples=1024</span><br><span class="line">channels=2</span><br><span class="line">channel_layout=stereo</span><br><span class="line">[/FRAME]</span><br></pre></td></tr></table></figure>
+    </td>
+  </tr>
+</table></div></div></div>
+
+
+<div class="tabs" id="ffprobe-usage"><ul class="nav-tabs"><li class="tab active"><a href="#ffprobe-usage-1">查看封装和流信息</a></li><li class="tab"><a href="#ffprobe-usage-2">统计包数量</a></li><li class="tab"><a href="#ffprobe-usage-3">统计帧数量</a></li></ul><div class="tab-content"><div class="tab-pane active" id="ffprobe-usage-1"><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">$ ffprobe -v quiet \</span><br><span class="line">  -show_streams \</span><br><span class="line">  -show_entries format=filename<span class="punctuation">,</span>start_time<span class="punctuation">:</span>stream=duration<span class="punctuation">,</span>width<span class="punctuation">,</span>height<span class="punctuation">,</span>r_frame_rate<span class="punctuation">,</span>bit_rate \</span><br><span class="line">  -of json \</span><br><span class="line">  -i <span class="number">1.</span>mp4</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;programs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;streams&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;width&quot;</span><span class="punctuation">:</span> <span class="number">1920</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;height&quot;</span><span class="punctuation">:</span> <span class="number">1080</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;r_frame_rate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;60/1&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;duration&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0:01:00.016000&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bit_rate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;10.020903 Mbit/s&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;disposition&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;default&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;dub&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;original&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;comment&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;lyrics&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;karaoke&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;forced&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;hearing_impaired&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;visual_impaired&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;clean_effects&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;attached_pic&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;timed_thumbnails&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;language&quot;</span><span class="punctuation">:</span> <span class="string">&quot;und&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;handler_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;VideoHandler&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;r_frame_rate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0/0&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;duration&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0:01:00.014000&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;bit_rate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;256.225000 Kbit/s&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;disposition&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;default&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;dub&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;original&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;comment&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;lyrics&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;karaoke&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;forced&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;hearing_impaired&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;visual_impaired&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;clean_effects&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;attached_pic&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;timed_thumbnails&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;language&quot;</span><span class="punctuation">:</span> <span class="string">&quot;und&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;handler_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SoundHandler&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;format&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;filename&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.mp4&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;start_time&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0:00:00.000000&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="ffprobe-usage-2"><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ ffprobe -v error \</span><br><span class="line">  -count_packets \</span><br><span class="line">  -show_entries stream=codec_type<span class="punctuation">,</span>nb_read_packets \</span><br><span class="line">  -of json \</span><br><span class="line">  <span class="number">1.</span>mp4</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;programs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line"></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;streams&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;codec_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;video&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;nb_read_packets&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3660&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;codec_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;audio&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;nb_read_packets&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2861&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="ffprobe-usage-3"><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ ffprobe -v error \</span><br><span class="line">  -count_frames \</span><br><span class="line">  -show_entries stream=codec_type<span class="punctuation">,</span>nb_read_frames \</span><br><span class="line">  -of json \</span><br><span class="line">  <span class="number">1.</span>mp4</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;streams&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;codec_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;video&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;nb_read_frames&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3600&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;codec_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;audio&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;nb_read_frames&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2814&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="ffmpeg"><a href="#ffmpeg" class="headerlink" title="ffmpeg"></a>ffmpeg</h1><p><a target="_blank" rel="noopener" href="http://ffmpeg.org/ffmpeg-all.html">ffmpeg Documentation</a></p>
+<pre class="mermaid">
+graph LR
+InputFile --&gt; |demuxer|EncodedPackets --&gt; |decoder|DecodedFrames
+DecodedFrames --&gt; |filter|FilteredFrames --&gt; |encoder|EncodedPackets --&gt; |muxer|OutputFile
+</pre>
+
+<p>概要：<code>ffmpeg [global_options] &#123;[input_options] -i input_url&#125; ... &#123;[output_options] output_url&#125; ...</code></p>
+<ul>
+<li><code>-y</code> 覆盖输出文件</li>
+<li><code>-nostdin</code> 禁用标准输入（等同<code>ffmpeg ... &lt; /dev/null</code>）</li>
+<li><code>-f avi</code> 强制文件封装格式<ul>
+<li>不指定此参数时，会自动探测输入文件格式，以及根据扩展名猜测输出文件格式</li>
+</ul>
+</li>
+<li><code>-i xxx.mp4</code> 输入文件</li>
+<li><code>-re</code> 以真实速率读取帧，同<code>-readrate 1</code></li>
+<li><code>-stream_loop 3</code> 输入流循环3次。（0-不循环，-1无限循环）</li>
+<li><code>-ss 100</code> 跳转（seek）到相对起始100s的位置</li>
+<li><code>-sseof 100</code> 跳转（seek）到相对结束100s的位置</li>
+<li><code>-t 60s</code>&#x2F;<code>-t 01:00</code> 限制时长60s</li>
+</ul>
+<h2 id="Filtering"><a href="#Filtering" class="headerlink" title="Filtering"></a>Filtering</h2><p><a target="_blank" rel="noopener" href="https://ffmpeg.org/ffmpeg-filters.html">FFmpeg Filters Documentation</a><br><a target="_blank" rel="noopener" href="https://trac.ffmpeg.org/wiki/FilteringGuide">FFmpeg Filtering Guide</a></p>
+<h3 id="simple"><a href="#simple" class="headerlink" title="simple"></a>simple</h3><p>一路输入一路输出。</p>
+<ul>
+<li>af 音频过滤</li>
+<li>vf 视频过滤<ul>
+<li><code>-vf scale=-1:720</code> : 分辨率转换到720p</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">缩放视频到720p</span></span><br><span class="line">ffmpeg -i i.mp4 -vf scale=-1:720 o_480.mp4</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">视频上叠加yuv直方图</span></span><br><span class="line">ffmpeg -i i.mp4 -vf &quot;split=2[a][b],[b]histogram,format=yuv420p[hh],[a][hh]overlay&quot; yuv_histogram.mp4</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">视频上叠加运动矢量（motion vector）</span></span><br><span class="line">ffmpeg -flags2 +export_mvs -i i.mp4 -vf codecview=mv=pf+bf+bb ovis_mv.mp4</span><br></pre></td></tr></table></figure>
+
+<h4 id="idet"><a href="#idet" class="headerlink" title="idet"></a>idet</h4><p><a target="_blank" rel="noopener" href="https://ffmpeg.org/ffmpeg-filters.html#idet">ffmpeg &#x2F; Video Filters &#x2F; idet</a></p>
+<ul>
+<li>探测输入帧是interlaced, progressive, top or bottom field first。</li>
+<li>探测邻近的帧（frame）之间重复的场（field）数量</li>
+<li>单帧探测时，当前帧的交错类型只考虑相邻帧的影响</li>
+<li>多帧探测时，当前帧的交错类型考虑之前所有帧的影响</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用idet过滤器，采样360帧，忽略音频帧</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">TFF - Top Field First</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">BFF - Bottom Field First</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ffmpeg -filter:v idet -frames:v 360 -an -f rawvideo -y /dev/null -i 20090228_085119-H.264.m2ts.mp4</span></span><br><span class="line">[Parsed_idet_0 @ 0x55792d6e7c80] Repeated Fields: Neither:   182 Top:     0 Bottom:     0</span><br><span class="line">[Parsed_idet_0 @ 0x55792d6e7c80] Single frame detection: TFF:   135 BFF:     0 Progressive:     2 Undetermined:    45</span><br><span class="line">[Parsed_idet_0 @ 0x55792d6e7c80] Multi frame detection: TFF:   182 BFF:     0 Progressive:     0 Undetermined:     0</span><br></pre></td></tr></table></figure>
+
+<h4 id="tinterlace"><a href="#tinterlace" class="headerlink" title="tinterlace"></a>tinterlace</h4><p><a target="_blank" rel="noopener" href="https://ffmpeg.org/ffmpeg-filters.html#tinterlace">ffmpeg &#x2F; Video Filters &#x2F; tinterlace</a></p>
+<ul>
+<li>从第1帧开始，对每一帧执行<a href="/Media/VideoBasic#%E4%BA%A4%E9%94%99"><strong>交错（interlacing）</strong></a>变换<ul>
+<li><code>interleave_bottom, 5</code> 执行底场优先，高度不变，帧率减半的交错</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ffmpeg -i HitchhikersGuide.mp4 -vf <span class="string">&quot;tinterlace=5&quot;</span> HitchhikersGuide-t.mp4</span></span><br><span class="line">[libx264 @ 0x5561fdb59f40] using SAR=1/1</span><br><span class="line">[libx264 @ 0x5561fdb59f40] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2</span><br><span class="line">[libx264 @ 0x5561fdb59f40] profile High, level 2.2</span><br><span class="line">[libx264 @ 0x5561fdb59f40] 264 - core 155 r2917 0a84d98 - H.264/MPEG-4 AVC codec - Copyleft 2003-2018 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=6 lookahead_threads=1 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=15 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00</span><br><span class="line">[libx264 @ 0x5561fdb59f40] frame I:12    Avg QP:15.17  size: 20887</span><br><span class="line">[libx264 @ 0x5561fdb59f40] frame P:661   Avg QP:19.46  size:  7614</span><br><span class="line">[libx264 @ 0x5561fdb59f40] frame B:1370  Avg QP:23.45  size:  2334</span><br><span class="line">[libx264 @ 0x5561fdb59f40] consecutive B-frames:  6.6%  8.4% 10.6% 74.4%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] mb I  I16..4: 43.0% 35.0% 21.9%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] mb P  I16..4:  7.9% 10.7%  3.1%  P16..4: 28.5% 13.1%  7.1%  0.0%  0.0%    skip:29.7%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] mb B  I16..4:  1.1%  1.4%  0.5%  B16..8: 29.7%  4.9%  1.3%  direct: 3.4%  skip:57.7%  L0:47.7% L1:43.9% BI: 8.4%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] 8x8 transform intra:48.0% inter:59.7%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] coded y,uvDC,uvAC intra: 38.1% 57.9% 21.6% inter: 12.6% 17.0% 1.8%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] i16 v,h,dc,p: 35% 40% 13% 12%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 26% 22% 35%  3%  2%  3%  3%  3%  3%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 19% 47% 14%  3%  4%  4%  4%  3%  4%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] i8c dc,h,v,p: 47% 29% 20%  4%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] Weighted P-Frames: Y:7.6% UV:5.0%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] ref P L0: 60.0% 11.9% 21.4%  6.3%  0.3%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] ref B L0: 79.8% 14.7%  5.5%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] ref B L1: 93.6%  6.4%</span><br><span class="line">[libx264 @ 0x5561fdb59f40] kb/s:498.12</span><br><span class="line">[aac @ 0x5561fdb89740] Qavg: 235.916</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ffprobe HitchhikersGuide-t.mp4</span></span><br><span class="line">Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &#x27;HitchhikersGuide-t.mp4&#x27;:</span><br><span class="line">  Metadata:</span><br><span class="line">    major_brand     : isom</span><br><span class="line">    minor_version   : 512</span><br><span class="line">    compatible_brands: isomiso2avc1mp41</span><br><span class="line">    encoder         : Lavf58.29.100</span><br><span class="line">  Duration: 00:02:16.23, start: 0.000000, bitrate: 631 kb/s</span><br><span class="line">    Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 640x480 [SAR 1:1 DAR 4:3], 498 kb/s, 15 fps, 15 tbr, 15360 tbn, 30 tbc (default)</span><br><span class="line">    Metadata:</span><br><span class="line">      handler_name    : ISO Media file produced by Google Inc.</span><br><span class="line">    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 128 kb/s (default)</span><br><span class="line">    Metadata:</span><br><span class="line">      handler_name    : ISO Media file produced by Google Inc.</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ffprobe HitchhikersGuide.mp4</span></span><br><span class="line">Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &#x27;HitchhikersGuide.mp4&#x27;:</span><br><span class="line">  Metadata:</span><br><span class="line">    major_brand     : isom</span><br><span class="line">    minor_version   : 512</span><br><span class="line">    compatible_brands: isomiso2avc1mp41</span><br><span class="line">    encoder         : Lavf58.45.100</span><br><span class="line">  Duration: 00:02:16.23, start: 0.000000, bitrate: 514 kb/s</span><br><span class="line">    Stream #0:0(und): Video: h264 (Main) (avc1 / 0x31637661), yuv420p(tv, bt709), 640x480 [SAR 1:1 DAR 4:3], 378 kb/s, 30 fps, 30 tbr, 15360 tbn, 60 tbc (default)</span><br><span class="line">    Metadata:</span><br><span class="line">      handler_name    : ISO Media file produced by Google Inc.</span><br><span class="line">    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 128 kb/s (default)</span><br><span class="line">    Metadata:</span><br><span class="line">      handler_name    : ISO Media file produced by Google Inc.</span><br></pre></td></tr></table></figure>
+
+<h4 id="yadif"><a href="#yadif" class="headerlink" title="yadif"></a>yadif</h4><p>对输入的视频执行反交错（deinterlace）</p>
+<ul>
+<li><code>1, send_field</code> 每一个场（field）作为一帧（frame）输出</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i HitchhikersGuide-t.mp4 -filter:v yadif=1 HitchhikersGuide-p2.mp4</span><br></pre></td></tr></table></figure>
+
+<h3 id="complex"><a href="#complex" class="headerlink" title="complex"></a>complex</h3><p>多路输入多路输出，用<code>-filter_complex</code>或<code>-lavfi</code>选项配置。</p>
+<ul>
+<li><code>overlay</code> 两路视频输入一路输出（视频叠加在一起）</li>
+<li><code>amix</code> 混音</li>
+</ul>
+<h4 id="psnr"><a href="#psnr" class="headerlink" title="psnr"></a>psnr</h4><p><a target="_blank" rel="noopener" href="https://ffmpeg.org/ffmpeg-filters.html#psnr">ffmpeg &#x2F; Video Filters &#x2F; psnr</a></p>
+<p>计算两个输入视频的平均、最小、最大峰值信噪比，输入的视频分辨率和像素格式必须相同。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ffmpeg -i HitchhikersGuide-target.mp4 -i HitchhikersGuide-origin.mp4 -lavfi psnr=stats_file=psnr_logfile.txt -f null -</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ffmpeg -i HitchhikersGuide-target.mp4 -i HitchhikersGuide-origin.mp4 -filter_complex <span class="string">&quot;psnr=stats_file=psnr_logfile.txt&quot;</span> -f null -</span></span><br><span class="line">[Parsed_psnr_0 @ 0x5623ab67af40] PSNR y:28.700056 u:39.638801 v:41.528778 average:30.319234 min:13.854924 max:55.468623</span><br></pre></td></tr></table></figure>
+
+<h4 id="vmaf"><a href="#vmaf" class="headerlink" title="vmaf"></a>vmaf</h4><p><a target="_blank" rel="noopener" href="https://github.com/Netflix/vmaf">Netflix&#x2F;vmaf</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i HitchhikersGuide-p.mp4 -i HitchhikersGuide.mp4 -lavfi libvmaf=&quot;model_path=vmaf_v0.6.1.pkl&quot;:log_path=vmaf_logfile.txt -f null -</span><br></pre></td></tr></table></figure>
+
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><h3 id="copy"><a href="#copy" class="headerlink" title="copy"></a>copy</h3><p>忽略decoding和encoding，只处理demuxing和muxing过程，用<code>-codec</code>选项配置。</p>
+<ul>
+<li><code>-c copy</code> 拷贝输入文件中的帧到输出文件</li>
+<li><code>-c:a copy</code> 只拷贝输入文件中的音频帧到输出文件</li>
+</ul>
+<h3 id="selection"><a href="#selection" class="headerlink" title="selection"></a>selection</h3><p>控制输出文件中的流选择过程。</p>
+<ul>
+<li>自动模式：<ul>
+<li>视频选择最高分辨率的</li>
+<li>音频选择最多通道数的</li>
+<li>发现的第一个字幕</li>
+</ul>
+</li>
+<li>手动模式：<ul>
+<li><code>-map 2:3</code> 选择第3个输入文件中的第4个流</li>
+<li><code>-map 1:a</code> 选择第2个输入文件中的所有音频流</li>
+<li><code>-vn/-an/-sn/-dn</code> 忽略输入文件中的视频&#x2F;音频&#x2F;字幕&#x2F;数据流</li>
+</ul>
+</li>
+</ul>
+<h3 id="specifier"><a href="#specifier" class="headerlink" title="specifier"></a>specifier</h3><p>应用于stream、codec、bitrate的描述选项。</p>
+<ul>
+<li><code>-codec:a:1 ac3</code> 指定第2个音频流用ac3编解码器处理（:a:1 第2个音频流）</li>
+<li><code>-b:a 128k</code> 所有音频流用128k码率（:a 所有音频流）</li>
+<li><code>-b:v 512k</code> 所有视频流用512k码率（:v 所有视频流）</li>
+<li><code>-ac:a:1 2</code> 第2个音频流的通道数为2</li>
+<li><code>-codec copy</code>&#x2F;<code>-codec: copy</code> 拷贝所有的流（空描述项指所有流）</li>
+<li><code>-threads:1 4</code> 设置第2个流的线程数量为4</li>
+</ul>
+<h2 id="Video"><a href="#Video" class="headerlink" title="Video"></a>Video</h2><ul>
+<li><code>-frames:v 360</code> 限制视频帧数量为360</li>
+<li><code>-fps_mode -1</code> 设置帧率模式（视频同步方法），同<code>vsync -1</code><ul>
+<li>passthrough(0) 透传每一帧的时间戳</li>
+<li>cfr(1) 帧会被复制或丢弃以达到固定的帧率</li>
+<li>vfr(2) 透传每一帧的时间戳，但会丢弃重复时间戳的帧</li>
+<li>drop 丢弃所有时间戳，然后基于帧率重新生成时间戳</li>
+<li>auto(-1) 按封装器（muxer）的能力自动选择cfr还是vfr</li>
+</ul>
+</li>
+<li><code>-pix_fmt yuv420p</code> 设置像素格式</li>
+<li><code>-r 24</code> 设置帧率:24</li>
+</ul>
+<h2 id="rawvideo"><a href="#rawvideo" class="headerlink" title="rawvideo"></a>rawvideo</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg \</span><br><span class="line">-f rawvideo -pixel_format uyvy422 -video_size 1920x1080 -i test.uyvy422 \</span><br><span class="line">-f rawvideo -pix_fmt yuv420p -s 1920x1080 uyvy_to_yuv.420p</span><br></pre></td></tr></table></figure>
+
+<h2 id="Audio"><a href="#Audio" class="headerlink" title="Audio"></a>Audio</h2><ul>
+<li><code>-acodec aac</code> 设置音频流的编码格式，<code>-codec:a</code>的别名</li>
+<li><code>-ac 2</code> 设置音频通道数量</li>
+<li><code>-af loudnorm</code> 应用音频过滤器loudnorm，<code>-filter:a loudnorm</code>的别名</li>
+<li><code>-an</code> 阻止所有音频流到输出文件</li>
+<li><code>-ar 14400</code> 设置音频采样率</li>
+<li><code>-aq xxx</code> 设置音频质量，<code>-q:a xxx</code>的别名</li>
+<li><code>-async 1</code> 音频同步方法，通过拉伸或挤压音频数据的方式以匹配时间戳，参数是音频改变时每秒最大采样量。同<code>aresample</code>过滤器<ul>
+<li>1：特指只在音频流的开始时纠正时间戳</li>
+</ul>
+</li>
+<li><code>-sample_fmts s16p</code> 设置音频采样格式为<code>signed 16 bits, planar</code></li>
+</ul>
+<h1 id="码率控制"><a href="#码率控制" class="headerlink" title="码率控制"></a>码率控制</h1><p>有损视频编码（lossy video encoding）的目的是尽可能压缩原始输入文件的大小，同时最大化保留视频质量。码率控制（rate control）决定了编码出每一帧的字节量，是视频大小和质量之间的重要影响因素。</p>
+<p>通常的码率控制策略：</p>
+<ul>
+<li>存档：CRF码率</li>
+<li>流媒体：2-pass ABR 或 CRF，同时启用VBV码率约束</li>
+<li>实时流媒体：1-pass ABR 或 CRF，同时启用VBV码率约束（CBR浪费带宽）</li>
+<li>设备：2-pass ABR</li>
+</ul>
+<h2 id="量化参数"><a href="#量化参数" class="headerlink" title="量化参数"></a>量化参数</h2><p>量化参数（QP, Quantization Parameter）控制帧（frame）中每个宏块（macroblock）的压缩量。</p>
+<ul>
+<li>固定的量化参数会使得码率与场景复杂度强相关，使得编码效率降低。</li>
+<li>量化参数过低时，虽然视频质量好，但容易失去对码率的控制。</li>
+</ul>
+<p>FFmpeg的支持QP范围为0~51，值越大表示压缩率越高，质量越低:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -qp 23 &lt;output&gt;</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx265 -x265-params qp=23 &lt;output&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="恒定码率"><a href="#恒定码率" class="headerlink" title="恒定码率"></a>恒定码率</h2><p>恒定码率（CBR, Constant Bitrate）确保以恒定码率输出比特流，无论实际编码简单还是复杂。</p>
+<ul>
+<li>场景简单时可能会浪费带宽。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -x264-params &quot;nal-hrd=cbr:force-cfr=1&quot; -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M &lt;output&gt;.ts （MPEG-2 TS）</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libvpx-vp9 -b:v 1M -maxrate 1M -minrate 1M &lt;output&gt;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">CBR to 964kbps</span></span><br><span class="line">ffmpeg -i i.mp4 -b:v 964K -minrate 964K -maxrate 964K -bufsize 2000K o.mp4</span><br></pre></td></tr></table></figure>
+
+<h2 id="可变码率"><a href="#可变码率" class="headerlink" title="可变码率"></a>可变码率</h2><p>可变码率（VBR, Variable Bitrate）控制编码器将更多的字节用于难压缩的部分，例如运动（motion）中的视频、丰富的空间细节（spatial detail）以及复杂纹理（texture）；对于容易编码的部分用更少的字节。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">限制码率在964 kbps~3856 kbps范围内</span></span><br><span class="line">ffmpeg -i i.mp4 -minrate 964K -maxrate 3856K -bufsize 2000K o_964_3856.mp4</span><br></pre></td></tr></table></figure>
+
+<h3 id="平均码率"><a href="#平均码率" class="headerlink" title="平均码率"></a>平均码率</h3><p>平均码率（ABR, Average Bitrate）指设给编码器一个目标码率值，让其自行控制码率达到这个目标值。</p>
+<ul>
+<li>缺点：由于编码器不清楚后续的场景，因此要猜测如何达到目标值，容易导致视频质量出现巨大波动</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -b:v 1M &lt;output&gt;</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx265 -b:v 1M &lt;output&gt;</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libvpx-vp9 -b:v 1M &lt;output&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="两次平均码率"><a href="#两次平均码率" class="headerlink" title="两次平均码率"></a>两次平均码率</h3><p>两次平均码率（2-Pass ABR）控制时允许编码器进行两次计算，一次用于计算帧的编码消耗，第二次用于高效的编码比特流。这样保证了在确定的码率约束下最好的视频质量，也意味着码率会随着时间的推移有变化。</p>
+<ul>
+<li>需要做些测试验证设定的比特率满足复杂场景</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -b:v 1M -pass 1 -f null /dev/null</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -b:v 1M -pass 2 &lt;output&gt;.mp4</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx265 -b:v 1M -x265-params pass=1 -f null /dev/null</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx265 -b:v 1M -x265-params pass=2 &lt;output&gt;.mp4</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libvpx-vp9 -b:v 1M -pass 1 -f null /dev/null</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libvpx-vp9 -b:v 1M -pass 2 &lt;output&gt;.webm</span><br></pre></td></tr></table></figure>
+
+<h2 id="恒定质量"><a href="#恒定质量" class="headerlink" title="恒定质量"></a>恒定质量</h2><p>恒定质量（CQ, Constant Quality）或恒定速率银子（CRF, Constant Rate Factor）</p>
+<ul>
+<li>不好预计最终的文件大小以及码率的波动情况</li>
+<li>CRF编码与同码率下的<code>2-Pass ABR</code>的视频质量相当，区别在于<code>2-Pass ABR</code>可以控制文件大小，而CRF控制视频质量。</li>
+</ul>
+<p>FFmpeg的支持CRF是指数级参数，值越大表示压缩率越高，质量越低:</p>
+<ul>
+<li>范围：H264和H265为<code>0~51</code>，VP9为<code>0~63</code></li>
+<li>推荐值：H264在17&#x2F;18时视觉上接近无损，+6会损失一半码率，-6增大一倍码率，通常用23，H265用28，VP9用15~35<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -crf 23 &lt;output&gt;</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx265 -crf 28 &lt;output&gt;</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libvpx-vp9 -crf 30 -b:v 0 &lt;output&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="约束码率"><a href="#约束码率" class="headerlink" title="约束码率"></a>约束码率</h2><p>视频缓冲验证器（VBV, Video Buffering Verifier）提供了一个将码率限制到最大值的策略。</p>
+<ul>
+<li>对于流媒体很有用，可与<code>2-Pass ABR</code>或CRF配合使用。</li>
+</ul>
+<p>FFmpeg通过<code>-maxrate</code>和<code>-bufsize</code>选项启用：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -crf 23 -maxrate 1M -bufsize 2M &lt;output&gt;</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx265 -crf 28 -x265-params vbv-maxrate=1000:vbv-bufsize=2000 &lt;output&gt;</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libvpx-vp9 -crf 30 -b:v 2M &lt;output&gt;</span><br><span class="line"></span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -b:v 1M -maxrate 1M -bufsize 2M -pass 1 -f null /dev/null</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx264 -b:v 1M -maxrate 1M -bufsize 2M -pass 2 &lt;output&gt;</span><br><span class="line"></span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx265 -b:v 1M -x265-params pass=1:vbv-maxrate=1000:vbv-bufsize=2000 -f null /dev/null</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libx265 -b:v 1M -x265-params pass=2:vbv-maxrate=1000:vbv-bufsize=2000 &lt;output&gt;</span><br><span class="line"></span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libvpx-vp9 -b:v 1M -maxrate 1M -bufsize 2M -pass 1 -f null /dev/null</span><br><span class="line">ffmpeg -i &lt;input&gt; -c:v libvpx-vp9 -b:v 1M -maxrate 1M -bufsize 2M -pass 2 &lt;output&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="帧数量控制"><a href="#帧数量控制" class="headerlink" title="帧数量控制"></a>帧数量控制</h1><p><a target="_blank" rel="noopener" href="https://sites.google.com/site/linuxencoding/x264-ffmpeg-mapping">x264 FFmpeg Options Guide</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 原片时长10s、帧率30</span><br><span class="line">$ ffprobe 10s.v.mp4</span><br><span class="line">Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &#x27;10s.v.mp4&#x27;:</span><br><span class="line">  Duration: 00:00:10.00, start: 0.000000, bitrate: 1931 kb/s</span><br><span class="line">    Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1920x1080 [SAR 1:1 DAR 16:9], 1927 kb/s, 30 fps, 30 tbr, 15360 tbn, 60 tbc (default)</span><br><span class="line"></span><br><span class="line"># 转码成只有1个I帧，0个B帧（keyint指GOP长度，即I帧间隔，300=10s*30fps）</span><br><span class="line">$ ffmpeg -i 10s.v.mp4 -c:v libx264 -x264-params keyint=300:min-keyint=300:no-scenecut=1:bframes=0 10s.v.i1b0.mp4</span><br><span class="line"></span><br><span class="line"># 查看I帧数量</span><br><span class="line">$ mediainfo --Details 10s.v.i1b0.mp4 | grep &#x27;slice_type I&#x27; | wc -l</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line"># 查看B帧数量</span><br><span class="line">$ mediainfo --Details 10s.v.i1b0.mp4 | grep &#x27;slice_type B&#x27; | wc -l</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<h1 id="x264相关"><a href="#x264相关" class="headerlink" title="x264相关"></a>x264相关</h1><h2 id="CAVLC和CABAC"><a href="#CAVLC和CABAC" class="headerlink" title="CAVLC和CABAC"></a>CAVLC和CABAC</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># H264用CAVLC (faster, less cpu intensive, less compression)</span><br><span class="line">ffmpeg -i 10s.v.mp4 \</span><br><span class="line">  -an \</span><br><span class="line">  -c:v libx264 \</span><br><span class="line">  -x264-params keyint=30:min-keyint=30:no-scenecut=1:no-cabac=1 \</span><br><span class="line">  10s.v.i1s.CAVLC.mp4</span><br><span class="line"></span><br><span class="line"># H264用CABAC (slower, more cpu intensive, more compression)</span><br><span class="line">ffmpeg -i 10s.v.mp4 \</span><br><span class="line">  -an \</span><br><span class="line">  -c:v libx264 \</span><br><span class="line">  -x264-params keyint=30:min-keyint=30:no-scenecut=1:coder=1 \</span><br><span class="line">  10s.v.i1s.CABAC.mp4</span><br></pre></td></tr></table></figure>
+
+<h1 id="切分与合并"><a href="#切分与合并" class="headerlink" title="切分与合并"></a>切分与合并</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 每20s切分成一个文件</span><br><span class="line">$ ffmpeg -v error \</span><br><span class="line">  -fflags +genpts \</span><br><span class="line">  -i 1.mp4 \</span><br><span class="line">  -map 0 \</span><br><span class="line">  -c copy \</span><br><span class="line">  -f segment \</span><br><span class="line">  -segment_format mp4 \</span><br><span class="line">  -segment_time 20 \</span><br><span class="line">  -segment_list 1-20s.ffcat \</span><br><span class="line">  -reset_timestamps 1 \</span><br><span class="line">  1-%03d.mp4</span><br><span class="line">1-000.mp4</span><br><span class="line">1-001.mp4</span><br><span class="line">1-002.mp4</span><br><span class="line">1-20s.ffcat</span><br><span class="line"></span><br><span class="line">$ cat 1-20s.ffcat</span><br><span class="line">ffconcat version 1.0</span><br><span class="line">file 1-000.mp4</span><br><span class="line">file 1-001.mp4</span><br><span class="line">file 1-002.mp4</span><br><span class="line"></span><br><span class="line"># 合并</span><br><span class="line">$ ffmpeg -y -v error -i 1-20s.ffcat -map 0 -c copy 1-2.mp4</span><br></pre></td></tr></table></figure>
+
+<h1 id="图片相关"><a href="#图片相关" class="headerlink" title="图片相关"></a>图片相关</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 提取第一秒的所有帧为图片</span><br><span class="line">ffmpeg -y -i 1.mp4 -t 00:00:01 %3d.jpg</span><br><span class="line"></span><br><span class="line"># 一系列图生成视频（30fps）</span><br><span class="line">ffmpeg -i %3d.jpg -r 30 -pix_fmt yuv420p 1s.v.mp4</span><br><span class="line"></span><br><span class="line"># 一张图生成10s视频</span><br><span class="line">ffmpeg -loop 1 -i 001.jpg -c:v libx264 -pix_fmt yuv420p -t 10 001.mp4</span><br><span class="line"></span><br><span class="line"># 一系列图生成10s视频（图片循环）</span><br><span class="line">ffmpeg -loop 1 -i %03d.jpg -c:v libx264 -pix_fmt yuv420p -t 10 10s.v.xxx.mp4</span><br><span class="line"></span><br><span class="line"># 一张图片生成h264 bitstream</span><br><span class="line">ffmpeg -i 001.jpg -pix_fmt yuv420p 001.h264</span><br></pre></td></tr></table></figure>
+
+<h1 id="音频相关"><a href="#音频相关" class="headerlink" title="音频相关"></a>音频相关</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 忽略视频、音频采样转为8kHz</span><br><span class="line">ffmpeg -i 10s_1080p_30fps.mp4 -vn -ar 8000 10s.a.8khz.mp4</span><br></pre></td></tr></table></figure>
+
+<h1 id="HLS相关"><a href="#HLS相关" class="headerlink" title="HLS相关"></a>HLS相关</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ ffmpeg -i 10s.v.mp4 \</span><br><span class="line">  -an \</span><br><span class="line">  -c:v libx264 \</span><br><span class="line">  -x264-params keyint=30:min-keyint=30:no-scenecut=1 \</span><br><span class="line">  -hls_playlist_type vod \</span><br><span class="line">  -hls_time 1 \</span><br><span class="line">  10s.v.playlist.m3u8</span><br><span class="line">10s.v.playlist0.ts</span><br><span class="line">10s.v.playlist1.ts</span><br><span class="line">10s.v.playlist2.ts</span><br><span class="line">10s.v.playlist3.ts</span><br><span class="line">10s.v.playlist4.ts</span><br><span class="line">10s.v.playlist5.ts</span><br><span class="line">10s.v.playlist6.ts</span><br><span class="line">10s.v.playlist7.ts</span><br><span class="line">10s.v.playlist8.ts</span><br><span class="line">10s.v.playlist9.ts</span><br><span class="line">10s.v.playlist.m3u8</span><br><span class="line"></span><br><span class="line">$ cat 10s.v.playlist.m3u8</span><br><span class="line">#EXTM3U</span><br><span class="line">#EXT-X-VERSION:3</span><br><span class="line">#EXT-X-TARGETDURATION:1</span><br><span class="line">#EXT-X-MEDIA-SEQUENCE:0</span><br><span class="line">#EXT-X-PLAYLIST-TYPE:VOD</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist0.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist1.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist2.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist3.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist4.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist5.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist6.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist7.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist8.ts</span><br><span class="line">#EXTINF:1.000000,</span><br><span class="line">10s.v.playlist9.ts</span><br><span class="line">#EXT-X-ENDLIST</span><br><span class="line"></span><br><span class="line"># Playlists for 720p(2628kbs), 480p(480p1128kbs) and 240p(264kbs) streams</span><br><span class="line">$ ffmpeg -i 1.mp4 \</span><br><span class="line">  -c:a copy -c:v libx264 -x264-params keyint=30:min-keyint=30:no-scenecut=1 \</span><br><span class="line">  -b:v 2500k -s 1280x720 -profile:v high -hls_time 1 -hls_playlist_type vod 720p2628kbs.m3u8 \</span><br><span class="line">  -c:a copy -c:v libx264 -x264-params keyint=30:min-keyint=30:no-scenecut=1 \</span><br><span class="line">  -b:v 1000k -s 854x480 -profile:v high -hls_time 1 -hls_playlist_type vod 480p1128kbs.m3u8 \</span><br><span class="line">  -c:a copy -c:v libx264 -x264-params keyint=30:min-keyint=30:no-scenecut=1 \</span><br><span class="line">  -b:v 200k -s 426x240 -profile:v high -hls_time 1 -hls_playlist_type vod 240p264kbs.m3u8</span><br><span class="line">240p264kbs0.ts</span><br><span class="line">240p264kbs1.ts</span><br><span class="line">240p264kbs2.ts</span><br><span class="line">240p264kbs3.ts</span><br><span class="line">240p264kbs4.ts</span><br><span class="line">240p264kbs5.ts</span><br><span class="line">240p264kbs6.ts</span><br><span class="line">240p264kbs7.ts</span><br><span class="line">240p264kbs8.ts</span><br><span class="line">240p264kbs9.ts</span><br><span class="line">240p264kbs.m3u8</span><br><span class="line">480p1128kbs0.ts</span><br><span class="line">480p1128kbs1.ts</span><br><span class="line">480p1128kbs2.ts</span><br><span class="line">480p1128kbs3.ts</span><br><span class="line">480p1128kbs4.ts</span><br><span class="line">480p1128kbs5.ts</span><br><span class="line">480p1128kbs6.ts</span><br><span class="line">480p1128kbs7.ts</span><br><span class="line">480p1128kbs8.ts</span><br><span class="line">480p1128kbs9.ts</span><br><span class="line">480p1128kbs.m3u8</span><br><span class="line">720p2628kbs0.ts</span><br><span class="line">720p2628kbs1.ts</span><br><span class="line">720p2628kbs2.ts</span><br><span class="line">720p2628kbs3.ts</span><br><span class="line">720p2628kbs4.ts</span><br><span class="line">720p2628kbs5.ts</span><br><span class="line">720p2628kbs6.ts</span><br><span class="line">720p2628kbs7.ts</span><br><span class="line">720p2628kbs8.ts</span><br><span class="line">720p2628kbs9.ts</span><br><span class="line">720p2628kbs.m3u8</span><br><span class="line"></span><br><span class="line">$ cat &lt;&lt;EOF &gt; variant.m3u8</span><br><span class="line">#EXTM3U</span><br><span class="line">#EXT-X-VERSION:6</span><br><span class="line">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2500000,CODECS=&quot;avc1.640028,mp4a.40.2&quot;,RESOLUTION=1280x720</span><br><span class="line">720p2628kbs.m3u8</span><br><span class="line">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1000000,CODECS=&quot;avc1.4d001f,mp4a.40.2&quot;,RESOLUTION=854x480</span><br><span class="line">480p1128kbs.m3u8</span><br><span class="line">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=200000,CODECS=&quot;avc1.42001f,mp4a.40.2&quot;,RESOLUTION=426x240</span><br><span class="line">240p264kbs.m3u8</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FFmpeg/" rel="tag"><i class="fa fa-tag"></i> FFmpeg</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Media/VideoBasic.html" rel="prev" title="视频基础">
+                  <i class="fa fa-chevron-left"></i> 视频基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Media/H264/H264.html" rel="next" title="H264视频编码">
+                  H264视频编码 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/Media/FFmpeg.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"96794706cdc5bb6232fbaeb2cdd15e12"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

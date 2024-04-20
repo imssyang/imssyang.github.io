@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="unittest(Unit testing framework)受到JUnit启发而设计，标准库原生支持。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unittest单元测试框架">
+<meta property="og:url" content="https://blog.imssyang.com/ProgrammingLanguage/Python/Unittest.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="unittest(Unit testing framework)受到JUnit启发而设计，标准库原生支持。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-01-01T14:33:08.000Z">
+<meta property="article:modified_time" content="2022-01-15T16:00:00.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="unittest">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/ProgrammingLanguage/Python/Unittest.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/ProgrammingLanguage/Python/Unittest.html","path":"ProgrammingLanguage/Python/Unittest.html","title":"unittest单元测试框架"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>unittest单元测试框架 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">基本命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%EF%BC%88test-case%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">测试用例（test case）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%B2%BB%E5%85%B7%EF%BC%88test-fixture%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">测试治具（test fixture）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%A5%97%E4%BB%B6%EF%BC%88test-suite%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">测试套件（test suite）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%89%A7%E8%A1%8C%E5%99%A8%EF%BC%88test-runner%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">测试执行器（test runner）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%BC%E5%AE%B9%E6%97%A7%E4%BB%A3%E7%A0%81"><span class="nav-number">6.</span> <span class="nav-text">兼容旧代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%BD%E7%95%A5%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E4%B8%8E%E5%8F%8D%E8%BD%AC%E7%BB%93%E6%9E%9C"><span class="nav-number">7.</span> <span class="nav-text">忽略测试用例与反转结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E5%AD%90%E6%B5%8B%E8%AF%95%E5%8C%BA%E5%88%86%E8%BF%AD%E4%BB%A3"><span class="nav-number">8.</span> <span class="nav-text">利用子测试区分迭代</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E6%B5%8B%E8%AF%95"><span class="nav-number">9.</span> <span class="nav-text">异步测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">10.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/ProgrammingLanguage/Python/Unittest.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          unittest单元测试框架
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/ProgrammingLanguage/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 1/1/2022 22:33:08" itemprop="dateCreated datePublished" datetime="2022-01-01T22:33:08+08:00">1/1/2022</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 1/16/2022 00:00:00" itemprop="dateModified" datetime="2022-01-16T00:00:00+08:00">1/16/2022</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>8.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>8 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>unittest(Unit testing framework)受到JUnit启发而设计，标准库原生支持。</p>
+<span id="more"></span>
+
+<h1 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">帮助信息</span><br><span class="line">  python -m unittest --help</span><br><span class="line"></span><br><span class="line">运行测试用例</span><br><span class="line">  python -m unittest -v test_module            - run tests from test_module with verbose output</span><br><span class="line">  python -m unittest test_module               - run tests from test_module</span><br><span class="line">  python -m unittest module.TestClass          - run tests from module.TestClass</span><br><span class="line">  python -m unittest module.Class.test_method  - run specified test method</span><br><span class="line">  python -m unittest path/to/test_file.py      - run tests from test_file.py</span><br><span class="line"></span><br><span class="line">运行特定项目的测试用例</span><br><span class="line">  python -m unittest discover -s project_directory -p &quot;*_test.py&quot;</span><br><span class="line">  python -m unittest discover project_directory &quot;*_test.py&quot;</span><br></pre></td></tr></table></figure>
+
+<h1 id="测试用例（test-case）"><a href="#测试用例（test-case）" class="headerlink" title="测试用例（test case）"></a>测试用例（test case）</h1><ul>
+<li>执行unittest.main()，运行测试用例</li>
+<li>继承unittest.TestCase，创建测试用例</li>
+<li>测试方法名必须前缀”test”</li>
+<li>使用TestCase.assert*()进行测试</li>
+</ul>
+<div class="tabs" id="test_case"><ul class="nav-tabs"><li class="tab active"><a href="#test_case-1">app/widget.py</a></li><li class="tab"><a href="#test_case-2">tests/widget/test_widget.py</a></li></ul><div class="tab-content"><div class="tab-pane active" id="test_case-1"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\n__init__&quot;</span>)</span><br><span class="line">        self.name = name</span><br><span class="line">        self.x = self.y = <span class="number">50</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">size</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;size&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> self.x, self.y</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">resize</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;resize&quot;</span>)</span><br><span class="line">        self.x, self.y = x, y</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dispose</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;dispose&quot;</span>)</span><br><span class="line">        self.name = <span class="literal">None</span></span><br><span class="line">        self.x = self.y = <span class="number">0</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="test_case-2"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">from</span> app.widget <span class="keyword">import</span> Widget</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">setUpModule</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;setUpModule %s&quot;</span> % __name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">tearDownModule</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;tearDownModule %s&quot;</span> % __name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WidgetTestCase</span>(unittest.TestCase):</span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">setUpClass</span>(<span class="params">cls</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;setUpClass %s&quot;</span> % __name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">tearDownClass</span>(<span class="params">cls</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;tearDownClass %s&quot;</span> % __name__)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">setUp</span>(<span class="params">self</span>):</span><br><span class="line">        self.widget = Widget(<span class="string">&#x27;The widget&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">tearDown</span>(<span class="params">self</span>):</span><br><span class="line">        self.widget.dispose()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_default_widget_size</span>(<span class="params">self</span>):</span><br><span class="line">        self.assertEqual(self.widget.size(), (<span class="number">50</span>,<span class="number">50</span>),</span><br><span class="line">                         <span class="string">&#x27;incorrect default size&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_widget_resize</span>(<span class="params">self</span>):</span><br><span class="line">        self.widget.resize(<span class="number">100</span>,<span class="number">150</span>)</span><br><span class="line">        self.assertEqual(self.widget.size(), (<span class="number">100</span>,<span class="number">150</span>),</span><br><span class="line">                         <span class="string">&#x27;wrong size after resize&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div></div>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ python3 -m unittest -v tests\widget\test_widget.py</span><br><span class="line">setUpModule tests.widget.test_widget</span><br><span class="line">setUpClass tests.widget.test_widget</span><br><span class="line">test_default_widget_size (tests.widget.test_widget.WidgetTestCase) ...</span><br><span class="line">__init__</span><br><span class="line">size</span><br><span class="line">dispose</span><br><span class="line">ok</span><br><span class="line">test_widget_resize (tests.widget.test_widget.WidgetTestCase) ...</span><br><span class="line">__init__</span><br><span class="line">resize</span><br><span class="line">size</span><br><span class="line">dispose</span><br><span class="line">ok</span><br><span class="line">tearDownClass tests.widget.test_widget</span><br><span class="line">tearDownModule tests.widget.test_widget</span><br><span class="line"></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 2 tests in 0.003s</span><br><span class="line"></span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<h1 id="测试治具（test-fixture）"><a href="#测试治具（test-fixture）" class="headerlink" title="测试治具（test fixture）"></a>测试治具（test fixture）</h1><ul>
+<li>每个测试方法之前执行TestCase.setUp()，之后执行TestCase.tearDown()。<br>TestCase.setUp()执行测试对象的__init__()，在TestCase.tearDown()清理测试对象占用资源。</li>
+<li>在运行单个类的测试之前执行TestCase.setUpClass()，之后执行TestCase.tearDown()，必须用@classmethod修饰。</li>
+<li>在运行单个模块的测试之前执行TestCase.setUpModule()，之后执行TestCase.tearDown()，应实现为function。</li>
+<li>只要setUp<em>执行成功，tearDown</em>一定会执行，和测试方法的执行结果无关。</li>
+</ul>
+<h1 id="测试套件（test-suite）"><a href="#测试套件（test-suite）" class="headerlink" title="测试套件（test suite）"></a>测试套件（test suite）</h1><p>测试用例的集合，一起执行。</p>
+<div class="tabs" id="test_suite"><ul class="nav-tabs"><li class="tab active"><a href="#test_suite-1">tests/widget/test_widget_suite.py</a></li><li class="tab"><a href="#test_suite-2">tests/widget/test_widget.py</a></li><li class="tab"><a href="#test_suite-3">tests/widget/__init__.py</a></li></ul><div class="tab-content"><div class="tab-pane active" id="test_suite-1"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> tests.widget.test_widget <span class="keyword">import</span> WidgetTestCase</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">suite</span>():</span><br><span class="line">    suite = unittest.TestSuite()</span><br><span class="line">    suite.addTest(WidgetTestCase(<span class="string">&#x27;test_default_widget_size&#x27;</span>))</span><br><span class="line">    suite.addTest(WidgetTestCase(<span class="string">&#x27;test_widget_resize&#x27;</span>))</span><br><span class="line">    <span class="keyword">return</span> suite</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    runner = unittest.TextTestRunner(verbosity=<span class="number">2</span>)</span><br><span class="line">    runner.run(suite())</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="test_suite-2"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_tests</span>(<span class="params">loader=<span class="literal">None</span>, tests=<span class="literal">None</span>, pattern=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> loader:</span><br><span class="line">        loader = unittest.TestLoader()</span><br><span class="line">    suite_list = [</span><br><span class="line">        loader.loadTestsFromTestCase(WidgetTestCase),</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">return</span> unittest.TestSuite(suite_list)</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="test_suite-3"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> tests.widget <span class="keyword">import</span> test_widget</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_tests</span>():</span><br><span class="line">    <span class="keyword">return</span> unittest.TestSuite(</span><br><span class="line">        [</span><br><span class="line">            test_widget.load_tests(),</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    result = unittest.TextTestRunner(verbosity=<span class="number">2</span>).run(load_tests())</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> result.wasSuccessful():</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br></pre></td></tr></table></figure></div></div></div>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ python3 -m unittest tests\widget\test_widget_suite.py</span><br><span class="line">setUpModule tests.widget.test_widget</span><br><span class="line">setUpClass tests.widget.test_widget</span><br><span class="line"></span><br><span class="line">__init__</span><br><span class="line">size</span><br><span class="line">dispose</span><br><span class="line">.</span><br><span class="line">__init__</span><br><span class="line">resize</span><br><span class="line">size</span><br><span class="line">dispose</span><br><span class="line">.tearDownClass tests.widget.test_widget</span><br><span class="line">tearDownModule tests.widget.test_widget</span><br><span class="line"></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 2 tests in 0.003s</span><br><span class="line"></span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">$ set PYTHONPATH=$PYTHONPATH;.</span><br><span class="line">$ python3 tests\widget\__init__.py</span><br><span class="line">test_default_widget_size (tests.widget.test_widget.WidgetTestCase) ...  ok</span><br><span class="line">test_widget_resize (tests.widget.test_widget.WidgetTestCase) ...  ok</span><br><span class="line"></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 2 tests in 0.003s</span><br><span class="line"></span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<h1 id="测试执行器（test-runner）"><a href="#测试执行器（test-runner）" class="headerlink" title="测试执行器（test runner）"></a>测试执行器（test runner）</h1><p>编排测试用例的执行过程，并反馈结果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">unittest</span>.TextTestRunner(stream=<span class="literal">None</span>, descriptions=<span class="literal">True</span>, verbosity=<span class="number">1</span>, </span><br><span class="line">                              failfast=<span class="literal">False</span>, buffer=<span class="literal">False</span>, resultclass=<span class="literal">None</span>, </span><br><span class="line">                              warnings=<span class="literal">None</span>, *, tb_locals=<span class="literal">False</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">test</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">unittest.main(module=<span class="string">&#x27;__main__&#x27;</span>, defaultTest=<span class="literal">None</span>, argv=<span class="literal">None</span>, testRunner=<span class="literal">None</span>, </span><br><span class="line">              testLoader=unittest.defaultTestLoader, exit=<span class="literal">True</span>, verbosity=<span class="number">1</span>,</span><br><span class="line">              failfast=<span class="literal">None</span>, catchbreak=<span class="literal">None</span>, buffer=<span class="literal">None</span>, warnings=<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">python -m unittest ...</span><br></pre></td></tr></table></figure>
+
+<h1 id="兼容旧代码"><a href="#兼容旧代码" class="headerlink" title="兼容旧代码"></a>兼容旧代码</h1><p><code>class unittest.FunctionTestCase(testFunc, setUp=None, tearDown=None, description=None)</code></p>
+<div class="tabs" id="test_old_code"><ul class="nav-tabs"><li class="tab active"><a href="#test_old_code-1">app/widget_func.py</a></li><li class="tab"><a href="#test_old_code-2">test/widget_func/test_widget_func.py</a></li></ul><div class="tab-content"><div class="tab-pane active" id="test_old_code-1"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">WIDGET_NAME = <span class="literal">None</span></span><br><span class="line">WIDGET_X = <span class="number">50</span></span><br><span class="line">WIDGET_Y = <span class="number">50</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init</span>(<span class="params">name</span>):</span><br><span class="line">    <span class="keyword">global</span> WIDGET_NAME</span><br><span class="line">    WIDGET_NAME = name</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\ninit <span class="subst">&#123;WIDGET_NAME&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">size</span>():</span><br><span class="line">    <span class="keyword">global</span> WIDGET_X, WIDGET_Y</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;size (<span class="subst">&#123;WIDGET_X&#125;</span>, <span class="subst">&#123;WIDGET_Y&#125;</span>)&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> WIDGET_X, WIDGET_Y</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">resize</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">global</span> WIDGET_X, WIDGET_Y</span><br><span class="line">    WIDGET_X, WIDGET_Y = x, y</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;resize (<span class="subst">&#123;WIDGET_X&#125;</span>, <span class="subst">&#123;WIDGET_Y&#125;</span>)&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dispose</span>():</span><br><span class="line">    <span class="keyword">global</span> WIDGET_NAME, WIDGET_X, WIDGET_Y</span><br><span class="line">    WIDGET_NAME = <span class="literal">None</span></span><br><span class="line">    WIDGET_X = WIDGET_Y = <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;dispose&quot;</span>)</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="test_old_code-2"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">from</span> app <span class="keyword">import</span> widget_func <span class="keyword">as</span> Widget</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init</span>():</span><br><span class="line">    Widget.init(<span class="string">&#x27;The widget&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clean</span>():</span><br><span class="line">    Widget.dispose()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">default_widget_size</span>():</span><br><span class="line">    <span class="keyword">assert</span> Widget.size() == (<span class="number">50</span>, <span class="number">50</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">widget_resize</span>():</span><br><span class="line">    Widget.resize(<span class="number">100</span>, <span class="number">150</span>)</span><br><span class="line">    <span class="keyword">assert</span> Widget.size() == (<span class="number">100</span>, <span class="number">150</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">test_func1 = unittest.FunctionTestCase(default_widget_size, setUp=init, tearDown=clean)</span><br><span class="line">test_func2 = unittest.FunctionTestCase(widget_resize)</span><br><span class="line"></span><br><span class="line">runner = unittest.TextTestRunner()</span><br><span class="line">runner.run(test_func1)</span><br><span class="line">runner.run(test_func2)</span><br></pre></td></tr></table></figure></div></div></div>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ python3 -m unittest tests\widget_func\test_widget_func.py</span><br><span class="line"></span><br><span class="line">init The widget</span><br><span class="line">size (50, 50)</span><br><span class="line">dispose</span><br><span class="line">.</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 1 test in 0.001s</span><br><span class="line"></span><br><span class="line">OK</span><br><span class="line">resize (100, 150)</span><br><span class="line">size (100, 150)</span><br><span class="line">.</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 1 test in 0.000s</span><br><span class="line"></span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 0 tests in 0.000s</span><br><span class="line"></span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<h1 id="忽略测试用例与反转结果"><a href="#忽略测试用例与反转结果" class="headerlink" title="忽略测试用例与反转结果"></a>忽略测试用例与反转结果</h1><ul>
+<li>@unittest.skip忽略某些测试用例；</li>
+<li>@unittest.expectedFailure期望执行结果是失败的。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SkipTestCase</span>(unittest.TestCase):</span><br><span class="line"></span><br><span class="line"><span class="meta">    @unittest.skip(<span class="params"><span class="string">&quot;demonstrating skipping&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_nothing</span>(<span class="params">self</span>):</span><br><span class="line">        self.fail(<span class="string">&quot;shouldn&#x27;t happen&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @unittest.skipUnless(<span class="params">sys.platform.startswith(<span class="params"><span class="string">&quot;win&quot;</span></span>), <span class="string">&quot;requires Windows&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_windows_support</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_maybe_skipped</span>(<span class="params">self</span>):</span><br><span class="line">        self.skipTest(<span class="string">&quot;external resource not available&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @unittest.expectedFailure</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_fail</span>(<span class="params">self</span>):</span><br><span class="line">        self.assertEqual(<span class="number">1</span>, <span class="number">1</span>, <span class="string">&quot;broken&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ python3 -m unittest -v tests\test_skip_expected.py</span><br><span class="line">test_fail (tests.test_skip_expected.SkipTestCase) ... unexpected success</span><br><span class="line">test_maybe_skipped (tests.test_skip_expected.SkipTestCase) ... skipped &#x27;external resource not available&#x27;</span><br><span class="line">test_nothing (tests.test_skip_expected.SkipTestCase) ... skipped &#x27;demonstrating skipping&#x27;</span><br><span class="line">test_windows_support (tests.test_skip_expected.SkipTestCase) ... ok</span><br><span class="line"></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 4 tests in 0.001s</span><br><span class="line"></span><br><span class="line">FAILED (skipped=2, unexpected successes=1)</span><br></pre></td></tr></table></figure>
+
+<h1 id="利用子测试区分迭代"><a href="#利用子测试区分迭代" class="headerlink" title="利用子测试区分迭代"></a>利用子测试区分迭代</h1><ul>
+<li>TestCase.subTest()后不会因结果失败而终止迭代，且失败时可显示subTest的参数。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NumbersTest</span>(unittest.TestCase):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_even</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Test that numbers between 0 and 5 are all even.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">6</span>):</span><br><span class="line">            <span class="keyword">with</span> self.subTest(i=i):</span><br><span class="line">                self.assertEqual(i % <span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="异步测试"><a href="#异步测试" class="headerlink" title="异步测试"></a>异步测试</h1><ul>
+<li>unittest.IsolatedAsyncioTestCase支持协程作为测试函数。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">from</span> unittest <span class="keyword">import</span> IsolatedAsyncioTestCase</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>(<span class="title class_ inherited__">IsolatedAsyncioTestCase</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">setUp</span>(<span class="params">self</span>):</span><br><span class="line">        events.append(<span class="string">&quot;setUp&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">asyncSetUp</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment">#self._async_connection = await AsyncConnection()</span></span><br><span class="line">        events.append(<span class="string">&quot;asyncSetUp&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">test_response</span>(<span class="params">self</span>):</span><br><span class="line">        events.append(<span class="string">&quot;test_response&quot;</span>)</span><br><span class="line">        <span class="comment">#rsp.status_code = await self._async_connection.get(&quot;https://example.com&quot;)</span></span><br><span class="line">        <span class="comment">#self.assertEqual(rsp.status_code, 200)</span></span><br><span class="line">        self.addAsyncCleanup(self.on_cleanup)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">tearDown</span>(<span class="params">self</span>):</span><br><span class="line">        events.append(<span class="string">&quot;tearDown&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">asyncTearDown</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment">#await self._async_connection.close()</span></span><br><span class="line">        events.append(<span class="string">&quot;asyncTearDown&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">on_cleanup</span>(<span class="params">self</span>):</span><br><span class="line">        events.append(<span class="string">&quot;cleanup&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;events&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    unittest.main(argv=[<span class="number">123</span>], exit=<span class="literal">True</span>, verbosity=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ python3.exe -m unittest -v tests\test_asyncio.py</span><br><span class="line">test_response (tests.test_asyncio.Test) ... [&#x27;setUp&#x27;, &#x27;asyncSetUp&#x27;, &#x27;test_response&#x27;, &#x27;asyncTearDown&#x27;, &#x27;tearDown&#x27;, &#x27;cleanup&#x27;]</span><br><span class="line">ok</span><br><span class="line"></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">Ran 1 test in 0.012s</span><br><span class="line"></span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/unittest.html">unittest — Unit testing framework</a><br><a target="_blank" rel="noopener" href="https://github.com/imssyang/python3">github: python3&#x2F;sample&#x2F;_unittest</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/unittest/" rel="tag"><i class="fa fa-tag"></i> unittest</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/ProgrammingLanguage/Python/Basic.html" rel="prev" title="Python基础">
+                  <i class="fa fa-chevron-left"></i> Python基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/ProgrammingLanguage/Python/StandardLibrary.html" rel="next" title="Python标准库">
+                  Python标准库 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/ProgrammingLanguage/Python/Unittest.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"f51daee3b56b907ee416e23da320c60c"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

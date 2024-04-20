@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="视频常见概念梳理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="视频基础">
+<meta property="og:url" content="https://blog.imssyang.com/Media/VideoBasic.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="视频常见概念梳理。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/YCrCb-sampling-pattern-progressive.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/YV12-samples-to-top-and-bottom-fields.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/motion-estimation.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/spatial-prediction.png">
+<meta property="article:published_time" content="2022-06-18T12:15:22.000Z">
+<meta property="article:modified_time" content="2022-07-26T08:25:30.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="VideoBasic">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.imssyang.com/images/Media/YCrCb-sampling-pattern-progressive.png">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/Media/VideoBasic.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/Media/VideoBasic.html","path":"Media/VideoBasic.html","title":"视频基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>视频基础 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E6%95%B0%E6%8D%AE"><span class="nav-number">1.</span> <span class="nav-text">视频数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E9%87%87%E6%A0%B7"><span class="nav-number">2.</span> <span class="nav-text">视频采样</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E4%B8%8A"><span class="nav-number">2.1.</span> <span class="nav-text">空间上</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.1.1.</span> <span class="nav-text">分辨率</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E4%B8%8A"><span class="nav-number">2.2.</span> <span class="nav-text">时间上</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%90%E8%BF%9B"><span class="nav-number">2.2.1.</span> <span class="nav-text">渐进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E9%94%99"><span class="nav-number">2.2.2.</span> <span class="nav-text">交错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A7%E7%8E%87"><span class="nav-number">2.2.3.</span> <span class="nav-text">帧率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%9C%E8%89%B2%E7%A9%BA%E9%97%B4"><span class="nav-number">3.</span> <span class="nav-text">颜色空间</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RGB"><span class="nav-number">3.1.</span> <span class="nav-text">RGB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YCrCb"><span class="nav-number">3.2.</span> <span class="nav-text">YCrCb</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%87%E6%A0%B7%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.2.1.</span> <span class="nav-text">采样模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E8%B4%A8%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">视频质量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%8C%83%E5%9B%B4%EF%BC%88Dynamic-range%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">动态范围（Dynamic range）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E5%9B%A0%E7%B4%A0"><span class="nav-number">4.2.</span> <span class="nav-text">影响因素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E4%BB%B7%E6%96%B9%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">评价方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B3%B0%E5%80%BC%E4%BF%A1%E5%99%AA%E6%AF%94"><span class="nav-number">4.3.1.</span> <span class="nav-text">峰值信噪比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81"><span class="nav-number">5.</span> <span class="nav-text">视频编码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-number">5.1.</span> <span class="nav-text">编码器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.1.1.</span> <span class="nav-text">预测模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.1.2.</span> <span class="nav-text">空间模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%86%B5%E7%BC%96%E7%A0%81"><span class="nav-number">5.1.3.</span> <span class="nav-text">熵编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-number">5.2.</span> <span class="nav-text">解码器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A0%E6%9D%90"><span class="nav-number">6.</span> <span class="nav-text">素材</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/Media/VideoBasic.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          视频基础
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/Media/" itemprop="url" rel="index"><span itemprop="name">Media</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 6/18/2022 20:15:22" itemprop="dateCreated datePublished" datetime="2022-06-18T20:15:22+08:00">6/18/2022</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 7/26/2022 16:25:30" itemprop="dateModified" datetime="2022-07-26T16:25:30+08:00">7/26/2022</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>7 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>视频常见概念梳理。</p>
+<span id="more"></span>
+
+<h1 id="视频数据"><a href="#视频数据" class="headerlink" title="视频数据"></a>视频数据</h1><ul>
+<li>视频是一系列连续静止的图像快速切换产生的</li>
+</ul>
+<pre class="mermaid">
+graph LR
+Y0 -.- Y1 -.- Y2 -.- Y4 &amp; CR3 &amp; CG3 &amp; CB3
+Y0 -.- |add| C1 -.- C2 -.- CR3 &amp; CG3 &amp; CB3 &amp; PB4 &amp; PR4
+S0 -.- S1 -.- S2
+CR3 -.- CR5
+CG3 -.- CG5
+CB3 -.- CB5
+Y4 -.- Y6
+PB4 -.- CB6
+PR4 -.- CR6
+
+subgraph G0[模拟黑白]
+  Y0(灰度Y)
+  S0(一路信号)
+end
+
+subgraph G1[模拟彩色-NTSC&#x2F;PAL&#x2F;SECAM]
+  Y1(灰度Y)
+  C1(色度R&#x2F;G)
+  S1(一路复合信号)
+end
+
+subgraph G2[模拟S-Video]
+  Y2(灰度Y)
+  C2(色度C)
+  S2(两路信号)
+end
+
+subgraph G3[模拟RGB]
+  CR3(红R)
+  CG3(绿G)
+  CB3(蓝B)
+end
+
+subgraph G4[模拟YPbPr]
+  Y4(灰度Y)
+  PB4(蓝光与灰度差异Pb)
+  PR4(红光与灰度差异Pr)
+end
+
+subgraph G5[数字RGB]
+  CR5(红R)
+  CG5(绿G)
+  CB5(蓝B)
+end
+
+subgraph G6[数字YCbCr]
+  Y6(灰度Y)
+  CB6(蓝光与灰度差异Cb)
+  CR6(红光与灰度差异Cr)
+end
+</pre>
+
+<h1 id="视频采样"><a href="#视频采样" class="headerlink" title="视频采样"></a>视频采样</h1><p>将模拟信号量化为数字信号的过程。</p>
+<h2 id="空间上"><a href="#空间上" class="headerlink" title="空间上"></a>空间上</h2><p>每张图像由采样点组成，采样点的数量决定图像质量，每个采样点可以用像素（pixel）表示。</p>
+<h3 id="分辨率"><a href="#分辨率" class="headerlink" title="分辨率"></a>分辨率</h3><ul>
+<li>视频分辨率（resolution）：<ul>
+<li>1920x1080分别指在16:9的宽高比下水平采样和垂直扫描线的数目</li>
+<li>对模拟视频信号进行采样时，频率越高水平采样数目越大，既线分辨率（lines of resolution）越大</li>
+<li>视频质量通常用线分辨率来度量，与垂直扫描线无关</li>
+</ul>
+</li>
+<li>清晰度（definition）：<ul>
+<li>每个定义涉及多个因素<ul>
+<li>显示宽高比（DAR, display aspect ratio）</li>
+<li>像素宽高比（PAR, pixel aspect ratio或SAR，sample aspect ratio）</li>
+<li>渐进&#x2F;交错采样</li>
+<li>模拟消隐量（NAB, nominal analog blanking，一般左右两边各8个像素宽，用于标识水平采样的开始和结束，不会实际显示出来）</li>
+</ul>
+</li>
+<li>480p(720x480) 是在DAR&#x3D;4:3，PAR&#x3D;10:11，NAB&#x3D;8时的逐行显示，480i指隔行显示<ul>
+<li>720 &#x3D; 480 * (4&#x2F;3) &#x2F; (10&#x2F;11) + (8 * 2)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="时间上"><a href="#时间上" class="headerlink" title="时间上"></a>时间上</h2><p>视频中的运动图像是在周期性的时间间隔内对信号进行采样形成的，高帧率会使得运动中的场景越平滑。当使用渐进采样的视频在隔行显示器上播放时，需要先转换为交错采样，反之亦然。</p>
+<h3 id="渐进"><a href="#渐进" class="headerlink" title="渐进"></a>渐进</h3><p>渐进采样（progressive sampling）时按顺序传输一张图像中的每一行。</p>
+<h3 id="交错"><a href="#交错" class="headerlink" title="交错"></a>交错</h3><p>交错采样（interlaced sampling）：每张图像分成两个场（field），分别只包含奇数（odd）行和偶数（even）行的数据</p>
+<ul>
+<li>顶场（top field）：第一行为交错帧（interlaced frame）的第一行</li>
+<li>低场（bottom field）：第一行为交错帧（interlaced frame）的第二行</li>
+</ul>
+<p><a href="/Media/FFmpeg#idet"><strong>探测采样类型ffmpeg&#x2F;filter&#x2F;idet</strong></a><br><a href="/Media/FFmpeg#tinterlace"><strong>转换交错模式ffmpeg&#x2F;filter&#x2F;tinterlace</strong></a></p>
+<h3 id="帧率"><a href="#帧率" class="headerlink" title="帧率"></a>帧率</h3><p>帧率（frame rate）影响视频的流畅程度，帧率越大越流畅。例如同等码率下，每秒50场的交错采样要比每秒25帧的渐进采样更流畅。</p>
+<h1 id="颜色空间"><a href="#颜色空间" class="headerlink" title="颜色空间"></a>颜色空间</h1><p>颜色空间（colour space）是一种可以再现亮度（brightness, luminance or luma）和色彩（colour）的方法。</p>
+<h2 id="RGB"><a href="#RGB" class="headerlink" title="RGB"></a>RGB</h2><p>RGB (red, green, blue) 是三原色加色模型（Additive models），用于采样与显示：</p>
+<ul>
+<li>生成任何一种颜色时，三个分量都需要占用相同的带宽，帧缓冲要求大</li>
+<li>修改给定像素的亮度或颜色值时，必须同时从帧缓冲中读出三个分量，然后重新计算亮度和颜色，再将修改写回帧缓冲</li>
+</ul>
+<h2 id="YCrCb"><a href="#YCrCb" class="headerlink" title="YCrCb"></a>YCrCb</h2><p>在RGB颜色空间中，三个颜色同等重要，需要存储在同等的分辨率上。人类视觉系统（HVS, human visual system）对颜色的敏感度弱于亮度，为了更高效的量化颜色信息，把RGB分量中的亮度信息提取出来作为Y分量，然后取RGB三个分量与Y分量的偏差Cr、Cb、Cg作为色度（chroma）信息，由于Cr+Cb+Cg的和为一个常量，因此可以只存储Cr和Cb分量信息，即得到YCrCb颜色空间。</p>
+<div class="tabs" id="ycrcb"><ul class="nav-tabs"><li class="tab active"><a href="#ycrcb-1">ITU-R BT.601-5</a></li></ul><div class="tab-content"><div class="tab-pane active" id="ycrcb-1"><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Y  = 0.299R + 0.587G + 0.114B</span><br><span class="line">Cb = 0.564(B − Y)</span><br><span class="line">Cr = 0.713(R − Y)</span><br><span class="line"></span><br><span class="line">B = Y + 1.772Cb</span><br><span class="line">R = Y + 1.402Cr</span><br><span class="line">G = Y − 0.344Cb − 0.714Cr</span><br></pre></td></tr></table></figure></div></div></div>
+
+<ul>
+<li>YCrCb降低了色彩分量的表达的同时，没有对视觉质量产生太大影响</li>
+<li>采样到的RGB数据转换为YCrCb后，更有利于存储与传输。在显示图像时，再转换回RGB</li>
+</ul>
+<h3 id="采样模式"><a href="#采样模式" class="headerlink" title="采样模式"></a>采样模式</h3><img data-src="/images/Media/YCrCb-sampling-pattern-progressive.png" class="" width="509" height="537" title="YCrCb sampling patterns (progressive)">
+
+<ul>
+<li><code>4:4:4</code> 每4个Y采样点时由4个Cr和4个Cb采样点</li>
+<li><code>4:2:2</code>&#x2F;YUY2 色度采样点在垂直方向上与亮度相同，但在水平方向上只有亮度的一半<ul>
+<li><code>1982/CCIR-601</code>定义了基于此方式采样的参数：亮度采样频率为13.5MHz，色度采样频率为6.75MHz，每个采样点为8bit.<ul>
+<li>采样码率：<code>13.5 * 8 + 6.75 * 8 * 2 = 216Mb/s</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>4:2:0</code>&#x2F;YV12 色度采样点在垂直和水平方向上都只有亮度的一半<ul>
+<li>其中的数字0容易误解，其并不表示缺少某个色度分量，历史上只是作为<code>code</code>上的延续标识</li>
+<li>YV12的由来：4个Y、1个Cr和1个Cb分量，位深为8时，6*8&#x3D;48bit，每个像素平均48&#x2F;4&#x3D;12bit</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Image resolution: 720 × 576 pixels</span><br><span class="line">Y resolution: 720 × 576 samples, each represented with 8 bits</span><br><span class="line"></span><br><span class="line">4:4:4 Cr, Cb resolution: 720 × 576 samples, each 8 bits</span><br><span class="line">Total number of bits: 720 × 576 × 8 × 3 = 9953280 bits</span><br><span class="line"></span><br><span class="line">4:2:0 Cr, Cb resolution: 360 × 288 samples, each 8 bits</span><br><span class="line">Total number of bits: (720 × 576 × 8) + (360 × 288 × 8 × 2) = 4976640 bits</span><br><span class="line"></span><br><span class="line">The 4:2:0 version requires half as many bits as the 4:4:4 version.</span><br></pre></td></tr></table></figure>
+
+<img data-src="/images/Media/YV12-samples-to-top-and-bottom-fields.png" class="" width="437" height="408" title="4:2:0 samples to top and bottom fields">
+
+<h1 id="视频质量"><a href="#视频质量" class="headerlink" title="视频质量"></a>视频质量</h1><p><strong>视频质量（Video quality）</strong>是指经过视频传输（transmission）或处理（processing）系统之后，与原始视频相比，感知到的视频特征（characteristic）的退化情况。</p>
+<h2 id="动态范围（Dynamic-range）"><a href="#动态范围（Dynamic-range）" class="headerlink" title="动态范围（Dynamic range）"></a>动态范围（Dynamic range）</h2><p>Dynamic range (DR, DNR, or DYR)指某一信号（如sound、light）所能假定的最大值与最小值之间的比率。它可被测量为一个以log10或log2为底的最小和最大信号值之间的对数差值。</p>
+<p><strong>动态范围压缩（dynamic range compression）</strong>：原始信号通常具有wide dynamic range，为了利于存储与重建，需要处理成narrower recorded dynamic range。</p>
+<h2 id="影响因素"><a href="#影响因素" class="headerlink" title="影响因素"></a>影响因素</h2><p><strong>数字视频（Digital video）</strong>系统中影响视频质量的因素：</p>
+<ul>
+<li>输入视频信号的特性（characteristics of the input video signal）<ul>
+<li>运动量（amount of motion）</li>
+<li>空间信息（spatial details）<ul>
+<li>模糊度（Blurring）：高空间频率图像细节丢失的结果（锐利的边缘）</li>
+<li>大块（Blocking）：图像内部由8、16或32的宏块表示，宏块参数会影响图像质量</li>
+<li>重影（Ringing&#x2F;echoing&#x2F;ghosting）：在尖锐的边缘附近以“光环”、“带”或“鬼影”的形式出现.</li>
+<li>颜色溢出（Color bleeding）：当图像中一种颜色的边缘无意地出血或重叠成另一种颜色时发生</li>
+<li>梯式噪音（Staircase noise）：沿对角线或曲线边阻塞的一种特殊情况</li>
+</ul>
+</li>
+<li>时间信息（Temporal details）<ul>
+<li>闪烁（Flickering）：亮度或色彩沿时间维度的频繁变化（细粒闪烁和粗粒闪烁）</li>
+<li>蚊式噪声（Mosquito noise）：模糊或在高频内容周围闪烁（前景实体和背景或硬边缘之间的急剧过渡）</li>
+<li>悬浮（Floating）：某些区域的错觉运动，而周围的区域保持静止（漂浮在周围的背景之上）</li>
+<li>抖动（Jerkiness&#x2F;judder）：由于帧采样而感知到的不均匀或摆动的运动（出现在将24帧的电影转换成3或60帧时）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>用于编码和传输的设置（settings used for encoding and transmission）</li>
+<li>信道保真度（channel fidelity）</li>
+<li>网络性能（network performance）</li>
+</ul>
+<h2 id="评价方法"><a href="#评价方法" class="headerlink" title="评价方法"></a>评价方法</h2><p><strong>视频质量评价（Video quality evaluation）</strong>用来描述所研究的一组视频序列的质量。</p>
+<blockquote>
+<p>parametric&#x2F;bitstream-based metrics have also been standardized:</p>
+</blockquote>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.itu.int/rec/T-REC-P.1201/en">(2012) P.1201 : Parametric non-intrusive assessment of audiovisual media streaming quality</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.itu.int/rec/T-REC-P.1202">(2012) P.1202 : Parametric non-intrusive bitstream assessment of video media streaming quality</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.itu.int/rec/T-REC-P.1203.1/en">(2016) P.1203.1 : Parametric bitstream-based quality assessment of progressive download and adaptive audiovisual streaming services over reliable transport - Video quality estimation module</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.itu.int/rec/T-REC-P.1204.3-202001-I/en">(2020) P.1204.3 : Video quality assessment of streaming services over reliable transport for resolutions up to 4K with access to full bitstream information</a></li>
+</ol>
+<ul>
+<li>主观评价（subjectively）：询问用户（ITU-R 500&#x2F;DSCQS, Double Stimulus Continuous Quality Scale）</li>
+<li>客观评价（objectively）：近似主观视频质量评价结果的数学模型<ul>
+<li>Full Reference Methods (FR)：比较原始视频信号与接收的视频信号的质量差异。<ul>
+<li>经典做法是比较原始视频和接收到视频的每一个像素，不关系中间的编码与传输过程<ul>
+<li>最准确（most accurate）</li>
+<li>高计算工作量（higher computational effort）</li>
+<li>可访问原始视频（availability of the original video）</li>
+</ul>
+</li>
+<li>衡量标准（Metric）<ul>
+<li>峰值信噪比（PSNR - Peak Signal-to-Noise Ratio）<ul>
+<li>广泛用于图像质量评价，与人眼感知相关性差</li>
+</ul>
+</li>
+<li>结构相似性（SSIM - Structural SIMilarity）<ul>
+<li>用于图像质量评价，将图像退化视为结构信息的感知变化</li>
+</ul>
+</li>
+<li>基于运动的视频完整性评估（MOVIE Index - Motion-based Video Integrity Evaluation)<ul>
+<li>基于神经科学的模型，用于预测(可能被压缩或扭曲的)电影或视频相对于原始参考视频的感知质量。</li>
+</ul>
+</li>
+<li>视频多方法评估融合（VMAF - Video Multimethod Assessment Fusion）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Reduced Reference Methods (RR)：提取两个视频的一些特征并比较，得出一个质量分数<ul>
+<li>与FR模型比较<ul>
+<li>较低准确度（lower accuracy）</li>
+<li>较低计算工作量（lower computational effort）</li>
+<li>不可访问原始视频（not availability of the original video）</li>
+</ul>
+</li>
+<li>衡量标准（Metric）<ul>
+<li>SRR - SSIM Reduced-Reference</li>
+<li>ST-RRED</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>No-Reference Methods (NR)：试图在没有任何参考原始信号的情况下评估失真视频的质量<ul>
+<li>特点：准确度低于FR与RR，但计算效率更高</li>
+<li>Pixel-Based Methods (NR-P)：根据解码后的像素信息分析质量，通常只关注特定的退化类型<ul>
+<li>退化类型（degradation types）<ul>
+<li>模糊度（blurring）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Parametric&#x2F;Bitstream Methods (NR-B)：根据从传输容器和视频比特流中提取的信息分析质量<ul>
+<li>传输容器（transmission container）<ul>
+<li>MPEG-TS packet headers</li>
+</ul>
+</li>
+<li>视频比特流（video bitstream）<ul>
+<li>运动矢量（motion vectors）</li>
+<li>量化参数（quantization parameters）</li>
+</ul>
+</li>
+<li>特点：无需解码、效率高但很不准确</li>
+</ul>
+</li>
+<li>Hybrid Methods (Hybrid NR-P-B)：结合从比特流提取的参数与解码的视频信号分析质量</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="峰值信噪比"><a href="#峰值信噪比" class="headerlink" title="峰值信噪比"></a>峰值信噪比</h3><p><strong>峰值信噪比（PSNR - Peak Signal-to-Noise Ratio）</strong>指信号的最大可能功率与影响信号表现保真度的干扰噪声功率之间的比值。</p>
+<p><a href="/Media/FFmpeg#psnr"><strong>计算峰值信噪比 ffmpeg&#x2F;filter&#x2F;psnr</strong></a></p>
+<h1 id="视频编码"><a href="#视频编码" class="headerlink" title="视频编码"></a>视频编码</h1><p>视频编码（video coding）或者叫视频压缩（Video compression）是将数字视频处理成适合传输或存储的形式，减少冗余字节量。在图像与视频信息的压缩上，使用<code>JPEG-LS</code>的无损（lossless）压缩算法通常只能达到3~4倍的压缩量，有损（lossy）压缩算法基于去除主观冗余的原则，可以在不显著影响观感的情况下，以视觉质量的损失换取更高的压缩比。</p>
+<ul>
+<li>冗余信息（redundancy）<ul>
+<li>时间上（temporal）<ul>
+<li>时间顺序上连续的帧，通常是高度相关的，特别是当采样率或帧率很高的时候</li>
+</ul>
+</li>
+<li>空间上（spatial）<ul>
+<li>相邻的像素(样本)之间通常有很高的相关性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>编解码器（codec）</li>
+</ul>
+<h2 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h2><p>编码器（encoder）：将源数据进行压缩数据</p>
+<pre class="mermaid">
+graph LR
+VideoSource[视频源数据] --&gt; PredictionModel[预测模型] --&gt; |残差帧| SpatialModel[空间模型]
+SpatialModel --&gt; |残差帧经变换和量化后的系数| EntropyEncoder[熵编码器] --&gt; CodedVideo[编码数据]
+StoredCodedData[引用的已编码数据] --&gt; PredictionModel --&gt; |预测类型和运动补偿参数| EntropyEncoder
+</pre>
+
+<h3 id="预测模型"><a href="#预测模型" class="headerlink" title="预测模型"></a>预测模型</h3><p>预测模型（prediction model）</p>
+<ul>
+<li>输入信息为未压缩的视频源数据，</li>
+<li>利用相邻视频帧或相邻图像样本之间的相似性来减少冗余<ul>
+<li>帧间预测（inter prediction）| 时域（temporal）预测 | 运动补偿（motion compensation）<ul>
+<li>利用前后引用帧（reference frame）之间的差异预测当前视频帧，差异类型有：<ul>
+<li>运动（motion）：可用帧间像素的移动量，可用光流（optical flow）表示<ul>
+<li>刚体运动：例如移动的车辆</li>
+<li>可变形的运动：例如说话的人</li>
+<li>镜头移动：例如PTZ变换</li>
+</ul>
+</li>
+<li>未覆盖区域（uncovered regions）：没有被运动物体遮蔽的背景区域</li>
+<li>光线变化（lighting changes）</li>
+</ul>
+</li>
+<li>光流（optical flow）计算复杂，且也需要网络传输，在实际中应用少</li>
+<li>基于块（block-based）的运动估计与补偿（estimation and compensation）：<ol>
+<li>在当前帧中选取M*N的采样点作为块</li>
+<li>在引用帧（reference frame）的搜索区域中寻找相似的块（称为候选区域或预测器），从当前块减去候选块得到残差块（称为运动补偿），能量最小的残差块就是最佳匹配，寻找最佳匹配的过程即为运动估计。</li>
+<li>计算当前块与最佳匹配块位置上的偏差，得到运动矢量（motion vector）</li>
+<li>残差块和运动矢量经熵编码后一起被传输</li>
+<li>解码器通过运动矢量重建预测块，然后将残差帧加到预测器上得到原始的块<img data-src="/images/Media/motion-estimation.png" class="" width="700" height="400" title="Motion Estimation"></li>
+</ol>
+</li>
+</ul>
+</li>
+<li>帧内预测（intra prediction）| 空间预测（spatial prediction）| DPCM (Differential Pulse Code Modulation)<ul>
+<li>利用周边视频块（block of video data）预测当前块<img data-src="/images/Media/spatial-prediction.png" class="" width="565" height="366" title="Spatial Prediction (DPCM)">
+<ul>
+<li>编码器基于之前编码的像素<em>A</em>、<em>B</em>、<em>C</em>的某种组合预测当前像素<em>X</em><ol>
+<li>假定编码器预测<code>P(X) = (2A + B + C) / 4</code></li>
+<li>计算残差帧<code>R(X) = X - P(X)</code>，经编码、传输</li>
+<li>解码器解码后得到<code>R(X)</code>和同样的预测<code>P(X) = (2A + B + C) / 4</code></li>
+<li>解码器重建像素<code>X = R(X) + P(X)</code></li>
+</ol>
+</li>
+<li>压缩效率取决于<code>P(X)</code>的预测精度，预测越准确，残差帧越小</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>输出<ul>
+<li>预测类型和参数</li>
+<li>残差帧（residual frame，当前帧实际值减去预测值后的差值，得到灰度图像）</li>
+</ul>
+</li>
+<li>编码器（encoder）预测时只能使用解码时可以利用的信息，使得解码器与编码器有同样的预测结果</li>
+</ul>
+<h3 id="空间模型"><a href="#空间模型" class="headerlink" title="空间模型"></a>空间模型</h3><p>空间模型（spatial model）</p>
+<ul>
+<li>输入为残差帧</li>
+<li>将残差帧进行变换（transform），以获取更紧凑的表示，必须可逆，计算过程可实现<ul>
+<li>基于块（block-based）的变换，内存占用低，块边缘易产生伪影<ul>
+<li>KLT (Karhunen-Loeve Transform)</li>
+<li>SVD (Singular Value Decomposition)</li>
+<li>DCT (Discrete Cosine Transform)</li>
+</ul>
+</li>
+<li>基于图像（image-based）的变换，内存占用高，适合于静态图像<ul>
+<li>DWT (Discrete Wavelet Transform)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对变换后的数据进行量化（quantization），将值限制在更小的范围内<ul>
+<li>标量量化（scalar quantizer）：一对一映射<ul>
+<li>前向量化器（FQ, forward quantizer FQ）<ul>
+<li>将多数不重要的系数映射到零值，同时保留少量的重要系数为非零值，因此输出是一个主要包含零的稀疏数组</li>
+<li>步长（step size）越大，量化后的值范围越小，压缩率越高</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>矢量量化（vector quantizer）：多对多映射</li>
+</ul>
+</li>
+<li>对非零值进行重排序（reordering），并对零值高效编码，以获取更紧凑的表示</li>
+<li>输出为残差帧经变换、量化后得到的一组系数（quantized transform coefficients）</li>
+</ul>
+<h3 id="熵编码"><a href="#熵编码" class="headerlink" title="熵编码"></a>熵编码</h3><p>熵编码（entropy coding）：将表示视频序列的数据转换为适合传输或存储的字节流形式</p>
+<ul>
+<li>算法<ul>
+<li>哈夫曼编码（huffman coding）</li>
+</ul>
+</li>
+<li>输出压缩字节流（bit stream）<ul>
+<li>头信息（header information）</li>
+<li>编码预测参数（coded prediction parameters）</li>
+<li>编码残差系数（coded residual coefficients）</li>
+</ul>
+</li>
+</ul>
+<h2 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h2><p>解码器（decoder）：将压缩数据恢复成源数据</p>
+<ul>
+<li>反向量化器（IQ, inverse quantizer）</li>
+</ul>
+<h1 id="素材"><a href="#素材" class="headerlink" title="素材"></a>素材</h1><p><a target="_blank" rel="noopener" href="https://www.hdpvrcapture.com/wordpress/?page_id=97">Sample Recordings</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="#">THE H.264 ADVANCED VIDEO COMPRESSION STANDARD, Second Edition, 2010, Iain E. Richardson</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VideoBasic/" rel="tag"><i class="fa fa-tag"></i> VideoBasic</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Automate/CI-CD/github/GithubAction.html" rel="prev" title="Github持续集成与交付">
+                  <i class="fa fa-chevron-left"></i> Github持续集成与交付
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Media/FFmpeg.html" rel="next" title="FFmpeg视频处理">
+                  FFmpeg视频处理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/Media/VideoBasic.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"d1303bb7aa299a0de3fe6741d9da2a3c"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

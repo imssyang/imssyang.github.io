@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Network address translation (NAT) 是指当数据包经过路由设备时，通过修改IP包头中的网络地址信息，将一个IP地址空间映射到另一个IP地址空间的方法。最初用于更换上游 Internet service provider 时，避免重新分配网络中每个主机的地址，后来在面对IPv4地址耗尽问题时变成一种流行而必要的工具。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络地址转换与穿越">
+<meta property="og:url" content="https://blog.imssyang.com/Network/NAT.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="Network address translation (NAT) 是指当数据包经过路由设备时，通过修改IP包头中的网络地址信息，将一个IP地址空间映射到另一个IP地址空间的方法。最初用于更换上游 Internet service provider 时，避免重新分配网络中每个主机的地址，后来在面对IPv4地址耗尽问题时变成一种流行而必要的工具。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.imssyang.com/images/Network/Network-Address-Translation.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Network/Network-Address-Port-Translation.jpg">
+<meta property="og:image" content="https://blog.imssyang.com/images/Network/Bidirectional-NAT.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Network/STUN-NATDetectAlgorithm.svg">
+<meta property="article:published_time" content="2021-08-18T06:31:31.000Z">
+<meta property="article:modified_time" content="2021-09-20T10:27:30.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="NAT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.imssyang.com/images/Network/Network-Address-Translation.png">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/Network/NAT.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/Network/NAT.html","path":"Network/NAT.html","title":"网络地址转换与穿越"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>网络地址转换与穿越 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%81%E7%BD%91%E5%9C%B0%E5%9D%80"><span class="nav-number">1.</span> <span class="nav-text">私网地址</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAT%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">NAT应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAT%E8%AE%BE%E5%A4%87%E7%89%B9%E5%BE%81"><span class="nav-number">3.</span> <span class="nav-text">NAT设备特征</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAT%E5%8F%98%E4%BD%93"><span class="nav-number">4.</span> <span class="nav-text">NAT变体</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NAPT"><span class="nav-number">4.1.</span> <span class="nav-text">NAPT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Two-Way-NAT"><span class="nav-number">4.2.</span> <span class="nav-text">Two-Way NAT</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STUN%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.</span> <span class="nav-text">STUN协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P2P%E7%A9%BF%E8%B6%8ANAT"><span class="nav-number">6.</span> <span class="nav-text">P2P穿越NAT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UPnP%E5%8D%8F%E8%AE%AE"><span class="nav-number">7.</span> <span class="nav-text">UPnP协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAT-PMP%E5%8D%8F%E8%AE%AE"><span class="nav-number">8.</span> <span class="nav-text">NAT-PMP协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RSIP"><span class="nav-number">9.</span> <span class="nav-text">RSIP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#symmetric-RTP"><span class="nav-number">10.</span> <span class="nav-text">symmetric RTP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TRUN%E5%8D%8F%E8%AE%AE"><span class="nav-number">11.</span> <span class="nav-text">TRUN协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ICE%E8%A7%84%E8%8C%83"><span class="nav-number">12.</span> <span class="nav-text">ICE规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#freeswitch"><span class="nav-number">13.</span> <span class="nav-text">freeswitch</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/Network/NAT.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网络地址转换与穿越
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/Network/" itemprop="url" rel="index"><span itemprop="name">Network</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 8/18/2021 14:31:31" itemprop="dateCreated datePublished" datetime="2021-08-18T14:31:31+08:00">8/18/2021</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 9/20/2021 18:27:30" itemprop="dateModified" datetime="2021-09-20T18:27:30+08:00">9/20/2021</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>20k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>18 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><code>Network address translation (NAT)</code> 是指当数据包经过路由设备时，通过修改IP包头中的网络地址信息，将一个IP地址空间映射到另一个IP地址空间的方法。最初用于更换上游 Internet service provider 时，避免重新分配网络中每个主机的地址，后来在面对IPv4地址耗尽问题时变成一种流行而必要的工具。</p>
+<span id="more"></span>
+
+<p><img data-src="/images/Network/Network-Address-Translation.png"></p>
+<h1 id="私网地址"><a href="#私网地址" class="headerlink" title="私网地址"></a>私网地址</h1><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc1918">RFC1918 Address Allocation for Private Internets (1996)</a></p>
+<p>   The Internet Assigned Numbers Authority (IANA) has reserved the<br>   following three blocks of the IP address space for private internets:</p>
+<pre><code> 10.0.0.0        -   10.255.255.255  (10/8 prefix)
+ 172.16.0.0      -   172.31.255.255  (172.16/12 prefix)
+ 192.168.0.0     -   192.168.255.255 (192.168/16 prefix)
+</code></pre>
+<h1 id="NAT应用场景"><a href="#NAT应用场景" class="headerlink" title="NAT应用场景"></a>NAT应用场景</h1><ul>
+<li>需要连接到因特网，但主机没有全局唯一的IP地址；</li>
+<li>更换的ISP要求对网络进行重新编址；</li>
+<li>需要合并两个使用相同编址方案的内联网；</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">优点</th>
+<th align="left">缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">节省合法的注册地址</td>
+<td align="left">地址转换将增加交换延迟</td>
+</tr>
+<tr>
+<td align="left">在地址重叠或网络发生变化时避免重新编址</td>
+<td align="left">导致无法进行端到端的IP跟踪</td>
+</tr>
+<tr>
+<td align="left">提高连接到因特网的灵活性</td>
+<td align="left">导致有些应用程序无法正常运行</td>
+</tr>
+</tbody></table>
+<h1 id="NAT设备特征"><a href="#NAT设备特征" class="headerlink" title="NAT设备特征"></a>NAT设备特征</h1><ul>
+<li><em>透明的地址分配</em>：<ul>
+<li>静态地址分配：在私网地址和外部地址之间进行一对一的映射。使用时必须为私网中的每台主机提供一个外部IP地址；</li>
+<li>动态地址分配；将私网地址动态映射到外部地址池中的一个地址。使用时无需静态的配置路由器，但必须有足够的公网IP地址，让连接到因特网的主机都能够同时发送和接收分组。</li>
+</ul>
+</li>
+<li><em>通过地址转换实现透明路由（只转发包，不交换路由信息）</em>，分为三个阶段：<ol>
+<li>地址绑定：在新会话的开始分配地址，并创建一个状态，以促进与会话相关的数据报的转换。</li>
+<li>地址查找与转换：一旦为会话建立了状态，属于该会话的所有包都将进行地址查找和转换。</li>
+<li>地址解绑：当NAT设备认为使用地址绑定的最后一个会话已经终止时，它将执行地址解除绑定。</li>
+</ol>
+</li>
+<li><em>ICMP错误数据包载荷转换</em>：为了让NAT设备对终端主机完全透明，IP、传输层以及ICMP包头中的地址和校验和都必须被修改。</li>
+</ul>
+<h1 id="NAT变体"><a href="#NAT变体" class="headerlink" title="NAT变体"></a>NAT变体</h1><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc2663">RFC2663 IP Network Address Translator (NAT) Terminology and Considerations (1999)</a></p>
+<table>
+  <tr>
+    <td colspan="3">
+      <b>名称</b>
+    </td>
+    <td colspan="5">
+      <b>特征</b>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      Traditional NAT / Outbound NAT
+    </td>
+    <td colspan="5">
+      会话只允许从内部主机发起。
+    </td>
+  </tr>
+  <tr>
+    <td colspan="1">
+    </td>
+    <td colspan="2">
+      Basic NAT / one-to-one NAT
+    </td>
+    <td colspan="5">
+      只转换 IP、UDP、TCP、ICMP 包头中的 IP 地址。
+    </td>
+  </tr>
+  <tr>
+    <td colspan="1">
+    </td>
+    <td colspan="2">
+      Network Address Port Translation (NAPT) / one-to-many NAT / Port Address Translation (PAT) / IP masquerading / NAT overload
+    </td>
+    <td colspan="5">
+      进一步扩展了转换的概念，例如 TCP 和 UDP 端口、ICMP 查询标识符等也被转换。
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      Two-Way NAT / Bi-directional NAT
+    </td>
+    <td colspan="5">
+      会话既能从内部主机发起，也能从外部主机发起。
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      Twice NAT
+    </td>
+    <td colspan="5">
+      数据报跨越地址域时，源地址和目的地址都会被修改，应用于内部地址和外部地址有冲突的情况下。
+    </td>
+  </tr>
+</table>
+
+<h2 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h2><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc3489">RFC3498 STUN - Simple Traversal of User Datagram Protocol (UDP) Through Network Address Translators (NATs) (2003)</a><br><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc4787">RFC4787 Network Address Translation (NAT) Behavioral Requirements for Unicast UDP (2007)</a></p>
+<p><img data-src="/images/Network/Network-Address-Port-Translation.jpg"></p>
+<p><strong>NAPT实现分类</strong></p>
+<ul>
+<li>RFC3498 (分类部分定义不够清晰，已弃用)：<ul>
+<li><strong>锥型</strong>（Cone）:<ul>
+<li><strong>全锥型</strong>（Full Cone）：<br>内部主机向外打了一个洞，外网的任何主机都可以利用这个洞与它通信。</li>
+<li><strong>限制锥型</strong>（Restricted Cone）：<br>内部主机向某一外部主机打了一个洞后，只有该外部主机才能利用这个洞。</li>
+<li><strong>端口限制锥型</strong>（Port Restricted Cone）：<br>内部主机向外部主机上的某一程序（端口）打了一个洞，则只有该程序可以利用这个洞，其他的不行。</li>
+</ul>
+</li>
+<li><strong>对称型</strong>（Symmetric）：<br>对称型NAT相当于对同一内部主机联系不同的外部主机时都需要打不同的洞。</li>
+</ul>
+</li>
+<li>RFC4787：<ul>
+<li><strong>地址和端口映射</strong>（Address and Port Mapping）：从内部主机发送包时。<ul>
+<li><strong>Endpoint-Independent Mapping</strong>：<br>从内部主机发出的包，都会重用已分配的外部地址。例如 Full-Cone, Restricted-Cone, and Port-Restricted Cone NATs。</li>
+<li><strong>Address-Dependent Mapping</strong>：<br>当内部主机发出的包中<strong>目的IP不变</strong>时，已分配的外部地址才会重用。例如 Symmetric NAT。</li>
+<li><strong>Address and Port-Dependent Mapping</strong>：<br>当内部主机发出的包中<strong>目的IP&amp;port不变</strong>时，已分配的外部地址才会重用。例如 Symmetric NAT。</li>
+</ul>
+</li>
+<li><strong>过滤行为</strong>（Filtering Behavior）：外部主机应答包回来时。<ul>
+<li><strong>Endpoint-Independent Filtering</strong>：<br>外部地址上收到的任何包，都会被转发到内部主机上。例如 Full-Cone NAT。</li>
+<li><strong>Address-Dependent Filtering</strong>：<br>当外部地址曾经向应答包中<strong>源IP</strong>发送过数据，应答包才会被转发到内部主机上。Restricted-Cone NAT, Symmetric NAT。</li>
+<li><strong>Address and Port-Dependent Filtering</strong>：<br>当外部地址曾经向应答包中<strong>源IP&amp;port</strong>发送过数据，应答包才会被转发到内部主机上。Port-Restricted Cone NAT, Symmetric NAT。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Two-Way-NAT"><a href="#Two-Way-NAT" class="headerlink" title="Two-Way NAT"></a>Two-Way NAT</h2><p>NAT内部的私有地址映射为外部的公网地址。PAT (Port address translation)解决了多台主机同时使用同一个源端口号建立不同的外部连接时的冲突问题。</p>
+<p><img data-src="/images/Network/Bidirectional-NAT.png"></p>
+<h1 id="STUN协议"><a href="#STUN协议" class="headerlink" title="STUN协议"></a>STUN协议</h1><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc3489">RFC3498 STUN - Simple Traversal of User Datagram Protocol (UDP) Through Network Address Translators (NATs) (2003)</a><br><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc5389">RFC5389 Session Traversal Utilities for NAT (STUN) (2008)</a><br><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc7635">RFC7635 Session Traversal Utilities for NAT (STUN) Extension for Third-Party Authorization (2015)</a></p>
+<p>STUN适用于锥型NAT：full cone NAT, restricted cone NAT, and port restricted cone NAT。（不适用 symmetric NAT）。</p>
+<p>STUN是client-server协议，client和server之间可能存在一个或多个NATs，请求有两种类型:</p>
+<ul>
+<li>Binding Requests, sent over UDP;</li>
+<li>Shared Secret Requests, sent over TLS over TCP.</li>
+</ul>
+<p>Server端部署在公网上，收到的请求中源地址是最靠近Server的NAT分配的，应支持如下四种应答：<br>  (A1, P1), (A2, P1), (A1, P2), and (A2, P2)。<br>  其中(A1, P1)是主地址和端口，端口默认3478。A2和P2可以是任意的值。</p>
+<p>Client端发起请求：</p>
+<ol>
+<li>区分锥型还是对称型：<br>分别往A1和A2发送请求，如果这两次应答中MAPPED-ADDRESS一致，<br>说明同一内部主机联系外部不同主机使用了同一个洞，是锥型NAT。否则，是对称型NAT。</li>
+<li>区分具体锥型：<br>往(A1,P1)发送三次请求：x、y、z，其中x无附加属性，y要求从(A2,P2)应答，z要求从(A1,P2)应答。<br>首先能收到x的应答，说明存在锥型NAT。否则，存在防火墙（应答包被防火墙拦截了）；<br>其次能收到y的应答，说明存在全锥型NAT。否则，不存在全锥型NAT，需要继续观察z的应答；<br>最后能收到z的应答，说明存在限制锥型NAT。否则，存在端口限制锥型NAT。</li>
+</ol>
+<p>Firewall通常规则：</p>
+<ol>
+<li>只允许从内部主机发起会话；</li>
+<li>按照一定规则过滤外部主机应答的数据包。<ul>
+<li>应答包的源IP必须是请求包的目的IP；</li>
+<li>应答包的源IP&amp;Port必须是请求包的目的IP&amp;Port（此时也可称为symmetric Firewall）；</li>
+</ul>
+</li>
+</ol>
+<p>示例：端口限制锥型NAT（Endpoint-Independent Mapping &amp; Address and Port-Dependent Filtering）</p>
+<div class="tabs" id="stun"><ul class="nav-tabs"><li class="tab active"><a href="#stun-1">x:无附加</a></li><li class="tab"><a href="#stun-2">y:改变IP和Port</a></li><li class="tab"><a href="#stun-3">z:只改变Port</a></li><li class="tab"><a href="#stun-4">cone:发往不同IP</a></li></ul><div class="tab-content"><div class="tab-pane active" id="stun-1"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">nternet Protocol Version 4, Src: 172.16.65.200, Dst: 198.211.120.59</span><br><span class="line">User Datagram Protocol, Src Port: 61229, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    [Response In: 434]</span><br><span class="line">    Message Type: 0x0001 (Binding Request)</span><br><span class="line">    Message Length: 0</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: f63bfd78d2034b16c3642e52</span><br><span class="line"></span><br><span class="line">Internet Protocol Version 4, Src: 198.211.120.59, Dst: 172.16.65.200</span><br><span class="line">User Datagram Protocol, Src Port: 3478, Dst Port: 61229</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    [Request In: 389]</span><br><span class="line">    [Time: 0.249086000 seconds]</span><br><span class="line">    Message Type: 0x0101 (Binding Success Response)</span><br><span class="line">    Message Length: 48</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: f63bfd78d2034b16c3642e52</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        MAPPED-ADDRESS: 116.233.95.21:61229</span><br><span class="line">        RESPONSE-ORIGIN: 198.211.120.59:3478</span><br><span class="line">        OTHER-ADDRESS: 188.166.128.84:3479</span><br><span class="line">        XOR-MAPPED-ADDRESS: 116.233.95.21:61229</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="stun-2"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Internet Protocol Version 4, Src: 172.16.65.200, Dst: 198.211.120.59</span><br><span class="line">User Datagram Protocol, Src Port: 61229, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0001 (Binding Request)</span><br><span class="line">    Message Length: 8</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: dff9628084313db04b15dd39</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        CHANGE_REQUEST</span><br><span class="line">            Attribute Type: CHANGE_REQUEST</span><br><span class="line">            Attribute Length: 4</span><br><span class="line">            .... .... .... .1.. = Change IP: Set</span><br><span class="line">            .... .... .... ..1. = Change Port: Set</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="stun-3"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Internet Protocol Version 4, Src: 172.16.65.200, Dst: 198.211.120.59</span><br><span class="line">User Datagram Protocol, Src Port: 61229, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0001 (Binding Request)</span><br><span class="line">    Message Length: 8</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 27deb059a9869569a8856d91</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        CHANGE_REQUEST</span><br><span class="line">            Attribute Type: CHANGE_REQUEST</span><br><span class="line">            Attribute Length: 4</span><br><span class="line">            .... .... .... .0.. = Change IP: Not set</span><br><span class="line">            .... .... .... ..1. = Change Port: Set</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="stun-4"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Internet Protocol Version 4, Src: 172.16.65.200, Dst: 188.166.128.84</span><br><span class="line">User Datagram Protocol, Src Port: 61229, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    [Response In: 704]</span><br><span class="line">    Message Type: 0x0001 (Binding Request)</span><br><span class="line">    Message Length: 0</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: af5441b8222139230b90938a</span><br><span class="line"></span><br><span class="line">Internet Protocol Version 4, Src: 188.166.128.84, Dst: 172.16.65.200</span><br><span class="line">User Datagram Protocol, Src Port: 3478, Dst Port: 61229</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    [Request In: 673]</span><br><span class="line">    [Time: 0.248904000 seconds]</span><br><span class="line">    Message Type: 0x0101 (Binding Success Response)</span><br><span class="line">    Message Length: 48</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: af5441b8222139230b90938a</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        MAPPED-ADDRESS: 116.233.95.21:61229</span><br><span class="line">        RESPONSE-ORIGIN: 188.166.128.84:3478</span><br><span class="line">        OTHER-ADDRESS: 198.211.120.59:3479</span><br><span class="line">        XOR-MAPPED-ADDRESS: 116.233.95.21:61229</span><br></pre></td></tr></table></figure></div></div></div>
+
+<p>NAT类型探测算法（实际场景中不够可靠）：</p>
+<p><img data-src="/images/Network/STUN-NATDetectAlgorithm.svg"></p>
+<h1 id="P2P穿越NAT"><a href="#P2P穿越NAT" class="headerlink" title="P2P穿越NAT"></a>P2P穿越NAT</h1><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc5128">RFC5128 State of Peer-to-Peer (P2P) Communication across Network Address Translators (NATs) (2008)</a></p>
+<p>打洞（hole punching）技术尝试发现直接连接路径，而不使用中继（Relay），但打洞技术不适用于通信两端均在NAT内的情况。</p>
+<h1 id="UPnP协议"><a href="#UPnP协议" class="headerlink" title="UPnP协议"></a>UPnP协议</h1><p><a target="_blank" rel="noopener" href="https://openconnectivity.org/developer/specifications/upnp-resources/upnp">UPnP Standards &amp; Architecture</a></p>
+<p>通用即插即用（Universal Plug and Play），用来在NAT设备上打洞，需要NAT设备支持。</p>
+<h1 id="NAT-PMP协议"><a href="#NAT-PMP协议" class="headerlink" title="NAT-PMP协议"></a>NAT-PMP协议</h1><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc6886">RFC6886 NAT Port Mapping Protocol (NAT-PMP) (2013)</a></p>
+<p>NAT端口映射协议（NAT Port Mapping Protocol），用来在NAT设备上打洞，需要NAT设备支持。</p>
+<h1 id="RSIP"><a href="#RSIP" class="headerlink" title="RSIP"></a>RSIP</h1><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc3102">RFC3102 Realm Specific IP: Framework (2001)</a></p>
+<h1 id="symmetric-RTP"><a href="#symmetric-RTP" class="headerlink" title="symmetric RTP"></a>symmetric RTP</h1><h1 id="TRUN协议"><a href="#TRUN协议" class="headerlink" title="TRUN协议"></a>TRUN协议</h1><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc5766">RFC5766 Traversal Using Relays around NAT (TURN): Relay Extensions to Session Traversal Utilities for NAT (STUN) (2010)</a><br><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc7065">RFC7065 Traversal Using Relays around NAT (TURN) Uniform Resource Identifiers (2013)</a><br><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc8656">RFC8656 Traversal Using Relays around NAT (TURN): Relay Extensions to Session Traversal Utilities for NAT (STUN) (2020)</a></p>
+<p>TRUN适用于解决如下NAT场景：</p>
+<ol>
+<li>对称型（symmetric）NAT。</li>
+<li>通信两端（TURN&#x2F;client和peer）都在NAT内时，使用中继（TURN&#x2F;server）在两端之间互相转发流量。</li>
+</ol>
+<p>TURN缺点：</p>
+<ol>
+<li>通讯性能会受限于TRUN&#x2F;Server的处理能力和带宽；</li>
+<li>增加了通信延迟。</li>
+</ol>
+<p>TURN模型：</p>
+<pre><code>TURN/Client --NAT-- TURN/Server(XOR-RELAYED-ADDRESS) -- PeerA/B/..
+TURN/Client --NAT-- TURN/Server(XOR-RELAYED-ADDRESS) --NAT-- PeerA/B/..
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">TURN&#x2F;client to TURN&#x2F;server</th>
+<th align="left">TURN&#x2F;server to peer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">UDP</td>
+<td align="left">UDP</td>
+</tr>
+<tr>
+<td align="left">TCP</td>
+<td align="left">UDP</td>
+</tr>
+<tr>
+<td align="left">TLS-over-TCP</td>
+<td align="left">UDP</td>
+</tr>
+<tr>
+<td align="left">DTLS-over-UDP</td>
+<td align="left">UDP</td>
+</tr>
+</tbody></table>
+<ol>
+<li><strong>分配中继地址</strong></li>
+</ol>
+<p>TURN&#x2F;Client向TURN&#x2F;Server申请分配器（Allocation），申请成功后需要定期保活，一个Allocation可以同时与多个peer交换数据，分配器与中继地址（XOR-RELAYED-ADDRESS）一一对应。</p>
+<pre><code>    TURN                                           TURN          Peer         Peer
+    client                                         server         A            B
+      |-- Allocate request -------------------------&gt;|            |            |
+      |   (invalid or missing credentials)           |            |            |
+      |                                              |            |            |
+      |&lt;--------------- Allocate failure ------------|            |            |
+      |              (401 Unauthenticated)           |            |            |
+      |                                              |            |            |
+      |-- Allocate request -------------------------&gt;|            |            |
+      |               (valid credentials)            |            |            |
+      |                                              |            |            |
+      |&lt;---------- Allocate success resp ------------|            |            |
+      | (XOR-RELAYED-ADDRESS: 192.168.5.220:58067)   |            |            |
+      //                                             //           //           //
+      |                                              |            |            |
+      |-- Refresh request --------------------------&gt;|            |            |
+      |                                              |            |            |
+      |&lt;----------- Refresh success resp ------------|            |            |
+      |                                              |            |            |
+</code></pre>
+<div class="tabs" id="turn-allocation"><ul class="nav-tabs"><li class="tab active"><a href="#turn-allocation-1">allocate:401</a></li><li class="tab"><a href="#turn-allocation-2">allocate:create</a></li><li class="tab"><a href="#turn-allocation-3">refresh:update</a></li><li class="tab"><a href="#turn-allocation-4">refresh:delete</a></li></ul><div class="tab-content"><div class="tab-pane active" id="turn-allocation-1"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># STUN-Client: 请求分配中继地址（无认证）</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 37740, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0003 (Allocate Request)</span><br><span class="line">    Message Length: 36</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 3e0ca382ceb0e6c6dc87ef32</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        REQUESTED-TRANSPORT: UDP</span><br><span class="line">        LIFETIME 777</span><br><span class="line">        RESERVATION-TOKEN: c15f9f750002d641</span><br><span class="line">        FINGERPRINT: 0x63df9cea</span><br><span class="line"></span><br><span class="line"># STUN-Server: 要求认证机制</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 3478, Dst Port: 37740</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0113 (Allocate Error Response)</span><br><span class="line">    Message Length: 104</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 3e0ca382ceb0e6c6dc87ef32</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        ERROR-CODE 401 (Unauthenticated): Unauthorized</span><br><span class="line">        NONCE: bee374e6bc8bd352</span><br><span class="line">        REALM: coturn.imssyang.com</span><br><span class="line">        FINGERPRINT: 0xfa3e2c47</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="turn-allocation-2"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">MESSAGE-INTEGRITY属性 (HMAC-SHA1算法):</span><br><span class="line">    For STUN&#x27;s long-term credentials (RFC5389长期认证):</span><br><span class="line">        key = MD5(username &quot;:&quot; realm &quot;:&quot; SASLprep(password)) </span><br><span class="line">            = MD5(coturn:coturn.imssyang.com:coturn)</span><br><span class="line">            = echo -n coturn:coturn.imssyang.com:coturn | md5sum</span><br><span class="line">            = 14d71486bdbb3b7ef8035128bf8df039</span><br><span class="line">    For STUN&#x27;s short-term credentials (RFC5389短期认证):</span><br><span class="line">        key = SASLprep(password)</span><br><span class="line"></span><br><span class="line"># STUN-Client: 请求分配中继地址（长期认证机制）</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 37740, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0003 (Allocate Request)</span><br><span class="line">    Message Length: 116</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 7e193858930002b5196d44c3</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        REQUESTED-TRANSPORT: UDP</span><br><span class="line">        LIFETIME 777</span><br><span class="line">        RESERVATION-TOKEN: c15f9f750002d641</span><br><span class="line">        USERNAME: coturn</span><br><span class="line">        NONCE: bee374e6bc8bd352</span><br><span class="line">        REALM: coturn.imssyang.com</span><br><span class="line">        MESSAGE-INTEGRITY: 95c6d5ae051931f9af7085a2e07ceb97afb16fa7</span><br><span class="line">        FINGERPRINT: 0x0e2f95dc</span><br><span class="line"></span><br><span class="line">    0000   00 03 00&gt;74 21 12 a4 42 7e 19 38 58 93 00 02 b5   ...t!..B~.8X....</span><br><span class="line">    0010   19 6d 44 c3 00 19 00 04 11 00 00 00 00 0d 00 04   .mD.............</span><br><span class="line">    0020   00 00 03 09 00 22 00 08 c1 5f 9f 75 00 02 d6 41   .....&quot;..._.u...A</span><br><span class="line">    0030   00 06 00 06 63 6f 74 75 72 6e 34 63 00 15 00 10   ....coturn4c....</span><br><span class="line">    0040   62 65 65 33 37 34 65 36 62 63 38 62 64 33 35 32   bee374e6bc8bd352</span><br><span class="line">    0050   00 14 00 13 63 6f 74 75 72 6e 2e 69 6d 73 73 79   ....coturn.imssy</span><br><span class="line">    0060   61 6e 67 2e 63 6f 6d 29&gt;00 08 00 14 95 c6 d5 ae   ang.com)........</span><br><span class="line">    0070   05 19 31 f9 af 70 85 a2 e0 7c eb 97 af b1 6f a7   ..1..p...|....o.</span><br><span class="line">    0080   80 28 00 04 0e 2f 95 dc                           .(.../..</span><br><span class="line"></span><br><span class="line">    # STUN消息(1.bin)，用于计算MESSAGE-INTEGRITY属性的值:</span><br><span class="line">    # 1.去掉MESSAGE-INTEGRITY（含）之后属性的数据；</span><br><span class="line">    # 2.修改MessageLength值，去除掉MESSAGE-INTEGRITY（不含）之后属性的大小；</span><br><span class="line">    0000   00 03 00 6C 21 12 a4 42 7e 19 38 58 93 00 02 b5   ...t!..B~.8X....</span><br><span class="line">    0010   19 6d 44 c3 00 19 00 04 11 00 00 00 00 0d 00 04   .mD.............</span><br><span class="line">    0020   00 00 03 09 00 22 00 08 c1 5f 9f 75 00 02 d6 41   .....&quot;..._.u...A</span><br><span class="line">    0030   00 06 00 06 63 6f 74 75 72 6e 34 63 00 15 00 10   ....coturn4c....</span><br><span class="line">    0040   62 65 65 33 37 34 65 36 62 63 38 62 64 33 35 32   bee374e6bc8bd352</span><br><span class="line">    0050   00 14 00 13 63 6f 74 75 72 6e 2e 69 6d 73 73 79   ....coturn.imssy</span><br><span class="line">    0060   61 6e 67 2e 63 6f 6d 29                           ang.com)</span><br><span class="line">    openssl dgst -sha1 -mac HMAC -macopt hexkey:14d71486bdbb3b7ef8035128bf8df039 1.bin</span><br><span class="line">    HMAC-SHA1(1.bin)= 95c6d5ae051931f9af7085a2e07ceb97afb16fa7</span><br><span class="line"></span><br><span class="line"># STUN-Server: 成功分配中继地址（一个中继地址可以同时与多个peer交换数据）</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 3478, Dst Port: 37740</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0103 (Allocate Success Response)</span><br><span class="line">    Message Length: 96</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 7e193858930002b5196d44c3</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        XOR-RELAYED-ADDRESS: 192.168.5.220:58067  #中继地址</span><br><span class="line">        XOR-MAPPED-ADDRESS: 192.168.5.220:37740</span><br><span class="line">        LIFETIME 777</span><br><span class="line">        MESSAGE-INTEGRITY: 0c4eea2bd8d7d06e1a3321da8e68bf3d9a3d6c2d</span><br><span class="line">        FINGERPRINT: 0xaa922dfd</span><br><span class="line"></span><br><span class="line">    0000   01 03 00&gt;60 21 12 a4 42 7e 19 38 58 93 00 02 b5   ...`!..B~.8X....</span><br><span class="line">    0010   19 6d 44 c3 00 16 00 08 00 01 c3 c1 e1 ba a1 9e   .mD.............</span><br><span class="line">    0020   00 20 00 08 00 01 b2 7e e1 ba a1 9e 00 0d 00 04   . .....~........</span><br><span class="line">    0030   00 00 03 09 80 22 00 1a 43 6f 74 75 72 6e 2d 34   .....&quot;..Coturn-4</span><br><span class="line">    0040   2e 35 2e 31 2e 33 20 27 64 61 6e 20 45 69 64 65   .5.1.3 &#x27;dan Eide</span><br><span class="line">    0050   72 27 00 00&gt;00 08 00 14 0c 4e ea 2b d8 d7 d0 6e   r&#x27;.......N.+...n</span><br><span class="line">    0060   1a 33 21 da 8e 68 bf 3d 9a 3d 6c 2d 80 28 00 04   .3!..h.=.=l-.(..</span><br><span class="line">    0070   aa 92 2d fd                                       ..-.</span><br><span class="line"></span><br><span class="line">    # STUN消息(2.bin)，用于计算MESSAGE-INTEGRITY属性的值:</span><br><span class="line">    # 1.去掉MESSAGE-INTEGRITY（含）之后属性的数据；</span><br><span class="line">    # 2.修改MessageLength值，去除掉MESSAGE-INTEGRITY（不含）之后属性的大小；</span><br><span class="line">    0000   01 03 00 58 21 12 a4 42 7e 19 38 58 93 00 02 b5   ...`!..B~.8X....</span><br><span class="line">    0010   19 6d 44 c3 00 16 00 08 00 01 c3 c1 e1 ba a1 9e   .mD.............</span><br><span class="line">    0020   00 20 00 08 00 01 b2 7e e1 ba a1 9e 00 0d 00 04   . .....~........</span><br><span class="line">    0030   00 00 03 09 80 22 00 1a 43 6f 74 75 72 6e 2d 34   .....&quot;..Coturn-4</span><br><span class="line">    0040   2e 35 2e 31 2e 33 20 27 64 61 6e 20 45 69 64 65   .5.1.3 &#x27;dan Eide</span><br><span class="line">    0050   72 27 00 00                                       r&#x27;..</span><br><span class="line">    openssl dgst -sha1 -mac HMAC -macopt hexkey:14d71486bdbb3b7ef8035128bf8df039 2.bin</span><br><span class="line">    HMAC-SHA1(2.bin)= 0c4eea2bd8d7d06e1a3321da8e68bf3d9a3d6c2d</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="turn-allocation-3"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># STUN-Client: 刷新分配器（默认10min）</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 37740, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0004 (Refresh Request)</span><br><span class="line">    Message Length: 96</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 9c6d4a9ce32a3f736b81dd9e</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        LIFETIME 777</span><br><span class="line">        USERNAME: coturn</span><br><span class="line">        NONCE: bee374e6bc8bd352</span><br><span class="line">        REALM: coturn.imssyang.com</span><br><span class="line">        MESSAGE-INTEGRITY: 2ac92db74c84bb04b421b9729c5aaae4dab07a5e</span><br><span class="line">        FINGERPRINT: 0x75c5bcec</span><br><span class="line"></span><br><span class="line"># STUN-Server: 返回分配器生存时长</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 3478, Dst Port: 37740</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0104 (Refresh Success Response)</span><br><span class="line">    Message Length: 72</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 9c6d4a9ce32a3f736b81dd9e</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        LIFETIME 777</span><br><span class="line">        MESSAGE-INTEGRITY: 16d7ec9bf612b3c76eece5da86e0ed4c10ddb9f5</span><br><span class="line">        FINGERPRINT: 0x2e133e0d</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="turn-allocation-4"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># STUN-Client: 删除分配器（lifetime:0）</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 37740, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0004 (Refresh Request)</span><br><span class="line">    Message Length: 96</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: e06a8c2bf1d595a5e9cbfe52</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        LIFETIME 0</span><br><span class="line">        USERNAME: coturn</span><br><span class="line">        NONCE: bee374e6bc8bd352</span><br><span class="line">        REALM: coturn.imssyang.com</span><br><span class="line">        MESSAGE-INTEGRITY: aed33a6523af34156e86daab67f4ce490b82ff93</span><br><span class="line">        FINGERPRINT: 0x51fc337d</span><br><span class="line"></span><br><span class="line"># STUN-Server: 成功删除分配器</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 3478, Dst Port: 37740</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0104 (Refresh Success Response)</span><br><span class="line">    Message Length: 72</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: e06a8c2bf1d595a5e9cbfe52</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        LIFETIME 0</span><br><span class="line">        MESSAGE-INTEGRITY: 3cd13624b951fdc538d7a60ba4369e8eae24173a</span><br><span class="line">        FINGERPRINT: 0x189862a6</span><br></pre></td></tr></table></figure></div></div></div>
+
+<ol start="2">
+<li><strong>Send机制</strong><br>每个分配器（allocation）可以有多个授权（permission），每个授权包含一个peer的IP以及生存时间（lifetime，固定5min后过期），CreatePermission或ChannelBind会刷新授权，另外不允许主动删除授权。TURN权限借鉴了NAT的<code>address-restricted filtering</code>的机制，当TURN&#x2F;Server收到peer应答的数据时，只有源IP地址匹配到了授权，数据才会中继给TRUN&#x2F;Client。</li>
+</ol>
+<ul>
+<li><p>Send&amp;Data<br>Send方法用于将数据从client发送到server（PeerB没有授权，数据被丢弃）；<br>Data方法用于将数据从server发送到client（PeerB没有授权，数据被丢弃）。</p>
+<pre><code>TURN                                TURN           Peer          Peer
+client                              server          A             B
+  |                                   |             |             |
+  |-- CreatePermission req (Peer A) -&gt;|             |             |
+  |&lt;- CreatePermission success resp --|             |             |
+  |                                   |             |             |
+  |--- Send ind (Peer A)-------------&gt;|             |             |
+  |                                   |=== data ===&gt;|             |
+  |                                   |             |             |
+  |                                   |&lt;== data ====|             |
+  |&lt;------------- Data ind (Peer A) --|             |             |
+  |                                   |             |             |
+  |                                   |             |             |
+  |--- Send ind (Peer B)-------------&gt;|             |             |
+  |                                   | dropped     |             |
+  |                                   |             |             |
+  |                                   |&lt;== data ==================|
+  |                           dropped |             |             |
+  |                                   |             |             |
+</code></pre>
+</li>
+<li><p>ChannelData<br>TURN&#x2F;Client为每个Peer绑定唯一的通道，并用4-byte头代替STUN头中继数据，提高了带宽利用率。通道有效期固定10min，重发ChannelBind会重新绑定通道，不允许删除通道。</p>
+<pre><code>TURN                                TURN           Peer          Peer
+client                              server          A             B
+  |                                   |             |             |
+  |-- ChannelBind req ---------------&gt;|             |             |
+  | (Peer A to 0x5491)                |             |             |
+  |                                   |             |             |
+  |&lt;---------- ChannelBind succ resp -|             |             |
+  |                                   |             |             |
+  |-- (0x5491) ChannelData ----------&gt;|             |             |
+  |                                   |=== data ===&gt;|             |
+  |                                   |             |             |
+  |                                   |&lt;== data ====|             |
+  |&lt;----------- (0x5491) ChannelData -|             |             |
+  |                                   |             |             |
+  |--- Send ind (Peer A)-------------&gt;|             |             |
+  |                                   |=== data ===&gt;|             |
+  |                                   |             |             |
+  |                                   |&lt;== data ====|             |
+  |&lt;----------- (0x5491) ChannelData -|             |             |
+  |                                   |             |             |
+</code></pre>
+</li>
+</ul>
+<div class="tabs" id="turn-channeldata"><ul class="nav-tabs"><li class="tab active"><a href="#turn-channeldata-1">CreatePermission</a></li><li class="tab"><a href="#turn-channeldata-2">Channel-Bind</a></li><li class="tab"><a href="#turn-channeldata-3">ChannelData</a></li></ul><div class="tab-content"><div class="tab-pane active" id="turn-channeldata-1"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"># STUN-Client: 为Peer申请权限</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 37740, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0008 (CreatePermission Request)</span><br><span class="line">    Message Length: 100</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 471d6fcdccf84ac50c55b540</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        XOR-PEER-ADDRESS: 0.0.0.0:3480</span><br><span class="line">        USERNAME: coturn</span><br><span class="line">        NONCE: bee374e6bc8bd352</span><br><span class="line">        REALM: coturn.imssyang.com</span><br><span class="line">        MESSAGE-INTEGRITY: d7e8a5c26d2978cbbf574187cab99ca6df691c75</span><br><span class="line">        FINGERPRINT: 0x0f829ff5</span><br><span class="line"></span><br><span class="line"># STUN-Server: 申请权限成功</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 3478, Dst Port: 37740</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0108 (CreatePermission Success Response)</span><br><span class="line">    Message Length: 64</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 471d6fcdccf84ac50c55b540</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        MESSAGE-INTEGRITY: 98ecd6f7449db4ce1f541b9d12fbd418a36a7a41</span><br><span class="line">        FINGERPRINT: 0x32fec50a</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="turn-channeldata-2"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># STUN-Client: 将Peer绑定到0x5491通道</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 37740, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0009 (Channel-Bind Request)</span><br><span class="line">    Message Length: 108</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 8dbcd1b4cf1602673eff32c1</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        CHANNEL-NUMBER: 0x5491</span><br><span class="line">        XOR-PEER-ADDRESS: 0.0.0.0:3480</span><br><span class="line">        USERNAME: coturn</span><br><span class="line">        NONCE: bee374e6bc8bd352</span><br><span class="line">        REALM: coturn.imssyang.com</span><br><span class="line">        MESSAGE-INTEGRITY: 619782b11427ebbd4d0d47456fa41e9f187a2094</span><br><span class="line">        FINGERPRINT: 0x62fe9dfa</span><br><span class="line"></span><br><span class="line"># STUN-Server: 绑定到通道成功</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 3478, Dst Port: 37740</span><br><span class="line">Session Traversal Utilities for NAT</span><br><span class="line">    Message Type: 0x0109 (Channel-Bind Success Response)</span><br><span class="line">    Message Length: 64</span><br><span class="line">    Message Cookie: 2112a442</span><br><span class="line">    Message Transaction ID: 8dbcd1b4cf1602673eff32c1</span><br><span class="line">    [STUN Network Version: RFC-5389/8489 (3)]</span><br><span class="line">    Attributes</span><br><span class="line">        MESSAGE-INTEGRITY: 1d766a42b8d391da79264d3d303ca84a70f33308</span><br><span class="line">        FINGERPRINT: 0x094d6041</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="turn-channeldata-3"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># STUN-Client: 使用0x5491通道发送数据</span><br><span class="line">Internet Protocol Version 4, Src: 192.168.5.220, Dst: 192.168.5.220</span><br><span class="line">User Datagram Protocol, Src Port: 37740, Dst Port: 3478</span><br><span class="line">Session Traversal Utilities for NAT, TURN ChannelData Message</span><br><span class="line">    Channel Number: 0x5491</span><br><span class="line">    Message Length: 100</span><br><span class="line">Data (100 bytes)</span><br><span class="line">    Data: 00000000070707077e15000000000000070707070707070707070...</span><br></pre></td></tr></table></figure></div></div></div>
+
+<p><a target="_blank" rel="noopener" href="https://www.liavaag.org/English/SHA-Generator/HMAC/">Online HMAC Generator</a><br><a target="_blank" rel="noopener" href="http://nwsmith.blogspot.com/2012/07/using-openssl-to-generate-hmac-using.html">Using openssl to generate HMAC using a binary key</a></p>
+<h1 id="ICE规范"><a href="#ICE规范" class="headerlink" title="ICE规范"></a>ICE规范</h1><p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc8445">RFC8445 Interactive Connectivity Establishment (ICE): A Protocol for Network Address Translator (NAT) Traversal (2018)</a></p>
+<h1 id="freeswitch"><a href="#freeswitch" class="headerlink" title="freeswitch"></a>freeswitch</h1><ul>
+<li><p><strong>场景A</strong>: 话机运行在内网，穿过NAT与公网上的FreeSwitch（运营VoIP）对接。</p>
+<pre><code>       话机:192.168.0.2 --NAT:1.2.3.4-- Internet -- 1.2.3.5:FreeSwitch -- 外部网关
+</code></pre>
+<ul>
+<li><p>话机向FreeSwitch注册时：</p>
+<pre><code>     REGISTER 1000@1.2.3.5 SIP/2.0
+     Contact: 1000@192.168.0.2:5060
+</code></pre>
+<p>此时，FreeSwitch记住了Contact地址，后续呼叫1000的INVITE请求发往192.168.0.2，因为存在NAT会导致呼不通问题。</p>
+<p>解决方式：</p>
+<ol>
+<li>话机先通过STUN服务获取到被NAT设备映射完的外网地址：UDP 1.2.3.4:5060，然后在注册请求中直接携带外网地址。</li>
+<li>FreeSwitch发现注册请求实际从外网地址：UDP 1.2.3.4:5060发出，后续呼叫发往这个外网地址上。配置<code>&lt;param name=&quot;apply-nat-acl&quot; value=&quot;nat.auto&quot;&gt;</code>后，FreeSwitch会判断Contact地址为RFC1918规定的私网地址时，将其自动替换为SIP包的来源地址。</li>
+</ol>
+</li>
+<li><p>话机向FreeSwitch注册时（Via字段携带rport字段，需话机支持sip&#x2F;rport功能）：</p>
+<pre><code>     REGISTER 1000@1.2.3.5 SIP/2.0
+     Via: SIP/2.0/UDP 192.168.0.2:5060;branch=z9d851;rport
+     Contact: &lt;sip:1000@192.168.0.2:5060;rinstance=6622cfa07990b53c&gt;
+</code></pre>
+<p>FreeSwitch应答时，会将应答包发往SIP请求的实际来源地址，并将实际来源端口设置为Via头部的rport的值，同时增加参数received&#x3D;实际来源IP：</p>
+<pre><code>     SIP/2.0 200 OK
+     Via: SIP/2.0/UDP 192.168.0.2:56020;branch=z9d851;rport=5060;received=1.2.3.4
+</code></pre>
+<p>SIP客户端收到应答后，即知道了自己的外网地址，后续在重发的注册信息中，Contact地址直接填外网地址。</p>
+</li>
+<li><p>话机呼叫FreeSwitch时：</p>
+<pre><code>     INVITE 9196@1.2.3.5 SIP/2.0
+     Content-Type: application/sdp
+
+     c=IN IP4 192.168.0.2
+     m=audio 50452 RTP/AVP 8 0 101
+</code></pre>
+<p>此时，因为存在NAT会导致FreeSwitch无法向192.168.0.2发送RTP包。</p>
+<p>解决方式：</p>
+<ol>
+<li>话机先通过STUN服务获取到RTP流被NAT设备映射完的外网地址：UDP 1.2.3.4:50452，然后在sdp信息中直接携带外网地址。</li>
+<li>FreeSwitch在收到第一个RTP包后，记住RTP包实际从外网地址：UDP 1.2.3.4:50452发出，后续所有RTP包后发往这个外网地址上。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>场景B</strong>：话机和FreeSwitch运行在内网（公司内部IP-PBX），穿过NAT与公网上的设备对接。</p>
+<pre><code>   话机 -- FreeSwitch --NAT-- Internet -- 外部网关
+</code></pre>
+<p>FreeSwitch支持通过uPnP或NAT-PMP协议在路由器上打洞，打洞完成后就知道将要映射的外网地址了。</p>
+<pre><code>   &lt;param name=&quot;ext-sip-ip&quot; value=&quot;auto-nat&quot;/&gt;
+   &lt;param name=&quot;ext-rtp-ip&quot; value=&quot;auto-nat&quot;/&gt;
+</code></pre>
+<p>FreeSwitch也支持通过STUN服务器获取外网地址：</p>
+<pre><code>   &lt;param name=&quot;ext-sip-ip&quot; value=&quot;stun:stun.freeswitch.org&quot;/&gt;
+   &lt;param name=&quot;ext-rtp-ip&quot; value=&quot;stun:stun.freeswitch.org&quot;/&gt;
+</code></pre>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/NAT/" rel="tag"><i class="fa fa-tag"></i> NAT</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/ProgrammingLanguage/Overview.html" rel="prev" title="编程语言概述">
+                  <i class="fa fa-chevron-left"></i> 编程语言概述
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Multiprocessor/LockFreeQueue.html" rel="next" title="无锁队列">
+                  无锁队列 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/Network/NAT.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"3b1e8f681b3012a9eaaa66d61ae07bb7"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

