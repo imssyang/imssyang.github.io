@@ -1,6 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Github持续集成与交付</title>
+    <url>/Automate/CI-CD/github/GithubAction.html</url>
+    <content><![CDATA[<p>Github 仓库已支持 CI&#x2F;CD (continuous integration and continuous delivery) 流程，每个仓库均可实现自动化build，test，deploymemt。</p>
+<p><a href="https://docs.github.com/en/actions/learn-github-actions">Learn GitHub Actions</a></p>
+<span id="more"></span>
+
+<h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><ol>
+<li>部署runner</li>
+<li>在repository中编写需要自动化的workflow</li>
+<li>在workflow中指定event触发方式</li>
+<li>在workflow中指定运行所在的runner</li>
+<li>在workflow中指定每个步骤的job及其依赖关系</li>
+<li>在workflow中编写每个job使用的action及shell命令</li>
+<li>提交workflow后，自动交由Github Actions平台处理</li>
+<li>event产生时，runner拉取repository代码，然后执行job</li>
+</ol>
+<h2 id="workflow"><a href="#workflow" class="headerlink" title="workflow"></a>workflow</h2><p><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions">Workflow syntax</a><br><a href="https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs">Assigning permissions to jobs</a><br><a href="https://docs.github.com/en/actions/using-jobs/using-concurrency">Using concurrency</a></p>
+<ul>
+<li>脚本目录：<code>.github/workflows/*.yml</code>，文件为YAML语法</li>
+<li>一个repository可以有多个workflow，且workflow可以互相调用以复用代码</li>
+<li>一个yml文件对应一个workflow，一个workflow可包含多个job</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Modifies the default permissions granted to GITHUB_TOKEN.</span></span><br><span class="line"><span class="attr">permissions:</span></span><br><span class="line">  <span class="attr">contents:</span> <span class="string">read</span></span><br><span class="line">  <span class="attr">issues:</span> <span class="string">write</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This allows a subsequently queued workflow run to interrupt previous runs</span></span><br><span class="line"><span class="attr">concurrency:</span></span><br><span class="line">  <span class="attr">group:</span> <span class="string">&#x27;$<span class="template-variable">&#123;&#123; github.workflow &#125;&#125;</span> @ $<span class="template-variable">&#123;&#123; github.event.pull_request.head.label || github.head_ref || github.ref &#125;&#125;</span>&#x27;</span></span><br><span class="line">  <span class="attr">cancel-in-progress:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="event"><a href="#event" class="headerlink" title="event"></a>event</h2><p><a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows">Events that trigger workflows</a></p>
+<ul>
+<li>event用于触发workflow执行，支持git操作、REST&#x2F;API、manual方式</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">workflow_dispatch:</span>   <span class="comment"># manually run from UI</span></span><br><span class="line">  <span class="attr">push:</span>                <span class="comment"># when push to main branch</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">pull_request:</span>        <span class="comment"># when pull request is created or updated</span></span><br><span class="line">  <span class="attr">schedule:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">cron:</span> <span class="string">&#x27;40 19 * * *&#x27;</span> <span class="comment"># once a day at 19:40 UTC / 11:40 PST</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="job"><a href="#job" class="headerlink" title="job"></a>job</h2><ul>
+<li>job是在workflow中定义在runner上执行的最小单位，支持shell语法</li>
+<li>job是顺序执行的且多个命令相互独立执行</li>
+<li>job间可以有依赖关系，没有依赖关系的job会并行执行</li>
+</ul>
+<h2 id="action"><a href="#action" class="headerlink" title="action"></a>action</h2><p><a href="https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions">Metadata syntax for GitHub Actions</a><br><a href="https://github.com/marketplace?type=actions">GitHub Marketplace Actions</a></p>
+<ul>
+<li>action是在Github Actions平台上执行的特定应用，打包了一些频繁使用且复杂的重复task</li>
+<li>job中使用action可减少重复的代码量</li>
+<li>通过uses引用action，<a href="https://docs.github.com/en/actions/learn-github-actions/finding-and-customizing-actions">支持形式</a>有<ul>
+<li>公共仓库中的名字：<code>actions/checkout@v3</code></li>
+<li>仓库中的相对目录：<code>./.github/actions/demo</code></li>
+<li>docker镜像地址：<code>docker://alpine:3.8</code></li>
+</ul>
+</li>
+<li>支持自定义action</li>
+</ul>
+<h2 id="runner"><a href="#runner" class="headerlink" title="runner"></a>runner</h2><ul>
+<li>runner是用于执行workflow的服务</li>
+</ul>
+<h1 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h1><ul>
+<li><code>&#39;-&#39;</code> - 分割step</li>
+<li>env - 自定义环境变量</li>
+<li>name - job&#x2F;step的名字</li>
+<li>needs - 依赖的job</li>
+<li>run - 执行shell</li>
+<li>users - 执行action</li>
+</ul>
+<h1 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h1><p><a href="https://docs.github.com/en/actions/learn-github-actions/contexts">Contexts</a></p>
+<ul>
+<li>github - workflow运行相关信息</li>
+<li>env - workflow中的环境变量</li>
+<li>job - 当前job信息</li>
+<li>steps - 当前job中的steps信息</li>
+<li>runner - 当前job所在的runner信息</li>
+<li>secrets - workflow可用的私密信息</li>
+<li>strategy - 当前job的执行策略</li>
+<li>matrix - 当前job的矩阵属性</li>
+<li>needs - 当前job依赖的其他job的输出信息</li>
+<li>inputs - workflow的输入信息</li>
+</ul>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p><a href="https://docs.github.com/en/actions/learn-github-actions/environment-variables">Environment variables</a></p>
+<ul>
+<li>三种类型：<ul>
+<li><code>env</code>：应用整个workflow</li>
+<li><code>jobs.&lt;job_id&gt;.env</code>：应用特定job</li>
+<li><code>jobs.&lt;job_id&gt;.steps[*].env</code>：应用特定step</li>
+</ul>
+</li>
+<li>支持通过context读写环境变量<ul>
+<li><code>$&#123;&#123; env.MY_VARIABLE &#125;&#125;</code> 通过env访问自定义环境变量</li>
+</ul>
+</li>
+<li>自定义路径相关的环境变量应该加<code>_PATH</code>后缀</li>
+</ul>
+<h1 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h1><p><a href="https://docs.github.com/en/actions/learn-github-actions/expressions">Expressions</a></p>
+<ul>
+<li><code>$&#123;&#123; <expression> &#125;&#125;</code>格式表示作为表达式解释，而非字符串</li>
+<li>当if条件（默认按表达式解释）为ture时，step将运行</li>
+<li>支持数据类型：boolean, null, number, string（单引号作为转义字符）</li>
+<li>支持内建函数<ul>
+<li>contains: 包含子项时为true （大小写不敏感）</li>
+<li>startsWith: 以特定字符开始时为true（大小写不敏感）</li>
+<li>endsWith：以特定字符结束时为true （大小写不敏感）</li>
+<li>format：按占位符格式化字符串</li>
+<li>join：连接两项</li>
+<li>toJSON：序列化json字符串</li>
+<li>fromJSON：反序列化json字符串</li>
+</ul>
+</li>
+<li>支持状态检查函数：<ul>
+<li>success：之前的step既没有失败又没有取消时为true</li>
+<li>failure：之前的step失败时为true</li>
+<li>cancelled：workflow被取消时为true</li>
+<li>always：step始终执行时为true</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">steps:</span></span><br><span class="line">  <span class="string">...</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Failing</span> <span class="string">step</span></span><br><span class="line">    <span class="attr">id:</span> <span class="string">demo</span></span><br><span class="line">    <span class="attr">run:</span> <span class="string">exit</span> <span class="number">1</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">The</span> <span class="string">demo</span> <span class="string">step</span> <span class="string">has</span> <span class="string">failed</span></span><br><span class="line">    <span class="attr">if:</span> <span class="string">$&#123;&#123;</span> <span class="string">failure()</span> <span class="string">&amp;&amp;</span> <span class="string">steps.demo.conclusion</span> <span class="string">==</span> <span class="string">&#x27;failure&#x27;</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="自定义变量"><a href="#自定义变量" class="headerlink" title="自定义变量"></a>自定义变量</h2><p>POSTGRES_HOST 和 POSTGRES_PORT 变量可在 <code>node client.js</code> 脚本中使用</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">example-job:</span></span><br><span class="line">      <span class="attr">steps:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Connect</span> <span class="string">to</span> <span class="string">PostgreSQL</span></span><br><span class="line">          <span class="attr">run:</span> <span class="string">node</span> <span class="string">client.js</span></span><br><span class="line">          <span class="attr">env:</span></span><br><span class="line">            <span class="attr">POSTGRES_HOST:</span> <span class="string">postgres</span></span><br><span class="line">            <span class="attr">POSTGRES_PORT:</span> <span class="number">5432</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="调用仓库中的脚本"><a href="#调用仓库中的脚本" class="headerlink" title="调用仓库中的脚本"></a>调用仓库中的脚本</h2><p><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions">workflow-syntax-for-github-actions</a></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">example-job:</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">build</span> <span class="string">script</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">./.github/scripts/build.sh</span></span><br><span class="line">        <span class="attr">shell:</span> <span class="string">bash</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="job间共享数据"><a href="#job间共享数据" class="headerlink" title="job间共享数据"></a>job间共享数据</h2><div class="tabs" id="artifact"><ul class="nav-tabs"><li class="tab active"><a href="#artifact-1">upload-artifact</a></li><li class="tab"><a href="#artifact-2">download-artifact</a></li></ul><div class="tab-content"><div class="tab-pane active" id="artifact-1"><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">example-job:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Save</span> <span class="string">output</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">shell:</span> <span class="string">bash</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          expr 1 + 1 &gt; output.log</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Upload</span> <span class="string">output</span> <span class="string">file</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/upload-artifact@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">output-log-file</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">output.log</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="artifact-2"><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">example-job:</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Download</span> <span class="string">a</span> <span class="string">single</span> <span class="string">artifact</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/download-artifact@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">output-log-file</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">learn-github-actions</span>              <span class="comment"># name of the workflow</span></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>]                              <span class="comment"># workflow is triggered when push event</span></span><br><span class="line"><span class="attr">jobs:</span>                                   <span class="comment"># job group</span></span><br><span class="line">  <span class="attr">check-bats-version:</span>                   <span class="comment"># name of the job</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span>              <span class="comment"># name of runner</span></span><br><span class="line">    <span class="attr">steps:</span>                              <span class="comment"># steps of the job</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span>       <span class="comment"># clone repository to runner by action</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/setup-node@v3</span>     <span class="comment"># install node &amp; npm to runner by action</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="string">&#x27;14&#x27;</span>            <span class="comment"># use node v14</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">-g</span> <span class="string">bats</span>        <span class="comment"># exec npm to install bats on runner</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">bats</span> <span class="string">-v</span>                    <span class="comment"># exec bats on runner</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Automate</category>
+        <category>CI/CD</category>
+        <category>github</category>
+      </categories>
+      <tags>
+        <tag>Github</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>排序</title>
     <url>/Algorithm/Sort.html</url>
     <content><![CDATA[<p>各种排序算法的复杂度是不同的，对于小数据集，简单算法通常执行的更好，数据集越大，复杂算法的优势才会越明显。</p>
@@ -650,136 +780,6 @@
       </categories>
       <tags>
         <tag>Sort</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Github持续集成与交付</title>
-    <url>/Automate/CI-CD/github/GithubAction.html</url>
-    <content><![CDATA[<p>Github 仓库已支持 CI&#x2F;CD (continuous integration and continuous delivery) 流程，每个仓库均可实现自动化build，test，deploymemt。</p>
-<p><a href="https://docs.github.com/en/actions/learn-github-actions">Learn GitHub Actions</a></p>
-<span id="more"></span>
-
-<h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><ol>
-<li>部署runner</li>
-<li>在repository中编写需要自动化的workflow</li>
-<li>在workflow中指定event触发方式</li>
-<li>在workflow中指定运行所在的runner</li>
-<li>在workflow中指定每个步骤的job及其依赖关系</li>
-<li>在workflow中编写每个job使用的action及shell命令</li>
-<li>提交workflow后，自动交由Github Actions平台处理</li>
-<li>event产生时，runner拉取repository代码，然后执行job</li>
-</ol>
-<h2 id="workflow"><a href="#workflow" class="headerlink" title="workflow"></a>workflow</h2><p><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions">Workflow syntax</a><br><a href="https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs">Assigning permissions to jobs</a><br><a href="https://docs.github.com/en/actions/using-jobs/using-concurrency">Using concurrency</a></p>
-<ul>
-<li>脚本目录：<code>.github/workflows/*.yml</code>，文件为YAML语法</li>
-<li>一个repository可以有多个workflow，且workflow可以互相调用以复用代码</li>
-<li>一个yml文件对应一个workflow，一个workflow可包含多个job</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Modifies the default permissions granted to GITHUB_TOKEN.</span></span><br><span class="line"><span class="attr">permissions:</span></span><br><span class="line">  <span class="attr">contents:</span> <span class="string">read</span></span><br><span class="line">  <span class="attr">issues:</span> <span class="string">write</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This allows a subsequently queued workflow run to interrupt previous runs</span></span><br><span class="line"><span class="attr">concurrency:</span></span><br><span class="line">  <span class="attr">group:</span> <span class="string">&#x27;$<span class="template-variable">&#123;&#123; github.workflow &#125;&#125;</span> @ $<span class="template-variable">&#123;&#123; github.event.pull_request.head.label || github.head_ref || github.ref &#125;&#125;</span>&#x27;</span></span><br><span class="line">  <span class="attr">cancel-in-progress:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="event"><a href="#event" class="headerlink" title="event"></a>event</h2><p><a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows">Events that trigger workflows</a></p>
-<ul>
-<li>event用于触发workflow执行，支持git操作、REST&#x2F;API、manual方式</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">workflow_dispatch:</span>   <span class="comment"># manually run from UI</span></span><br><span class="line">  <span class="attr">push:</span>                <span class="comment"># when push to main branch</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">pull_request:</span>        <span class="comment"># when pull request is created or updated</span></span><br><span class="line">  <span class="attr">schedule:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">cron:</span> <span class="string">&#x27;40 19 * * *&#x27;</span> <span class="comment"># once a day at 19:40 UTC / 11:40 PST</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="job"><a href="#job" class="headerlink" title="job"></a>job</h2><ul>
-<li>job是在workflow中定义在runner上执行的最小单位，支持shell语法</li>
-<li>job是顺序执行的且多个命令相互独立执行</li>
-<li>job间可以有依赖关系，没有依赖关系的job会并行执行</li>
-</ul>
-<h2 id="action"><a href="#action" class="headerlink" title="action"></a>action</h2><p><a href="https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions">Metadata syntax for GitHub Actions</a><br><a href="https://github.com/marketplace?type=actions">GitHub Marketplace Actions</a></p>
-<ul>
-<li>action是在Github Actions平台上执行的特定应用，打包了一些频繁使用且复杂的重复task</li>
-<li>job中使用action可减少重复的代码量</li>
-<li>通过uses引用action，<a href="https://docs.github.com/en/actions/learn-github-actions/finding-and-customizing-actions">支持形式</a>有<ul>
-<li>公共仓库中的名字：<code>actions/checkout@v3</code></li>
-<li>仓库中的相对目录：<code>./.github/actions/demo</code></li>
-<li>docker镜像地址：<code>docker://alpine:3.8</code></li>
-</ul>
-</li>
-<li>支持自定义action</li>
-</ul>
-<h2 id="runner"><a href="#runner" class="headerlink" title="runner"></a>runner</h2><ul>
-<li>runner是用于执行workflow的服务</li>
-</ul>
-<h1 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h1><ul>
-<li><code>&#39;-&#39;</code> - 分割step</li>
-<li>env - 自定义环境变量</li>
-<li>name - job&#x2F;step的名字</li>
-<li>needs - 依赖的job</li>
-<li>run - 执行shell</li>
-<li>users - 执行action</li>
-</ul>
-<h1 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h1><p><a href="https://docs.github.com/en/actions/learn-github-actions/contexts">Contexts</a></p>
-<ul>
-<li>github - workflow运行相关信息</li>
-<li>env - workflow中的环境变量</li>
-<li>job - 当前job信息</li>
-<li>steps - 当前job中的steps信息</li>
-<li>runner - 当前job所在的runner信息</li>
-<li>secrets - workflow可用的私密信息</li>
-<li>strategy - 当前job的执行策略</li>
-<li>matrix - 当前job的矩阵属性</li>
-<li>needs - 当前job依赖的其他job的输出信息</li>
-<li>inputs - workflow的输入信息</li>
-</ul>
-<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><p><a href="https://docs.github.com/en/actions/learn-github-actions/environment-variables">Environment variables</a></p>
-<ul>
-<li>三种类型：<ul>
-<li><code>env</code>：应用整个workflow</li>
-<li><code>jobs.&lt;job_id&gt;.env</code>：应用特定job</li>
-<li><code>jobs.&lt;job_id&gt;.steps[*].env</code>：应用特定step</li>
-</ul>
-</li>
-<li>支持通过context读写环境变量<ul>
-<li><code>$&#123;&#123; env.MY_VARIABLE &#125;&#125;</code> 通过env访问自定义环境变量</li>
-</ul>
-</li>
-<li>自定义路径相关的环境变量应该加<code>_PATH</code>后缀</li>
-</ul>
-<h1 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h1><p><a href="https://docs.github.com/en/actions/learn-github-actions/expressions">Expressions</a></p>
-<ul>
-<li><code>$&#123;&#123; <expression> &#125;&#125;</code>格式表示作为表达式解释，而非字符串</li>
-<li>当if条件（默认按表达式解释）为ture时，step将运行</li>
-<li>支持数据类型：boolean, null, number, string（单引号作为转义字符）</li>
-<li>支持内建函数<ul>
-<li>contains: 包含子项时为true （大小写不敏感）</li>
-<li>startsWith: 以特定字符开始时为true（大小写不敏感）</li>
-<li>endsWith：以特定字符结束时为true （大小写不敏感）</li>
-<li>format：按占位符格式化字符串</li>
-<li>join：连接两项</li>
-<li>toJSON：序列化json字符串</li>
-<li>fromJSON：反序列化json字符串</li>
-</ul>
-</li>
-<li>支持状态检查函数：<ul>
-<li>success：之前的step既没有失败又没有取消时为true</li>
-<li>failure：之前的step失败时为true</li>
-<li>cancelled：workflow被取消时为true</li>
-<li>always：step始终执行时为true</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">steps:</span></span><br><span class="line">  <span class="string">...</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Failing</span> <span class="string">step</span></span><br><span class="line">    <span class="attr">id:</span> <span class="string">demo</span></span><br><span class="line">    <span class="attr">run:</span> <span class="string">exit</span> <span class="number">1</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">The</span> <span class="string">demo</span> <span class="string">step</span> <span class="string">has</span> <span class="string">failed</span></span><br><span class="line">    <span class="attr">if:</span> <span class="string">$&#123;&#123;</span> <span class="string">failure()</span> <span class="string">&amp;&amp;</span> <span class="string">steps.demo.conclusion</span> <span class="string">==</span> <span class="string">&#x27;failure&#x27;</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="自定义变量"><a href="#自定义变量" class="headerlink" title="自定义变量"></a>自定义变量</h2><p>POSTGRES_HOST 和 POSTGRES_PORT 变量可在 <code>node client.js</code> 脚本中使用</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">example-job:</span></span><br><span class="line">      <span class="attr">steps:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Connect</span> <span class="string">to</span> <span class="string">PostgreSQL</span></span><br><span class="line">          <span class="attr">run:</span> <span class="string">node</span> <span class="string">client.js</span></span><br><span class="line">          <span class="attr">env:</span></span><br><span class="line">            <span class="attr">POSTGRES_HOST:</span> <span class="string">postgres</span></span><br><span class="line">            <span class="attr">POSTGRES_PORT:</span> <span class="number">5432</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="调用仓库中的脚本"><a href="#调用仓库中的脚本" class="headerlink" title="调用仓库中的脚本"></a>调用仓库中的脚本</h2><p><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions">workflow-syntax-for-github-actions</a></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">example-job:</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">build</span> <span class="string">script</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">./.github/scripts/build.sh</span></span><br><span class="line">        <span class="attr">shell:</span> <span class="string">bash</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="job间共享数据"><a href="#job间共享数据" class="headerlink" title="job间共享数据"></a>job间共享数据</h2><div class="tabs" id="artifact"><ul class="nav-tabs"><li class="tab active"><a href="#artifact-1">upload-artifact</a></li><li class="tab"><a href="#artifact-2">download-artifact</a></li></ul><div class="tab-content"><div class="tab-pane active" id="artifact-1"><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">example-job:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Save</span> <span class="string">output</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">shell:</span> <span class="string">bash</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          expr 1 + 1 &gt; output.log</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Upload</span> <span class="string">output</span> <span class="string">file</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/upload-artifact@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">output-log-file</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">output.log</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="artifact-2"><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">example-job:</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Download</span> <span class="string">a</span> <span class="string">single</span> <span class="string">artifact</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/download-artifact@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">output-log-file</span></span><br></pre></td></tr></table></figure></div></div></div>
-
-<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">learn-github-actions</span>              <span class="comment"># name of the workflow</span></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>]                              <span class="comment"># workflow is triggered when push event</span></span><br><span class="line"><span class="attr">jobs:</span>                                   <span class="comment"># job group</span></span><br><span class="line">  <span class="attr">check-bats-version:</span>                   <span class="comment"># name of the job</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span>              <span class="comment"># name of runner</span></span><br><span class="line">    <span class="attr">steps:</span>                              <span class="comment"># steps of the job</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span>       <span class="comment"># clone repository to runner by action</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/setup-node@v3</span>     <span class="comment"># install node &amp; npm to runner by action</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="string">&#x27;14&#x27;</span>            <span class="comment"># use node v14</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">-g</span> <span class="string">bats</span>        <span class="comment"># exec npm to install bats on runner</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">bats</span> <span class="string">-v</span>                    <span class="comment"># exec bats on runner</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Automate</category>
-        <category>CI/CD</category>
-        <category>github</category>
-      </categories>
-      <tags>
-        <tag>Github</tag>
       </tags>
   </entry>
   <entry>
