@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="音频常见概念梳理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="音频基础">
+<meta property="og:url" content="https://blog.imssyang.com/Media/AudioBasic.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="音频常见概念梳理。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/human_ear.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/sound_intensity.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/audio_amplitude2db.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/FFT-snr-rms.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/sound_phase.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/sound_phase.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/sound_piano.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/audio_quality_and_bitrate.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/DFT-cos3Hz.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/DFT-sin40Hz-sin90Hz.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/STFT-sin20Hz-sin60Hz.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/Media/STFT-sin20Hz-sin60Hz-mel.png">
+<meta property="article:published_time" content="2024-09-11T02:30:22.000Z">
+<meta property="article:modified_time" content="2024-09-11T08:25:30.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="AudioBasic">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.imssyang.com/images/Media/human_ear.png">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/Media/AudioBasic.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/Media/AudioBasic.html","path":"Media/AudioBasic.html","title":"音频基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>音频基础 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%BA%E8%80%B3"><span class="nav-number">1.</span> <span class="nav-text">人耳</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%8D%E5%BA%A6%EF%BC%88%E6%8C%AF%E5%B9%85%E3%80%81%E5%A3%B0%E5%BC%BA%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">响度（振幅、声强）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%99%AA%E6%AF%94%EF%BC%88SNR%EF%BC%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">信噪比（SNR）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9F%B3%E8%B0%83%E5%92%8C%E9%9F%B3%E8%89%B2%EF%BC%88%E7%9B%B8%E4%BD%8D%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">音调和音色（相位）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E4%BD%8D"><span class="nav-number">1.2.1.</span> <span class="nav-text">相位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9F%B3%E8%B0%83%E5%92%8C%E9%9F%B3%E8%89%B2%EF%BC%88%E5%B0%8F%E6%8F%90%E7%90%B4%EF%BC%89"><span class="nav-number">1.2.2.</span> <span class="nav-text">音调和音色（小提琴）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AB%E5%BA%A6%E9%9F%B3%E9%98%B6%EF%BC%88%E9%92%A2%E7%90%B4%EF%BC%89"><span class="nav-number">1.2.3.</span> <span class="nav-text">八度音阶（钢琴）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%A3%B0%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">发声模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E9%9F%B3%E9%A2%91"><span class="nav-number">2.</span> <span class="nav-text">数字音频</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%87%E6%A0%B7%E7%8E%87"><span class="nav-number">2.1.</span> <span class="nav-text">采样率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8D%E6%B7%B1"><span class="nav-number">2.2.</span> <span class="nav-text">位深</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%8C%83%E5%9B%B4"><span class="nav-number">2.2.1.</span> <span class="nav-text">动态范围</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E9%81%93%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">通道数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%8B%E4%BD%93%E5%A3%B0%EF%BC%88stereo%EF%BC%89"><span class="nav-number">2.3.1.</span> <span class="nav-text">立体声（stereo）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%81%E7%8E%87%EF%BC%88%E9%9F%B3%E8%B4%A8%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">码率（音质）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">傅里叶分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%EF%BC%88DFT%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">离散傅里叶变换（DFT）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%9F%AD%E6%97%B6%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%EF%BC%88D-STFT%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">离散短时傅里叶变换（D-STFT）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%85%E5%B0%94%E8%B0%B1%E5%9B%BE%EF%BC%88Mel-Spectrogram%EF%BC%89"><span class="nav-number">3.2.1.</span> <span class="nav-text">梅尔谱图（Mel Spectrogram）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/Media/AudioBasic.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          音频基础
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/Media/" itemprop="url" rel="index"><span itemprop="name">Media</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 9/11/2024 10:30:22 / Modified: 16:25:30" itemprop="dateCreated datePublished" datetime="2024-09-11T10:30:22+08:00">9/11/2024</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>10 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>音频常见概念梳理。</p>
+<span id="more"></span>
+
+<h1 id="人耳"><a href="#人耳" class="headerlink" title="人耳"></a>人耳</h1><p><img data-src="/images/Media/human_ear.png"></p>
+<ul>
+<li>中耳是一个控制声波从空气进入到内耳中液体里的声音能量比例的<em>阻抗匹配网络</em>。<ul>
+<li>阻抗变换由耳鼓（从空气中接收声音，约 $60mm^2$ ）和卵圆窗（传输声音到液体，约 $4mm^2$）的面积差别产生。<ul>
+<li>压强等于单位面积上受到的压力，所以面积的差别使声压增加了约 $15$ 倍。</li>
+</ul>
+</li>
+<li>声波从空气传入液体过程中，只保留小部分投射过其表面，多数能量被反射了。</li>
+</ul>
+</li>
+<li>（区域法则）基膜靠近卵圆窗的部分最坚硬（对高频共鸣），相反的一端较柔软（对低频共鸣），使得它可以作为一个<em>频谱分析仪</em>。<ul>
+<li>基膜上神经细胞对每个振动周期产生一个动作电位来编码音频。例如，一个 200Hz 的声波可以用单个神经元每秒产生 200 个动作电位来呈现。<ul>
+<li>单个神经元能产生的动作电位的最大频率约 500Hz，人耳通过使若干个神经细胞轮流执行这种单个任务克服了这个问题，将频率范围扩展到 4kHz。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>人耳听觉范围是 20Hz $\sim$ 20kHz，但对 $1kHz \sim 4kHz$ 的声音相当敏感。<ul>
+<li>对于 3kHz 声音，即使响度为 0dB 依然能感知到，如果频率差异大于 0.3%，能区分出两个音调（基频）。</li>
+<li>对于 100Hz 声音，响度最少要求 40dB （相对于 0dB，振幅增长了 100 倍），频率差异大于 3%，才能区分出两个音调（基频）。</li>
+</ul>
+</li>
+<li>两个耳朵的主要优点是区分声音的方向，人耳能感知到 10m 远处的相距一人宽度的两个不同声源。依据条件是：<ol>
+<li>靠近声源的耳朵比另一只耳朵接收到更强的信号；</li>
+<li>头部相对远侧的耳朵听到的声音比另一只耳朵要稍晚一些，典型头部尺寸 22cm 和声音速度 340m&#x2F;s，时间精度约为 10us。</li>
+</ol>
+</li>
+<li>人耳不能很好地判定声源的远近，这是因为声波中几乎没有提供这种信息，声波在长距离传播中会耗散高频成分，所以听觉大体上判断高频声音离得近，而低频声音离得远。</li>
+</ul>
+<h2 id="响度（振幅、声强）"><a href="#响度（振幅、声强）" class="headerlink" title="响度（振幅、声强）"></a>响度（振幅、声强）</h2><p><img data-src="/images/Media/sound_intensity.png"></p>
+<ul>
+<li>声强（intensity）用每单位面积上的能量（或功率）来表示（例如 $W&#x2F;mm^2$）</li>
+<li>振幅（amplitude）是空气分子在声波通过时的最大偏离平衡位置的位移量。声强与振幅的平方成正比：<br>$$ I&#x3D;kA^2，其中，I 表示声音强度，A 表示声波振幅，k 是比例常数 $$</li>
+<li>声压（Sound Pressure）是声波引起的压力变化。声压的大小与声波的振幅成正比：<br>$$ P_{sound} &#x3D; kA，其中，P_{sound} 表示声压，A 表示声波振幅，k 是比例常数 $$</li>
+<li>响度（Loudness）人耳对声音强弱的主观感知，描述了人耳对声音的音量大小的感觉，比较符合对数性质，通常用分贝（dB）表示：<br>$$ L_{dB} &#x3D; 10 * log_{10}(\frac{I}{I_0}) &#x3D; 20 * log_{10}(\frac{P}{P_0}) $$<br>$$ 其中，I 是测量的声强（功率），I_0 是参考声强（通常用 10^{-16}W&#x2F;cm^2，约为人耳能探测到的最弱声音）$$<br>$$ P 是测量的声压（振幅），P_0 是参考声压（通常为 20μPa） $$<ul>
+<li>响度感知大概是声强（功率）的三分之一次方（$I^\frac{1}{3}$）<ul>
+<li>当增加 10 倍声功率，听者感觉响度增加了 2 倍（$10^\frac{1}{3} \approx 2$）。<ul>
+<li>消除环境噪声问题：即使通过隔音材料将声功率削减到之前的 1%，感知响度只下降了约 20%（$0.01^\frac{1}{3} \approx 0.2$）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>人耳能听到的最大（响雷）和最小（私语）的声音强度相差 120dB，声波振幅上相差一百万倍。<ul>
+<li>人耳能察觉到响度改变 1dB（振幅 12%）时的变化，或者说只能察觉到 120 个不同的声音级别，在 100 万幅度范围内呈对数分布。</li>
+<li>当听到非常弱的声音时，耳鼓振动小于单个分子的直径！</li>
+</ul>
+</li>
+</ul>
+<p>假定音频振幅被归一化到[0,1]区间，振幅转为 dB 的关系如下：</p>
+<p><img data-src="/images/Media/audio_amplitude2db.png"></p>
+<h3 id="信噪比（SNR）"><a href="#信噪比（SNR）" class="headerlink" title="信噪比（SNR）"></a>信噪比（SNR）</h3><p>信号的<strong>均方根（RMS，Root Mean Square）</strong>是一种表示信号强度（功率）的度量方式，计算方式是先对信号的每个值进行平方，然后求其平均值，最后再对平均值开方，公式表示如下：</p>
+<p>$$ \text{RMS} &#x3D; \sqrt{\frac{1}{N} \sum_{i&#x3D;1}^{N} x_i^2} $$<br>$$ N 是信号的样本数量，x_i 是第 i 个样本值。 $$</p>
+<p>信号的<strong>信噪比（SNR，Signal-to-Noise Ratio）</strong>是衡量信号相对于噪声强度的比值，用于评估信号质量，通常以分贝（dB）为单位，公式表示如下：</p>
+<p>$$ P_{\text{signal&#x2F;noise}} &#x3D; \text{RMS}^2 $$<br>$$ \text{SNR} &#x3D; 10 \log_{10}\left(\frac{P_{\text{signal}}}{P_{\text{noise}}}\right) &#x3D;<br>10 \log_{10}\left(\frac{RMS_{signal}^2}{RMS_{noise}^2}\right) &#x3D;<br>20 \log_{10}\left(\frac{RMS_{signal}}{RMS_{noise}}\right)<br>$$<br>$$ 信号强度为噪音强度的倍数 &#x3D; \frac{RMS_{signal}}{RMS_{noise}} &#x3D; 10^{\frac{\text{SNR}}{20}} $$<br>$$ P_{\text{signal}} 信号的功率，P_{\text{noise}} 噪声的功率。 $$</p>
+<div class="tabs" id="audiobasic-snr-example"><ul class="nav-tabs"><li class="tab active"><a href="#audiobasic-snr-example-1">SNR=92 & 12</a></li></ul><div class="tab-content"><div class="tab-pane active" id="audiobasic-snr-example-1"><p>信号由两个频率分别为 50Hz 和 200Hz 的三角函数组成，在混杂不同强度的噪声成分后，经过 FFT 变换的过程如下：</p>
+<p><img data-src="/images/Media/FFT-snr-rms.png"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/imssyang/ffmpeg/blob/main/sample/audio/fft/sin50hz_sin200hz.py">sin50hz_sin200hz.py</a></p></div></div></div>
+
+<h2 id="音调和音色（相位）"><a href="#音调和音色（相位）" class="headerlink" title="音调和音色（相位）"></a>音调和音色（相位）</h2><h3 id="相位"><a href="#相位" class="headerlink" title="相位"></a>相位</h3><p>两个时域波形，每个都由频率 1kHz、振幅 1 的正弦波和频率 3kHz、振幅 0.5 的正弦波相加组成。不同之处在于相位翻转了 $180^\circ$。</p>
+<p><img data-src="/images/Media/sound_phase.png"></p>
+<ul>
+<li>尽管时域波形很不相同，但是两个信号听起来是一样的。<ul>
+<li>听觉是基于<strong>频率分量</strong>的幅度，对它们的相位不敏感。</li>
+<li>时域波形的形状与听觉不直接相关，一般在音频系统中不予考虑。</li>
+</ul>
+</li>
+<li>人耳正是因为忽略了相位变化，当在房间中移动时才会感觉不到声音的变化。</li>
+</ul>
+<h3 id="音调和音色（小提琴）"><a href="#音调和音色（小提琴）" class="headerlink" title="音调和音色（小提琴）"></a>音调和音色（小提琴）</h3><p>当用小提琴演奏一个音符，比如中音 C 下面的 A 音，琴弓拉过琴弦，琴弦接触琴弓并后拉，最后松开，形成了一种锯齿波形：</p>
+<p><img data-src="/images/Media/sound_phase.png"></p>
+<ul>
+<li>小提琴的声波由 220Hz 基音以及 440Hz、660Hz、880Hz等频率的泛音组成（弦不仅以基频振动，还会以倍数频率振动）。<ul>
+<li>音调由基音（声波中频率最低的成分，也绝对基本音高）决定，相同的基频，听起来就类似，或者说有相同的音调。</li>
+<li>音色由泛音（声波中基音频率的整数倍的频率成分，不会单独听到）决定，和波形的形状相关，特定的波形只有一个音色，由于相位差异，一个特定的音色可能有无限种波形。</li>
+</ul>
+</li>
+</ul>
+<h3 id="八度音阶（钢琴）"><a href="#八度音阶（钢琴）" class="headerlink" title="八度音阶（钢琴）"></a>八度音阶（钢琴）</h3><p><img data-src="/images/Media/sound_piano.png"></p>
+<ul>
+<li>钢琴的频率每 7 个白键后加倍，相邻键的频率差异约 6%，术语八度音阶意味着频率为 2 的倍数，基于每固定数目键位频率加倍，所以这是一种频率对数表示法。</li>
+<li>钢琴在 50Hz $\sim$ 100Hz 的八度音阶中携带大量的音频信息，和 10kHz $\sim$ 20kHz 八度音阶所携带的信息相同。</li>
+<li>人耳听觉范围从 20Hz $\sim$ 20kHz，钢琴虽然只涵盖了听觉范围的 20%，但能产生超过 70% 的声音信息（10 个八度音阶中的 7 个）。</li>
+</ul>
+<h2 id="发声模型"><a href="#发声模型" class="headerlink" title="发声模型"></a>发声模型</h2><p>人声大体上可分为<strong>浊音</strong>和<strong>摩擦音</strong>：</p>
+<ul>
+<li>浊音是空气从肺中挤压出来，经过声带并从口腔或鼻腔发出的声音。<ul>
+<li>声带振动频率在 50 $\sim$ 1000Hz 间变化，导致注入喉结的空气<strong>周期性膨胀</strong>。</li>
+<li>元音就是一种浊音。</li>
+</ul>
+</li>
+<li>摩擦音是气流被舌头、嘴唇或牙齿阻塞时，受阻区域的空气被压缩而产生的空气湍流的声音。</li>
+<li>浊音和摩擦音会被由舌头、嘴唇、口腔、喉咙和鼻腔所形成的声腔修正，因为声腔只有几厘米大小，所以频率响应主要是 kHz 数量级上（100 $\sim$ 10kHz）的一系列共振。</li>
+</ul>
+<h1 id="数字音频"><a href="#数字音频" class="headerlink" title="数字音频"></a>数字音频</h1><p>数字音频有三个最重要的特征：采样率、位深、通道数。</p>
+<h2 id="采样率"><a href="#采样率" class="headerlink" title="采样率"></a>采样率</h2><p>采样率（sample rate, 单位为 Hz 或 kHz）指每秒钟采集的样本数。例如，44.1kHz表示每秒采集44,100个样本。</p>
+<ul>
+<li>Nyquist-Shannon 采样定理：要准确地重现一个频率为 $𝑓_{𝑚𝑎𝑥}$ 的信号，采样率 $𝑓_𝑠​$ 必须至少为信号中最高频率的两倍。</li>
+<li>44100Hz 是 CD 质量音频的标准采样率，根据 Nyquist 定理，44.1 kHz 的采样率能够精确重现最高频率为 44.1&#x2F;2&#x3D;22.05 kHz 的信号，能完全覆盖人类的听觉范围（小于 20kHz）。<ul>
+<li>$44100 &#x3D; 2^2 \times 3^2 \times 5^2 \times 7^2$ 是一个很特殊的数字，非常易于计算。</li>
+</ul>
+</li>
+</ul>
+<h2 id="位深"><a href="#位深" class="headerlink" title="位深"></a>位深</h2><p>位深（bit depth）指的是每个音频样本使用的比特数，决定了每个采样点可以记录的振幅值的精度，用来表示音频的振幅或声音的动态范围。</p>
+<h3 id="动态范围"><a href="#动态范围" class="headerlink" title="动态范围"></a>动态范围</h3><p>动态范围（Dynamic Range）指的是音频信号中最大振幅与最小可区分振幅之间的比率，通常以<strong>分贝（dB）</strong>表示，描述了音频从最安静的声音到最响的声音的范围。</p>
+<p>动态范围的大小与位深直接相关。具体来说，动态范围大约为每位位深对应 6 分贝（dB）：</p>
+<ul>
+<li>16位深的音频的动态范围大约为 6×16&#x3D;96 dB。</li>
+<li>24位深的音频的动态范围大约为 6×24&#x3D;144 dB。</li>
+</ul>
+<h2 id="通道数"><a href="#通道数" class="headerlink" title="通道数"></a>通道数</h2><p>通道数（number of channels）指音频信号的独立声音流的数量，影响声音的空间感和定位感。</p>
+<h3 id="立体声（stereo）"><a href="#立体声（stereo）" class="headerlink" title="立体声（stereo）"></a>立体声（stereo）</h3><p>立体声系统是指有两个或两个以上声道的音频系统，把声音通过不同的方向传送给听者，能更准确地播放原始音乐。</p>
+<p>高保真音乐很早就应用了双声道（左、右），早期唱片会将来自录音棚中多个麦克风的声音混音成两个声道中，让听着有身临其境的感觉。</p>
+<p>杜比立体音响（Dolby）在电影中应用四声道（左、右、中央、环绕声道）音效：</p>
+<ul>
+<li>电影屏幕两侧的扬声器产生左右声道（同立体声系统）；</li>
+<li>中央声道的扬声器在屏幕的正上方或正下方，再现与视觉同步的声音；</li>
+<li>环绕扬声器放置在听者旁边，在大礼堂中可能有二十几个扬声器，环绕声道只含有约 100Hz $\sim$ 7kHz 的中值频率，并且被延迟 15ms $\sim$ 30ms，听着把延迟信号当作墙壁的反射回声。</li>
+</ul>
+<h2 id="码率（音质）"><a href="#码率（音质）" class="headerlink" title="码率（音质）"></a>码率（音质）</h2><p>数据压缩（data compression）引入了音频数据的另一个特性：</p>
+<ul>
+<li>码率（bit rate）是指在单位时间内传输或处理的音频数据量，通常以 kbps（kilobits per second，千比特每秒）为单位，它是衡量音频质量和文件大小的一个关键指标。<ul>
+<li>对于无损信号（例如 pcm），码率可根据采样量、位深和通道数计算得到，对于 CD 立体声音频通常是 1411.2 kbps (kilobits per second)：<br>$$ 16 \frac{bits}{sample} \cdot 44100 \frac{samples}{second} \cdot 2 (channels) &#x3D; 1411200 \frac{bits}{second} $$</li>
+<li>对于有损压缩（例如 aac、mp3），音频码率通常在 30 $\sim$ 500 kbps。</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="/images/Media/audio_quality_and_bitrate.png"></p>
+<ul>
+<li>高保真音乐需要 20kHz 的带宽，采样量高达 44.1kHz，并且有足够的精度（16bit），能捕获人耳能听到的所有声音，代价是高码率：<code>44.1kHz * 16bit = 706kbit/s</code>。</li>
+<li>自然语言只需要约 3.2kHz 带宽，音频范围缩减到只有 16%，信号仍含有 80% 的音频信息（10 个八度音阶中的 8 个）。</li>
+<li>压缩音频信号的一个最有效方式是线性预测编码（LPC），能将码率减小到 2kbit&#x2F;s $\sim$ 6kbit&#x2F;s。</li>
+</ul>
+<h1 id="傅里叶分析"><a href="#傅里叶分析" class="headerlink" title="傅里叶分析"></a>傅里叶分析</h1><p>傅里叶分析是把复杂的信号分解成正弦波或余弦波的线性组合，从而理解信号的频率成分，是一种将信号从时域转换到频域的方法。</p>
+<ul>
+<li>傅里叶级数（FS, fourier series）是傅里叶分析的早期理论成果之一，它用于将<strong>周期性信号（无限长）</strong>分解成无穷多个不同频率的正弦波和余弦波。</li>
+<li>傅里叶变换（FT, fourier transform）是傅里叶级数的扩展，能够处理<strong>非周期信号（无限长）</strong>，傅里叶变换可以将有限长、非周期的信号转换为频率域表示。</li>
+<li>离散傅里叶变换（DFT, discrete fourier transform）是傅里叶变换在<strong>离散信号（有限长）</strong>上的应用，它用于将离散的、有限长的信号转换到频域，计算复杂度为 $O(N^2)$。</li>
+<li>快速傅里叶变换（FFT, fast fourier transform）是用于**高效计算 DFT **的一种算法，极大地降低了计算复杂度到 $NlogN$。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.jezzamon.com/fourier/">An Interactive Introduction to Fourier Transforms</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/19763358">傅里叶分析之掐死教程</a><br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ng411v7Dk">快速傅里叶变换原理</a></p>
+<h2 id="离散傅里叶变换（DFT）"><a href="#离散傅里叶变换（DFT）" class="headerlink" title="离散傅里叶变换（DFT）"></a>离散傅里叶变换（DFT）</h2><p>离散傅里叶变换（DFT, Discrete Fourier Transform） 是一种将离散的时域或空间域信号转换到频域的数学变换，计算复杂度为 $O(N^2)$，数学公式如下：</p>
+<p>$$ X_k &#x3D; \sum_{n&#x3D;0}^{N-1} x_n \cdot e^{-i 2\pi \frac{k n}{N}} $$<br>$$ 𝑋_𝑘 是 DFT 后的第 𝑘 个频率分量，k&#x3D;0,1,…,N-1。$$<br>$$ x_n 是时域输入信号的第 𝑛 个采样点，𝑁 是总采样点数。$$<br>$$ e^{-i 2\pi \frac{k n}{N}} 是基于复指数的傅里叶基函数（旋转因子），𝑖 是虚数单位，表示复数域中的频率分量。$$</p>
+<p>定义 $W_N &#x3D; e^{-i \frac{2\pi}{N}}$ 后，旋转因子可简化成 $W_N^{nk}$，数学公式简化为：</p>
+<p>$$ X_k &#x3D; \sum_{n&#x3D;0}^{N-1} x_n \cdot W_N^{nk}, k&#x3D;0,1,…,N-1. $$</p>
+<p>旋转因子的特点：</p>
+<ul>
+<li>周期性：$ W_N^{a+N} &#x3D; e^{-i \frac{2\pi}{N}(a+N)} &#x3D; e^{-i \frac{2\pi}{N}a}e^{-i 2\pi} &#x3D; W_N^{a} $</li>
+<li>对称性：$ W_N^{a+\frac{N}{2}} &#x3D; e^{-i \frac{2\pi}{N}(a+\frac{N}{2})} &#x3D; e^{-i \frac{2\pi}{N}a}e^{-i \pi} &#x3D; -W_N^{a} $</li>
+<li>缩放性：$ W_N^{a} &#x3D; e^{-i \frac{2\pi}{N}a} &#x3D; e^{-i \frac{2\pi}{\frac{N}{m}}\frac{a}{m}} &#x3D; W_{\frac{N}{m}}^{\frac{a}{m}} $</li>
+</ul>
+<p>当时域总采样数为 4 时，DFT 计算过程如下：</p>
+<p>$$ X_0 &#x3D; \sum_{n&#x3D;0}^{3} x_n \cdot W_4^{nk} &#x3D; x_0 \cdot W_4^0 + x_1 \cdot W_4^0 + x_2 \cdot W_4^0 + x_3 \cdot W_4^0 $$<br>$$ X_1 &#x3D; \sum_{n&#x3D;0}^{3} x_n \cdot W_4^{nk} &#x3D; x_0 \cdot W_4^0 + x_1 \cdot W_4^1 + x_2 \cdot W_4^2 + x_3 \cdot W_4^3 $$<br>$$ X_2 &#x3D; \sum_{n&#x3D;0}^{3} x_n \cdot W_4^{nk} &#x3D; x_0 \cdot W_4^0 + x_1 \cdot W_4^2 + x_2 \cdot W_4^4 + x_3 \cdot W_4^6 $$<br>$$ X_3 &#x3D; \sum_{n&#x3D;0}^{3} x_n \cdot W_4^{nk} &#x3D; x_0 \cdot W_4^0 + x_1 \cdot W_4^3 + x_2 \cdot W_4^6 + x_3 \cdot W_4^9 $$</p>
+<p>用矩阵形式表示如下：</p>
+<p>$$<br>\begin{bmatrix}<br>X_0 \\<br>X_1 \\<br>X_2 \\<br>X_3<br>\end{bmatrix}<br>\text{&#x3D;}<br>\begin{bmatrix}<br>x_0 \\<br>x_1 \\<br>x_2 \\<br>x_3<br>\end{bmatrix}<br>\cdot<br>\begin{bmatrix}<br>W_4^0 &amp; W_4^0 &amp; W_4^0 &amp; W_4^0 \\<br>W_4^0 &amp; W_4^1 &amp; W_4^2 &amp; W_4^3 \\<br>W_4^0 &amp; W_4^2 &amp; W_4^4 &amp; W_4^6 \\<br>W_4^0 &amp; W_4^3 &amp; W_4^6 &amp; W_4^9<br>\end{bmatrix}<br>\text{&#x3D;}<br>\begin{bmatrix}<br>x_0 \\<br>x_1 \\<br>x_2 \\<br>x_3<br>\end{bmatrix}<br>\cdot<br>\begin{bmatrix}<br>e_0 &amp; e_0 &amp; e_0 &amp; e_0 \\<br>e_0 &amp; e^{-i \frac{\pi}{2}} &amp; e^{-i \pi} &amp; e^{-i \frac{3\pi}{2}} \\<br>e_0 &amp; e^{-i \pi} &amp; e^{-i 2\pi} &amp; e^{-i 3\pi} \\<br>e_0 &amp; e^{-i \frac{3\pi}{2}} &amp; e^{-i 3\pi} &amp; e^{-i \frac{9\pi}{2}}<br>\end{bmatrix}<br>$$</p>
+<ul>
+<li>DFT 变换是将时域信号乘于一系列旋转因子后，再求和的过程。</li>
+<li>DFT 的结果是复数（$X_k&#x3D;a+bi$），一个 $X_k$ 代表一个频率分量。<ul>
+<li>实部表示信号的余弦分量，虚部表示信号的正弦分量。</li>
+<li>振幅可以通过复数的模来计算：<br>$$ \text{Amplitude} &#x3D; |X_k| &#x3D; \sqrt{a^2 + b^2} $$</li>
+<li>相位可以通过复数的辐角来计算：<br>$$ \text{Phase} &#x3D; \theta &#x3D; \text{atan2}(b, a) $$<br>$$ 其中，atan2 是一种四象限反正切函数，可以正确处理角度的范围为（-π 到 π）。$$</li>
+<li>通过计算复数的模和相位，可以得出信号的振幅和相位信息。</li>
+</ul>
+</li>
+<li><strong>共轭对称性</strong>：对于实值信号，FFT 结果的频谱具有共轭对称性。<ul>
+<li>$X_k$ 和 $X_{N-k}$ 实部相同，虚部相反，振幅一致，相位互相抵消。</li>
+<li>频谱在<strong>正频率</strong>（$0&lt;k&lt;\frac{N}{2}$）和<strong>负频率</strong>（$\frac{N}{2}&lt;k&lt;N$）是对称的，正频率和负频率部分提供的信息是相同的。</li>
+</ul>
+</li>
+<li>频率分量 $f_k$ 的频率与分量索引 $k$ 之间的关系如下：<br>$$ f_k&#x3D;k \cdot \frac{f_s}{N}, 其中，f_s 是采样频率，k&#x3D;0,1,…,N-1 $$<ul>
+<li>$k&#x3D;0$ 对应<strong>直流分量（0Hz）</strong>。</li>
+<li>$k&#x3D;\frac{N}{2}$对应<strong>奈奎斯特频率</strong>（$\frac{f_s}{2}$，即最高可以表示的频率，与采样定理一致）。</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="audiobasic-dft-example"><ul class="nav-tabs"><li class="tab active"><a href="#audiobasic-dft-example-1">$f(t)=cos(2\pi*3t+\frac{\pi}{3})$</a></li><li class="tab"><a href="#audiobasic-dft-example-2">$f(t)=sin(2\pi*40t+\frac{\pi}{4})+0.5sin(2\pi*90t+\frac{\pi}{3})$</a></li></ul><div class="tab-content"><div class="tab-pane active" id="audiobasic-dft-example-1"><p>对 1s 内有 3 个周期的余弦信号，以采样率 $f_s$&#x3D;16Hz、总采样点数 $N&#x3D;16$ 进行采样后，经过 DFT 变换的过程如下：</p>
+<p><img data-src="/images/Media/DFT-cos3Hz.png"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/imssyang/ffmpeg/blob/main/sample/audio/fft/cos3hz.py">cos3hz.py</a></p></div><div class="tab-pane" id="audiobasic-dft-example-2"><p>对 40Hz 和 90Hz 的两个正弦叠加信号，以采样率 $f_s$&#x3D;250Hz、总采样点数 $N&#x3D;50$ 进行采样后，经过 DFT 变换的过程如下：</p>
+<p><img data-src="/images/Media/DFT-sin40Hz-sin90Hz.png"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/imssyang/ffmpeg/blob/main/sample/audio/fft/sin40hz_sin90hz.py">sin40hz_sin90hz.py</a></p></div></div></div>
+
+<p>逆离散傅里叶变换（IDFT, Inverse Discrete Fourier Transform）将频域的信号转换回时域，恢复原始信号。其数学公式如下：</p>
+<p>$$ x_n &#x3D; \frac{1}{N} \sum_{k&#x3D;0}^{N-1} X_k \cdot e^{i 2\pi \frac{k n}{N}} $$</p>
+<h2 id="离散短时傅里叶变换（D-STFT）"><a href="#离散短时傅里叶变换（D-STFT）" class="headerlink" title="离散短时傅里叶变换（D-STFT）"></a>离散短时傅里叶变换（D-STFT）</h2><p>短时傅里叶变换（STFT, Short-Time Fourier Transform）是傅里叶变换的一种扩展，用于分析非平稳信号。傅里叶变换假设信号是<strong>周期性或平稳的</strong>，因此无法有效处理随时间变化的信号特征，而 STFT 通过在不同时间段上应用傅里叶变换，能够分析信号的频率随时间变化的情况，从而更适合处理音频、图像等非平稳信号。在实际应用中，信号往往是采样得到的离散信号，因此实际使用的是离散傅里叶变换（Discrete STFT）。其处理过程如下：</p>
+<ol>
+<li><strong>分割信号</strong>：将离散信号分割成若干短时段的片段，每个片段内的信号可以被近似为平稳的。</li>
+</ol>
+<ul>
+<li>对不同时间段的信号进行单独分析，从而捕捉到信号的时间变化特征。</li>
+</ul>
+<ol start="2">
+<li><strong>加窗</strong>：对每个片段应用一个窗口函数（如汉明窗、汉宁窗等），使信号在时间域上逐渐减小（平滑过渡，避免傅里叶变换时产生过大的频谱泄露）。</li>
+</ol>
+<ul>
+<li>时间分辨率：窗口函数的长度决定了时间分辨率，较短的窗口能够更好地捕捉信号的时间变化，但频率分辨率较差。</li>
+<li>频率分辨率：较长的窗口提供较高的频率分辨率，但时间分辨率较差。</li>
+</ul>
+<ol start="3">
+<li><strong>傅里叶变换</strong>：对每个加窗后的片段执行离散傅里叶变换 (DFT)，得到每个时段的频谱信息。</li>
+<li><strong>时频图、声谱图（spectrogram）</strong>：将所有窗口的傅里叶变换结果汇总后得到频率随时间变化的情况，横轴为时间，纵轴为频率，颜色或亮度表示不同频率成分的强度。</li>
+</ol>
+<p>离散短时傅里叶变换 (Discrete STFT)的数学公式如下：</p>
+<p>$$ X(m,k) &#x3D; \sum_{n&#x3D;0}^{N-1} x[n] w[n-m] \cdot e^{-i 2\pi \frac{k n}{N}} $$<br>$$ X(m,k) 是 STFT 后的第 𝑘 个频率分量的索引，k&#x3D;0,1,…,N-1。$$<br>$$ m 是 STFT 中的时间窗口中心位置的索引，𝑁 是窗口或信号长度。$$<br>$$ x[n] 是时域的离散信号。$$<br>$$ w[n-m] 是离散的窗口函数。$$<br>$$ e^{-i 2\pi \frac{k n}{N}} 是基于复指数的旋转因子（同 DFT）。$$</p>
+<div class="tabs" id="audiobasic-d-stft-example"><ul class="nav-tabs"><li class="tab active"><a href="#audiobasic-d-stft-example-1">$f(t)=sin(2\pi*20t) \& sin(2\pi*60t)$</a></li></ul><div class="tab-content"><div class="tab-pane active" id="audiobasic-d-stft-example-1"><p>对 2s 内有 4 段时长 0.5s 的信号，首尾分别为静音片段，中间分别是 20Hz 的正弦信号和 60Hz 的正弦信号。以采样率 $f_s$&#x3D;512Hz、总采样点数 $N&#x3D;1024$ 进行采样后，经过 DFT 和 STFT 变换的过程如下：</p>
+<p><img data-src="/images/Media/STFT-sin20Hz-sin60Hz.png"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/imssyang/ffmpeg/blob/main/sample/audio/stft/sin20hz_sin60hz.py">sin20hz_sin60hz.py</a></p></div></div></div>
+
+<p><strong>窗口长度的选择问题</strong>：窗口越长，频率分辨率越高，时间分辨率越低，反之亦然。</p>
+<ul>
+<li>n_fft 表示每次<strong>进行傅里叶变换时的采样点数</strong>，通常取 2 的幂，例如 512,1024,2048,…。</li>
+<li>win_len 表示<strong>窗口实际覆盖的采样点数</strong>，当 win_length &lt; n_fft，会对信号进行零填充（补全到 n_fft 的长度）。</li>
+<li>hop_len 表示<strong>相邻窗口之间的跳步长度</strong>，窗口之间通常会有重叠，hop_length 控制这种重叠的程度。<ul>
+<li>重叠越多（hop_len 越小），时间分辨率越高，但会增加计算量。</li>
+<li>重叠越少（hop_len 越大），计算量减少，但时间分辨率降低。</li>
+</ul>
+</li>
+</ul>
+<p><strong>窗口函数的作用</strong>：每段信号在进行傅里叶变换之前都会乘上一个平滑窗口函数，帮助减少边界效应、降低频谱泄露，进而提高频率分辨率。</p>
+<ul>
+<li>频谱泄露：信号片段通常在边界处会有不连续性（如信号截断），这会引入高频成分，导致频谱泄露。<ul>
+<li>频谱泄露意味着能量会从一个频率扩散到相邻频率，造成频谱模糊，影响频率分辨率。</li>
+</ul>
+</li>
+<li>边界效应：如果不使用窗口函数，信号片段的边界部分（起始点和终止点）会因为不连续导致边界效应。<ul>
+<li>会在频谱中产生伪影，干扰实际的频率成分。</li>
+</ul>
+</li>
+<li>信号失真：不使用窗口函数等于使用矩形窗，这会给频域带来大量的旁瓣（sidelobe，主瓣旁边较小的峰值），增加信号噪声，从而导致信号的频谱失真。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%9F%AD%E6%99%82%E8%B7%9D%E5%82%85%E7%AB%8B%E8%91%89%E8%AE%8A%E6%8F%9B">短时距傅里叶变换 - WIKIPEDIA</a></p>
+<h3 id="梅尔谱图（Mel-Spectrogram）"><a href="#梅尔谱图（Mel-Spectrogram）" class="headerlink" title="梅尔谱图（Mel Spectrogram）"></a>梅尔谱图（Mel Spectrogram）</h3><p><strong>梅尔尺度（Mel Scale）</strong>是一种用于近似人耳对频率感知的非线性频率尺度。人耳对低频段的频率变化（例如 500 Hz ~ 1000 Hz）更加敏感，而对高频段的频率变化（例如 10,000 Hz ~ 10,500 Hz）不那么敏感，<em>梅尔尺度将频率的线性变化转化为与人耳感知更加一致的非线性变化</em>，将赫兹频率（$f$）转换为梅尔频率$\text{Mel}(f)$ 有两种转换公式：</p>
+<p>HTK (Hidden Markov Model Toolkit) 公式：</p>
+<p>$$ \text{Mel}(f) &#x3D; 2595 \cdot \log_{10}\left(1 + \frac{f}{700}\right) $$</p>
+<p>Slaney (Malcolm Slaney’s Auditory Toolbox) 公式：</p>
+<p>$$ \text{Mel}(f) &#x3D; 1125 \cdot \ln\left(1 + \frac{f}{700}\right) $$</p>
+<ul>
+<li>赫兹频率（$f$）在低频时映射得更加密集（频带宽度较窄），而在高频时映射得更加稀疏（频带宽度较宽）。</li>
+<li>在低频段（例如 0 到 1000 Hz），两者的转换结果非常接近。</li>
+<li>在高频段（超过 1000 Hz），HTK 和 Slaney 的结果会有更多的偏差，HTK 的 Mel 值通常会比 Slaney 的稍高一些。</li>
+</ul>
+<p><strong>梅尔滤波器组（Mel Filterbank）</strong>是一个由一系列滤波器组成的滤波器组，每个滤波器对应于梅尔尺度中的一个频带，构建过程如下：</p>
+<ol>
+<li><strong>基于梅尔尺度设计频率带宽</strong>：每个滤波器的中心频率和带宽根据梅尔尺度定义。在梅尔尺度上，低频区域的滤波器具有更高的分辨率，而高频区域的滤波器分辨率较低。</li>
+<li><strong>三角形滤波器</strong>：每个滤波器通常是三角形滤波器，覆盖一段频带。在每个频带内，滤波器的值从 0 增长到 1，然后再减小到 0。这些滤波器的目的是将频谱能量集中在特定频带内。</li>
+<li><strong>滤波频谱</strong>：将通过短时傅里叶变换（STFT）得到的频谱信号通过每个滤波器（捕捉不同音频感知频率上的能量分布，对频谱进行加权处理），计算该频段的频谱能量。通过这种方式，原始频谱会被映射到梅尔频率空间。</li>
+</ol>
+<p><strong>梅尔谱图（Mel Spectrogram）</strong>是一种经过梅尔尺度变换的功率谱图。它基于短时傅里叶变换（STFT）生成频域信息，然后将频率转换为人耳更符合感知的梅尔尺度，可以更好地<strong>模拟人耳的听觉特性</strong>，使频谱更加符合我们对声音的感知。。</p>
+<div class="tabs" id="audiobasic-d-stft-mel"><ul class="nav-tabs"><li class="tab active"><a href="#audiobasic-d-stft-mel-1">$f(t)=sin(2\pi*20t) \& sin(2\pi*60t)$</a></li></ul><div class="tab-content"><div class="tab-pane active" id="audiobasic-d-stft-mel-1"><p>对 2s 内有 4 段时长 0.5s 的信号，首尾分别为静音片段，中间分别是 20Hz 的正弦信号和 60Hz 的正弦信号。以采样率 $f_s$&#x3D;512Hz、总采样点数 $N&#x3D;1024$ 进行采样后，经过 STFT 变换后，通过梅尔滤波器组处理后得到梅尔谱图的过程如下：</p>
+<p><img data-src="/images/Media/STFT-sin20Hz-sin60Hz-mel.png"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/imssyang/ffmpeg/blob/main/sample/audio/stft/sin20hz_sin60hz_mel.py">sin20hz_sin60hz_mel.py</a></p></div></div></div>
+
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="%E5%AE%9E%E7%94%A8%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86-%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%BA%94%E7%94%A8">Digital Signal Processing - A Practical Guide for Engineers and Scientists. by Steven W.Smith</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AudioBasic/" rel="tag"><i class="fa fa-tag"></i> AudioBasic</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DeepLearning/CNN.html" rel="prev" title="卷积神经网络（CNN）">
+                  <i class="fa fa-chevron-left"></i> 卷积神经网络（CNN）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:27</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/Media/AudioBasic.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/disqusjs/dist/disqusjs.css" integrity="sha256-GxdCIOyfxQ1OBfS99qAIJDoGK1ADuBsxhMTqXG82fAY=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqus.com/api/","apikey":"9zaN2jW6zXMHxC3NctLnrVsVuNe4yZ8CyZ1rWAJQKcIc7JMaHNPP9m4vra2AJeIA","shortname":"imssyang","js":{"url":"/lib/disqusjs/dist/disqus.js","integrity":"sha256-LVaMHPQ2zLqOc5rXSAfr4d1PIkEGNLyyUTDNPZmTtUw="}}</script>
+<script src="/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

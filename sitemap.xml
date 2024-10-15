@@ -4,7 +4,7 @@
   <url>
     <loc>https://blog.imssyang.com/tos.html</loc>
     
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -13,7 +13,7 @@
   <url>
     <loc>https://blog.imssyang.com/tags/index.html</loc>
     
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -22,7 +22,7 @@
   <url>
     <loc>https://blog.imssyang.com/about/index.html</loc>
     
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -31,7 +31,7 @@
   <url>
     <loc>https://blog.imssyang.com/categories/index.html</loc>
     
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -40,7 +40,7 @@
   <url>
     <loc>https://blog.imssyang.com/Automate/make/Makefile.html</loc>
     
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -49,7 +49,43 @@
   <url>
     <loc>https://blog.imssyang.com/ProgrammingLanguage/Bash/Basic.html</loc>
     
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/Media/AudioBasic.html</loc>
+    
+    <lastmod>2024-09-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/DeepLearning/CNN.html</loc>
+    
+    <lastmod>2024-07-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/DeepLearning/Basic.html</loc>
+    
+    <lastmod>2024-05-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/ProgrammingLanguage/Swift/Basic.html</loc>
+    
+    <lastmod>2024-05-13</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -182,15 +218,6 @@
   </url>
   
   <url>
-    <loc>https://blog.imssyang.com/NeuralNetwork/Basic.html</loc>
-    
-    <lastmod>2022-03-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.imssyang.com/CUDA/Basic.html</loc>
     
     <lastmod>2022-02-19</lastmod>
@@ -310,7 +337,7 @@
 
   <url>
     <loc>https://blog.imssyang.com/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -318,210 +345,238 @@
   
   <url>
     <loc>https://blog.imssyang.com/tags/Sort/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/Github/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/Makefile/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/Bash/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/C/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/cuda/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/BinarySearchTree/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/SinglyLinkedList/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.imssyang.com/tags/Go/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <loc>https://blog.imssyang.com/tags/DeepLearning/</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.imssyang.com/tags/Hexo/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/JavaScript/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/ColorTheory/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/FFmpeg/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/H264/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/mediainfo/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/OpenGL/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/RTMP/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/VideoBasic/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/ComputationalModel/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/LocalityPrinciple/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/LockFreeQueue/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/tags/NAT/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <loc>https://blog.imssyang.com/tags/ArtificialIntelligence/</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/NeuralNetwork/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.imssyang.com/tags/cuDNN/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <loc>https://blog.imssyang.com/tags/ConvolutionalNeuralNetwork/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/Go/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/Hexo/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/JavaScript/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/AudioBasic/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/ColorTheory/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/FFmpeg/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/H264/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/mediainfo/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/OpenGL/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/RTMP/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/VideoBasic/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/ComputationalModel/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/LocalityPrinciple/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/LockFreeQueue/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/NAT/</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/npm/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/Python/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/concurrency/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/PythonStandardLibrary/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/unittest/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/tags/Swift/</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/tags/TypeScript/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -530,161 +585,168 @@
   
   <url>
     <loc>https://blog.imssyang.com/categories/Algorithm/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/DataStructure/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/Python/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/Automate/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/Bash/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/CPP/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/CUDA/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/DataStructure/BinarySearchTree/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/Go/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <loc>https://blog.imssyang.com/categories/DeepLearning/</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/DataStructure/LinkedList/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/Go/</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/Hexo/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/JavaScript/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/Media/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/Multiprocessor/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/categories/Network/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/Automate/CI-CD/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/categories/NeuralNetwork/</loc>
-    <lastmod>2024-04-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.imssyang.com/categories/Node/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/Automate/make/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/TypeScript/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <loc>https://blog.imssyang.com/categories/Network/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/categories/Node/</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/Media/H264/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.imssyang.com/categories/Automate/CI-CD/github/</loc>
-    <lastmod>2024-04-21</lastmod>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/Swift/</loc>
+    <lastmod>2024-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.imssyang.com/categories/ProgrammingLanguage/TypeScript/</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

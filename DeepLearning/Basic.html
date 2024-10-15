@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="几年前，有位同事说吴恩达的AI (artificial intelligence)教程是最好了，当时感觉这个概念离自己还很远，不以为意。没成想这麽快，openai的出现改变了许多事情，商业上的图像识别和语音识别，在AI加持下也越来越强，特斯拉的智能驾驶也改用了AI模型代替传统算法，是时候系统的学习下了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习基础">
+<meta property="og:url" content="https://blog.imssyang.com/DeepLearning/Basic.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="几年前，有位同事说吴恩达的AI (artificial intelligence)教程是最好了，当时感觉这个概念离自己还很远，不以为意。没成想这麽快，openai的出现改变了许多事情，商业上的图像识别和语音识别，在AI加持下也越来越强，特斯拉的智能驾驶也改用了AI模型代替传统算法，是时候系统的学习下了。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/logistic_regression.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/sigmoid_function.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/cross_entropy_function.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/shallow_neural_network.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/activate_sigmoid.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/activate_tanh.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/activate_relu.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/activate_leakyrelu.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/activate_elu.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/activate_softmax.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/shallow_neural_network_sample.jpg">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/deep_neural_network.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/dataset_fitting.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/minibatch_gradient_descent.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/softmax_function.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/onehot_encode.png">
+<meta property="article:published_time" content="2024-05-20T04:43:30.000Z">
+<meta property="article:modified_time" content="2024-05-20T16:00:00.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="DeepLearning">
+<meta property="article:tag" content="ArtificialIntelligence">
+<meta property="article:tag" content="NeuralNetwork">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.imssyang.com/images/DeepLearning/logistic_regression.png">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/DeepLearning/Basic.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/DeepLearning/Basic.html","path":"DeepLearning/Basic.html","title":"深度学习基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深度学习基础 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">神经网络基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E8%8C%83%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">学习范式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%EF%BC%88Binary-Classification%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">二分类问题（Binary Classification）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%EF%BC%88Logistic-Regression%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">逻辑回归（Logistic Regression）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%EF%BC%88Gradient-Descent%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">梯度下降（Gradient Descent）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.3.3.</span> <span class="nav-text">训练示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E6%92%AD%EF%BC%88Propagation%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">传播（Propagation）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Numpy"><span class="nav-number">1.5.</span> <span class="nav-text">Numpy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8C%96%EF%BC%88Vectorization%EF%BC%89"><span class="nav-number">1.5.1.</span> <span class="nav-text">向量化（Vectorization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E6%92%AD%EF%BC%88broadcasting%EF%BC%89"><span class="nav-number">1.5.2.</span> <span class="nav-text">广播（broadcasting）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%85%E5%B1%82%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88Shallow-NN%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">浅层神经网络（Shallow NN）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%EF%BC%88Activate-Function%EF%BC%89"><span class="nav-number">2.2.1.</span> <span class="nav-text">激活函数（Activate Function）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%82%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">初始化参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0%E9%97%AE%E9%A2%98%EF%BC%88symmetry-breaking-problem%EF%BC%89"><span class="nav-number">2.3.1.</span> <span class="nav-text">对称问题（symmetry breaking problem）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B"><span class="nav-number">2.4.</span> <span class="nav-text">计算过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow"><span class="nav-number">2.5.</span> <span class="nav-text">TensorFlow</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%B1%82%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88Deep-NN%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">深层神经网络（Deep NN）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B6%85%E5%8F%82%E6%95%B0%EF%BC%88hyperparameters%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">超参数（hyperparameters）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%EF%BC%88data-set%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">数据集（data set）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%8F%E5%B7%AE%EF%BC%88Bias%EF%BC%89%E5%92%8C%E6%96%B9%E5%B7%AE%EF%BC%88Variance%EF%BC%89"><span class="nav-number">3.2.1.</span> <span class="nav-text">偏差（Bias）和方差（Variance）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96%EF%BC%88Regularization%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">正则化（Regularization）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%EF%BC%88vanishing-gradient%EF%BC%89"><span class="nav-number">3.4.</span> <span class="nav-text">梯度消失（vanishing gradient）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%EF%BC%88exploding-gradient%EF%BC%89"><span class="nav-number">3.5.</span> <span class="nav-text">梯度爆炸（exploding gradient）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%A3%80%E9%AA%8C%EF%BC%88Gradient-Checking%EF%BC%89"><span class="nav-number">3.6.</span> <span class="nav-text">梯度检验（Gradient Checking）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">3.7.</span> <span class="nav-text">优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mini-Batch"><span class="nav-number">3.7.1.</span> <span class="nav-text">Mini-Batch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Momentum"><span class="nav-number">3.7.2.</span> <span class="nav-text">Momentum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RMSprop"><span class="nav-number">3.7.3.</span> <span class="nav-text">RMSprop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adam"><span class="nav-number">3.7.4.</span> <span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%A1%B0%E5%87%8F"><span class="nav-number">3.8.</span> <span class="nav-text">学习率衰减</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9E%8D%E7%82%B9%EF%BC%88saddle%EF%BC%89"><span class="nav-number">3.9.</span> <span class="nav-text">鞍点（saddle）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Softmax%E5%9B%9E%E5%BD%92"><span class="nav-number">3.10.</span> <span class="nav-text">Softmax回归</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/DeepLearning/Basic.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习基础
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/DeepLearning/" itemprop="url" rel="index"><span itemprop="name">DeepLearning</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 5/20/2024 12:43:30" itemprop="dateCreated datePublished" datetime="2024-05-20T12:43:30+08:00">5/20/2024</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 5/21/2024 00:00:00" itemprop="dateModified" datetime="2024-05-21T00:00:00+08:00">5/21/2024</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>37k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>34 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>几年前，有位同事说吴恩达的AI (artificial intelligence)教程是最好了，当时感觉这个概念离自己还很远，不以为意。没成想这麽快，openai的出现改变了许多事情，商业上的图像识别和语音识别，在AI加持下也越来越强，特斯拉的智能驾驶也改用了AI模型代替传统算法，是时候系统的学习下了。</p>
+<span id="more"></span>
+
+<h1 id="神经网络基础"><a href="#神经网络基础" class="headerlink" title="神经网络基础"></a>神经网络基础</h1><p>深度学习（Deep Learning）是机器学习（Machine Learning）的一个子领域，基于人工神经网络，尤其是深度神经网络，“deep”指数据被转换的层数（layers）或者说转换链（credit assignment path, CAP &gt; 2）比较大，每一层将其输入数据转换为更抽象和复合的数据表示。</p>
+<ul>
+<li>“深度学习”术语在1986年被<code>Rina Dechter</code>引入机器学习（machine learning）领域；</li>
+<li>1989年<code>Yann LeCun</code>将反向传播算法应用到深度神经网络，以识别邮件上手写的邮政编码；</li>
+<li>1992年神经网络用于三维物体识别，随后又应用在股票预测和自动驾驶领域；</li>
+<li>1998年<code>Larry Heck</code>将深度神经网络应用在语音处理中，工业上大规模语音识别应用出现在2000年；</li>
+<li>2009年硬件进步重新激发了人们对深度学习的兴趣，深度神经网络可以使用Nvidia GPUs进行训练；</li>
+<li>2012年后，随着GPU和分布式计算能力的增强，使得可以训练更大的神经网络，特别是图像和视觉识别问题上；</li>
+</ul>
+<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p>人工神经网络（ANNs - artificial neural networks）是一种受大脑中的生物神经网络结构启发的计算系统，基于人工神经元节点的集合，模拟生物大脑中的神经元，试图执行传统算法几乎没有成功过的任务。</p>
+<ul>
+<li>信号（signal)：实数表示，每个神经元的输出是它的输入之和的某个非线性函数，强弱通过权重（weight）表示。</li>
+<li>神经元（neurons）：接收多个信号，计算加权和（称为激活），达到阈值（threshold）后，向与之连接的神经元发送信号（多输入单输出）。</li>
+<li>边（edge）：由神经元相互的连接组成。</li>
+<li>层（layer）：由神经元聚集形成，每一层都对输入进行特定的转换。<ul>
+<li>输入层（input layer）：接受外部数据的层；</li>
+<li>输出层（output layer）：产生目标结果的层；</li>
+<li>隐藏层（hidden layer）：输入层与输出层之间的层（&gt;&#x3D;0）;</li>
+<li>完全连接（fully connected）：每一层的每个神经元都连接到下一层的每个神经元；</li>
+<li>池化连接（pooling connected）：每一层的一组神经元连接到下一层的一个神经元（神经元数量逐渐减少）；</li>
+<li>前馈网络（feedforward network）：仅有池化连接组成的神经网络（有向无环图，directed acyclic graph）；</li>
+<li>循环网络（recurrent network）：允许同一层或前一层神经元之间连接的网络；</li>
+</ul>
+</li>
+</ul>
+<h2 id="学习范式"><a href="#学习范式" class="headerlink" title="学习范式"></a>学习范式</h2><ul>
+<li>监督学习（supervised learning）：使用一组成对的输入和期望的输出，通过均方差（mean-squared error）作为代价函数评估误差；<ul>
+<li>适合模式识别（pattern recognition, or classification）和回归（regression, or function approximation）；</li>
+<li>适合顺序数据，例如手写、语音识别和手势识别；</li>
+</ul>
+</li>
+<li>无监督学习（unsupervised learning）</li>
+<li>强化学习（reinforcement learning）</li>
+<li>自学习（self-learning）</li>
+<li>神经演化（neuroevolution）</li>
+</ul>
+<h2 id="二分类问题（Binary-Classification）"><a href="#二分类问题（Binary-Classification）" class="headerlink" title="二分类问题（Binary Classification）"></a>二分类问题（Binary Classification）</h2><p>一张<code>64x64</code>像素的图片作为输入，识别到猫输出<code>1</code>，未识别到输出<code>0</code>。</p>
+<h3 id="逻辑回归（Logistic-Regression）"><a href="#逻辑回归（Logistic-Regression）" class="headerlink" title="逻辑回归（Logistic Regression）"></a>逻辑回归（Logistic Regression）</h3><ul>
+<li>逻辑回归（logistic regression）是一种简单而有效的二分类算法，通过将线性回归的结果通过 <code>sigmoid</code> 函数映射到 <code>[0, 1]</code> 区间，从而得到分类的概率。<ul>
+<li><strong>激活函数或假设函数（Hypothesis Function）</strong>是指模型用来预测输出的函数。对于逻辑回归，假设函数 $h(x)$ 就是上面的 sigmoid 函数。</li>
+<li><strong>损失函数（Loss Function）</strong>是用于衡量模型预测与实际观测之间误差的函数。它是优化模型的目标函数，通过最小化损失函数来调整模型参数，使模型预测尽可能接近真实值。</li>
+<li><strong>凸函数（Convex function）</strong>的图像是一个形状向上的碗。凸函数有一个很重要的性质：任何局部最小值也是全局最小值。</li>
+</ul>
+</li>
+</ul>
+<p>逻辑回归的网络结构：<br><img data-src="/images/DeepLearning/logistic_regression.png"></p>
+<p>计算机以红、绿、蓝三种颜色通道存储像素，将像素值定义为一个输入特征向量$X$:<br>$$ X&#x3D;n_x&#x3D;[x_1, x_2, …, x_n]，其中 n&#x3D;64 \times 64 \times 3&#x3D;12288 $$</p>
+<p>定义两个模型参数，特征权重$W$和偏差$b$（实数值）：<br>$$ W&#x3D;n_w&#x3D;[w_1, w_2, …, w_n]，其中 n 同 X 向量一致 $$</p>
+<p>那么，线性组合$z$可以表示为：<br>$$ z&#x3D;w⋅x+b $$</p>
+<p>然后，将线性回归的结果应用 sigmoid 函数得到输出概率 𝑝：<br>$$ p &#x3D; \sigma(z) &#x3D; \frac{1}{1 + e^{-z}} $$</p>
+<p><img data-src="/images/DeepLearning/sigmoid_function.png"></p>
+<p>输出结果用$y$表示，概率值$𝑝$表示处理输入特征$X$后$y&#x3D;1$的概率，通常会选择一个阈值（例如 0.5）：<br>$$ 𝑝 &gt; 0.5 时，y&#x3D;1，识别到猫 $$<br>$$ 𝑝 &lt;&#x3D; 0.5 时，y&#x3D;0，未识别到猫 $$</p>
+<p>在监督学习中，损失函数 $L(y, \hat{y})$ 用于衡量预测值 $\hat{y}$ 和真实值 $𝑦$ 之间的差异。对于分类问题，常用交叉熵损失（Cross-Entropy Loss）作为损失函数：<br>$$ L(y, \hat{y}) &#x3D; -[ y \log(\hat{y}) + (1 - y) \log(1 - \hat{y})] $$</p>
+<p>对于整个训练集，损失函数的总和（或平均）$J(w, b)$是：<br>$$ J(w, b) &#x3D; -\frac{1}{m} \sum_{i&#x3D;1}^{m} \left[ y_i \log(\hat{y_i}) + (1 - y_i) \log(1 - \hat{y_i}) \right] $$<br>$$ m 是样本（示例指图片）的数量 $$<br>$$ 𝑦_𝑖 是第 𝑖 个样本的真实标签（0 或 1） $$<br>$$ \hat{y_i} 是第 𝑖 个样本预测为类别 1 的概率 $$</p>
+<p><strong>对于二分类问题，交叉熵损失函数关于预测概率 $\hat{y}$ 是凸函数</strong>：<br>$$ 当 y&#x3D;1 时， L(\hat{y}) &#x3D; -\log(\hat{y})，为了损失函数的值尽可能小，要求\hat{y}的值要尽可能大（无限接近1） $$<br>$$ 当 y&#x3D;0 时， L(\hat{y}) &#x3D; -\log(1 - \hat{y})，为了损失函数的值尽可能小，要求\hat{y}的值要尽可能小（无限接近0） $$</p>
+<p><img data-src="/images/DeepLearning/cross_entropy_function.png"></p>
+<p><strong>训练逻辑回归模型的目标是找到最优的参数 $𝑤$ 和 $𝑏$，使得模型对训练数据的预测尽可能准确。</strong></p>
+<h3 id="梯度下降（Gradient-Descent）"><a href="#梯度下降（Gradient-Descent）" class="headerlink" title="梯度下降（Gradient Descent）"></a>梯度下降（Gradient Descent）</h3><p>梯度下降法（Gradient Descent）是深度学习中用于优化模型参数的一种重要算法。对于凸函数，梯度下降法的表现非常好，因为：</p>
+<ul>
+<li>唯一的全局最小值：由于凸函数的性质，任何局部最小值都是全局最小值。这意味着梯度下降法不会陷入局部最小值。</li>
+<li>收敛性：梯度下降法在凸函数上通常有良好的收敛性和稳定性，只要学习率适当，算法就能逐步接近全局最小值。</li>
+</ul>
+<p>梯度下降算法：通过迭代更新模型参数 $𝑤$ 和 $𝑏$，最小化损失函数 $𝐽(𝑤,𝑏)$，从而使模型对训练数据的预测更加准确。</p>
+<ol>
+<li>初始化参数：随机初始化 $𝑤$ 和 $𝑏$。</li>
+<li>计算预测值：使用当前的参数计算每个样本的预测概率 $\hat{y}^𝑖$。</li>
+<li>计算损失：计算交叉熵损失函数的值。</li>
+<li>计算梯度：</li>
+</ol>
+<ul>
+<li>计算损失函数相对于 $𝑤$ 的梯度（偏导数）:<br>  $$ \frac{\partial J}{\partial \mathbf{w}} &#x3D; \frac{1}{m} \sum_{i&#x3D;1}^{m} \left( \hat{y}^{(i)} - y^{(i)} \right) \mathbf{x}^{(i)} $$</li>
+<li>计算损失函数相对于 $b$ 的梯度（偏导数）:<br>  $$ \frac{\partial J}{\partial b} &#x3D; \frac{1}{m} \sum_{i&#x3D;1}^{m} \left( \hat{y}^{(i)} - y^{(i)} \right) $$</li>
+</ul>
+<ol start="5">
+<li>更新参数: $𝛼$ 是学习率（learning rate），控制参数更新的步长（step）：</li>
+</ol>
+<ul>
+<li>更新权重向量 $𝑤$：<br>  $$ \mathbf{w} :&#x3D; \mathbf{w} - \alpha \frac{\partial J}{\partial \mathbf{w}} $$</li>
+<li>更新偏差 $b$：<br>  $$ b :&#x3D; b - \alpha \frac{\partial J}{\partial b} $$</li>
+</ul>
+<ol start="6">
+<li>重复步骤：重复步骤 2 到 5，直到损失函数收敛或达到最大迭代次数。</li>
+</ol>
+<p>理解梯度下降</p>
+<ul>
+<li>梯度的方向：梯度 $∇J(w,b)$ 指向损失函数上升最快的方向。为了最小化损失函数，我们沿着梯度的反方向更新参数。</li>
+<li>学习率：学习率 $𝛼$ 决定了每次更新的步长。选择合适的学习率非常重要：<ul>
+<li>如果 $𝛼$ 太大，可能会导致参数在最优值附近振荡或发散。</li>
+<li>如果 $𝛼$ 太小，收敛速度会很慢。</li>
+</ul>
+</li>
+<li>收敛条件：通常设定收敛条件，如损失函数的变化小于某个阈值，或达到最大迭代次数。</li>
+</ul>
+<h3 id="训练示例"><a href="#训练示例" class="headerlink" title="训练示例"></a>训练示例</h3><div class="tabs" id="deeplearning-gradient-descent"><ul class="nav-tabs"><li class="tab active"><a href="#deeplearning-gradient-descent-1">(w-5)^2</a></li><li class="tab"><a href="#deeplearning-gradient-descent-2">二分类</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deeplearning-gradient-descent-1"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 假设有一个损失函数 J(w) = w^2 - 10w + 25 = (w-5)^2 需要最小化，目标值 w=5。</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&quot;TF_USE_LEGACY_KERAS&quot;</span>] = <span class="string">&quot;True&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保我们使用的是 TensorFlow 2.x</span></span><br><span class="line"><span class="keyword">assert</span> tf.__version__.startswith(<span class="string">&#x27;2.&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义参数 w</span></span><br><span class="line">w = tf.Variable(<span class="number">0.0</span>, dtype=tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cost_fn</span>():</span><br><span class="line">    coefficients = np.array([<span class="number">1.</span>, -<span class="number">10.</span>, <span class="number">25.</span>])</span><br><span class="line">    <span class="keyword">return</span> coefficients[<span class="number">0</span>] * w**<span class="number">2</span> + coefficients[<span class="number">1</span>] * w + coefficients[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用梯度下降优化器，学习率为 0.01</span></span><br><span class="line">optimizer = tf.keras.optimizers.legacy.SGD(learning_rate=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练步骤</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">    optimizer.minimize(cost_fn, var_list=[w])</span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">100</span> == <span class="number">0</span>:  <span class="comment"># 每 100 次打印一次 w 的值</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Step <span class="subst">&#123;i&#125;</span>: w = <span class="subst">&#123;w.numpy()&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;Final w = <span class="subst">&#123;w.numpy()&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 0: w = 0.09999999403953552</span></span><br><span class="line"><span class="comment"># Step 100: w = 4.350164413452148</span></span><br><span class="line"><span class="comment"># Step 200: w = 4.913819789886475</span></span><br><span class="line"><span class="comment"># Step 300: w = 4.988570690155029</span></span><br><span class="line"><span class="comment"># Step 400: w = 4.998484134674072</span></span><br><span class="line"><span class="comment"># Step 500: w = 4.9997992515563965</span></span><br><span class="line"><span class="comment"># Step 600: w = 4.999971866607666</span></span><br><span class="line"><span class="comment"># Step 700: w = 4.999988555908203</span></span><br><span class="line"><span class="comment"># Step 800: w = 4.999988555908203</span></span><br><span class="line"><span class="comment"># Step 900: w = 4.999988555908203</span></span><br><span class="line"><span class="comment"># Final w = 4.999988555908203</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="deeplearning-gradient-descent-2"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个简单的二分类数据集</span></span><br><span class="line">np.random.seed(<span class="number">0</span>)  <span class="comment"># 为了结果可重复</span></span><br><span class="line">num_samples = <span class="number">100</span></span><br><span class="line">num_features = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成随机数据点</span></span><br><span class="line">X = np.random.randn(num_samples, num_features)</span><br><span class="line"><span class="comment"># 生成随机标签 (0 或 1)</span></span><br><span class="line">y = (np.random.rand(num_samples) &gt; <span class="number">0.5</span>).astype(<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加偏差特征（列）到输入数据矩阵X</span></span><br><span class="line">X = np.hstack((X, np.ones((num_samples, <span class="number">1</span>))))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化参数</span></span><br><span class="line">w = np.random.randn(num_features + <span class="number">1</span>)</span><br><span class="line">b = <span class="number">0.0</span></span><br><span class="line">alpha = <span class="number">0.01</span></span><br><span class="line">num_iterations = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> iteration <span class="keyword">in</span> <span class="built_in">range</span>(num_iterations):</span><br><span class="line">    <span class="comment"># 计算预测值</span></span><br><span class="line">    z = np.dot(X, w) + b</span><br><span class="line">    y_hat = <span class="number">1</span> / (<span class="number">1</span> + np.exp(-z))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算损失</span></span><br><span class="line">    loss = -np.mean(y * np.log(y_hat) + (<span class="number">1</span> - y) * np.log(<span class="number">1</span> - y_hat))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算梯度</span></span><br><span class="line">    dw = np.dot(X.T, (y_hat - y)) / num_samples</span><br><span class="line">    db = np.mean(y_hat - y)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新参数</span></span><br><span class="line">    w -= alpha * dw</span><br><span class="line">    b -= alpha * db</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 打印损失值（可选）</span></span><br><span class="line">    <span class="keyword">if</span> iteration % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Iteration <span class="subst">&#123;iteration&#125;</span>, Loss: <span class="subst">&#123;loss&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Training complete.&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Final weights: <span class="subst">&#123;w&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Final bias: <span class="subst">&#123;b&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># Iteration 0, Loss: 1.045403457065729</span></span><br><span class="line"><span class="comment"># Iteration 100, Loss: 0.8725920935904518</span></span><br><span class="line"><span class="comment"># Iteration 200, Loss: 0.7728200927540975</span></span><br><span class="line"><span class="comment"># Iteration 300, Loss: 0.7221046768380543</span></span><br><span class="line"><span class="comment"># Iteration 400, Loss: 0.6982084324634529</span></span><br><span class="line"><span class="comment"># Iteration 500, Loss: 0.6872343716236392</span></span><br><span class="line"><span class="comment"># Iteration 600, Loss: 0.6821316667101349</span></span><br><span class="line"><span class="comment"># Iteration 700, Loss: 0.6796706673755826</span></span><br><span class="line"><span class="comment"># Iteration 800, Loss: 0.6784256089360546</span></span><br><span class="line"><span class="comment"># Iteration 900, Loss: 0.6777644058163474</span></span><br><span class="line"><span class="comment"># Training complete.</span></span><br><span class="line"><span class="comment"># Final weights: [ 0.06850934 -0.26623629 -1.10926574]</span></span><br><span class="line"><span class="comment"># Final bias: 0.9214187234747546</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="传播（Propagation）"><a href="#传播（Propagation）" class="headerlink" title="传播（Propagation）"></a>传播（Propagation）</h2><ul>
+<li>链式法则（Chain Rule）是微积分中的一个基本定理，用于计算复合函数导数的基本定理：<br>$$ 对于复合函数 f(g(x)), 它相对于 x 的导数可以表示为 \frac{df}{dx} &#x3D; \frac{df}{dg} ⋅ \frac{dg}{dx} $$</li>
+<li>计算图（Computation Graph）：是一种在深度学习中用于描述数学运算和变量依赖关系的有向图。</li>
+<li>自动微分（Automatic Differentiation）是一种通过构建计算图并应用链式法则，高效计算函数梯度的方法：<ul>
+<li>正向模式（forward mode）：从输入开始，逐步计算每个中间变量的导数。</li>
+<li>反向模式（reverse mode）：从输出开始，逐步计算每个变量对最终输出的导数。</li>
+</ul>
+</li>
+<li>神经网络：<ul>
+<li>前向传播(foward propagation)：用于表示前向传播的计算过程，从输入到输出逐层计算。</li>
+<li>反向传播(backward propagation)：可以从输出开始，反向计算每个节点的梯度，这是梯度下降算法的基础，利用链式法则来计算每个参数对损失函数的梯度。</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="deeplearning-propagation"><ul class="nav-tabs"><li class="tab active"><a href="#deeplearning-propagation-1">$ 𝑧 = (x_1 + 2x_2) ⋅ x_3 $</a></li><li class="tab"><a href="#deeplearning-propagation-2">二分类</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deeplearning-propagation-1"><p>考虑一个简单的前向传播过程，函数表达式为：<br>$$ 𝑧 &#x3D; x_1 + 2x_2 $$<br>$$ 𝑎 &#x3D; 𝑧 ⋅ x_3 $$</p>
+<p>计算图可以表示如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">x1 -------</span><br><span class="line">          Add --&gt; z --</span><br><span class="line">x2 -*-2---+           |</span><br><span class="line">                    Mul ---&gt; a</span><br><span class="line">x3 -------------------</span><br></pre></td></tr></table></figure>
+
+<p>计算各变量的偏导数：<br>$ \frac{∂𝑎}{∂𝑧} &#x3D; x_3 $<br>$ \frac{∂𝑎}{∂x_3} &#x3D; 𝑧 $<br>$ \frac{∂𝑧}{∂x_1} &#x3D; 1 $<br>$ \frac{∂𝑧}{∂x_2} &#x3D; 2 $</p>
+<p>通过链式法则计算反向传播梯度：<br>$ \frac{∂𝑎}{∂x_1} &#x3D; \frac{∂𝑎}{∂𝑧} ⋅ \frac{∂𝑧}{∂x_1} &#x3D; x_3 ⋅ 1 &#x3D; x_3 $<br>$ \frac{∂𝑎}{∂x_2} &#x3D; \frac{∂𝑎}{∂𝑧} ⋅ \frac{∂𝑧}{∂x_2} &#x3D; x_3 ⋅ 2 &#x3D; 2x_3 $<br>$ \frac{∂𝑎}{∂x_3} &#x3D; 𝑧 &#x3D; x_1 + 2x_2 $</p>
+<p>PyTorch 使用自动微分进行反向传播的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义输入张量</span></span><br><span class="line">x1 = torch.tensor([<span class="number">1.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x2 = torch.tensor([<span class="number">2.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">x3 = torch.tensor([<span class="number">3.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算输出</span></span><br><span class="line">z = (x1 + <span class="number">2</span> * x2) * x3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 反向传播</span></span><br><span class="line">z.backward()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出梯度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Gradient of x1:&quot;</span>, x1.grad.item())  <span class="comment"># 3.0</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Gradient of x2:&quot;</span>, x2.grad.item())  <span class="comment"># 6.0</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Gradient of x3:&quot;</span>, x3.grad.item())  <span class="comment"># 5.0</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="deeplearning-propagation-2"><p>考虑一个简单的神经网络，输入 $𝑥$，权重 $𝑤$，偏差 $𝑏$，输出 $𝑦$，损失函数 $𝐿$。前向传播过程如下：<br>$$ 线性组合函数：z &#x3D; w ⋅ x + b $$<br>$$ 激活函数：𝑎 &#x3D; 𝜎(𝑧) $$<br>$$ 损失函数：𝐿 &#x3D; (𝑎 − 𝑦)^2 $$</p>
+<p>计算各变量的导数：<br>$$ 损失函数相对于激活值的导数：\frac{∂L}{∂𝑎} &#x3D; 2(a−y) $$<br>$$ 激活值相对于线性组合的导数：\frac{∂𝑎}{∂z} &#x3D; σ^′(z) &#x3D; σ(z)(1−σ(z)) $$<br>$$ 线性组合相对于权重和输入的导数：$$<br>$$ \frac{∂z}{∂w} &#x3D; x $$<br>$$ \frac{∂z}{∂x} &#x3D; w $$<br>$$ \frac{∂z}{∂b} &#x3D; 1 $$<br>$$ 链式法则计算损失函数相对于权重、输入和偏差的导数：$$<br>$$ \frac{∂L}{∂z} &#x3D; \frac{∂L}{∂𝑎} ⋅ \frac{∂𝑎}{∂z} $$<br>$$ \frac{∂L}{∂w} &#x3D; \frac{∂L}{∂z} ⋅ \frac{∂z}{∂w} &#x3D; 2(a−y)⋅σ(z)(1−σ(z))⋅x $$<br>$$ \frac{∂L}{∂b} &#x3D; \frac{∂L}{∂z} ⋅ \frac{∂z}{∂b} &#x3D; 2(a−y)⋅σ(z)(1−σ(z)) $$<br>$$ \frac{∂L}{∂x} &#x3D; \frac{∂L}{∂z} ⋅ \frac{∂z}{∂x} &#x3D; 2(a−y)⋅σ(z)(1−σ(z))⋅w $$</p>
+<p>PyTorch 使用自动微分进行反向传播的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义输入、权重、偏差和目标</span></span><br><span class="line">x = torch.tensor([<span class="number">1.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">w = torch.tensor([<span class="number">0.5</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b = torch.tensor([<span class="number">0.0</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.tensor([<span class="number">1.0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 前向传播</span></span><br><span class="line">z = w * x + b</span><br><span class="line">a = torch.sigmoid(z)</span><br><span class="line">loss = F.mse_loss(a, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 反向传播</span></span><br><span class="line">loss.backward()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出梯度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Gradient of x: <span class="subst">&#123;x.grad.item()&#125;</span>&quot;</span>) // x: -<span class="number">0.08872345089912415</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Gradient of w: <span class="subst">&#123;w.grad.item()&#125;</span>&quot;</span>) // w: -<span class="number">0.1774469017982483</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Gradient of b: <span class="subst">&#123;b.grad.item()&#125;</span>&quot;</span>) // b: -<span class="number">0.1774469017982483</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="Numpy"><a href="#Numpy" class="headerlink" title="Numpy"></a>Numpy</h2><h3 id="向量化（Vectorization）"><a href="#向量化（Vectorization）" class="headerlink" title="向量化（Vectorization）"></a>向量化（Vectorization）</h3><ul>
+<li>Numpy 使用了高度优化的底层库（如 BLAS 或 cuBLAS），其内部实现通常比手动编写的<code>for</code>循环要快得多。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">size = <span class="number">1000000</span></span><br><span class="line">a = np.random.rand(size)</span><br><span class="line">b = np.random.rand(size)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算点积</span></span><br><span class="line">start_time = time.time()</span><br><span class="line">c1 = np.dot(a, b)</span><br><span class="line">np_dot_time = time.time() - start_time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算点积</span></span><br><span class="line">start_time = time.time()</span><br><span class="line">c2 = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(size):</span><br><span class="line">    c2 += a[i] * b[i]</span><br><span class="line">manual_time = time.time() - start_time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出执行时间</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;c1&#125;</span> np.dot execution time: <span class="subst">&#123;np_dot_time:<span class="number">.6</span>f&#125;</span> seconds&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;c2&#125;</span> For loop execution time: <span class="subst">&#123;manual_time:<span class="number">.6</span>f&#125;</span> seconds&quot;</span>)</span><br><span class="line"><span class="comment"># 250253.55343551846 np.dot execution time: 0.000957 seconds</span></span><br><span class="line"><span class="comment"># 250253.5534355264 For loop execution time: 0.288324 seconds</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="广播（broadcasting）"><a href="#广播（broadcasting）" class="headerlink" title="广播（broadcasting）"></a>广播（broadcasting）</h3><p>NumPy 的广播机制（broadcasting）是一个强大的功能，它允许不同形状的数组在一起进行算术操作，而不需要显式地复制数据。</p>
+<p>广播规则的核心思想是扩展较小的数组，使其形状与较大的数组兼容。具体规则如下：</p>
+<ul>
+<li>如果两个数组的维度数不相同，则形状较小的数组会在左侧填充 1，以匹配较大数组的形状。</li>
+<li>如果两个数组在某个维度上的大小不同，则该维度的大小为 1 的数组会被扩展以匹配另一个数组的大小。</li>
+<li>如果两个数组在任何维度上的大小都不相同且都不为 1，则会引发错误。</li>
+</ul>
+<div class="tabs" id="deeplearning-numpy-broadcasting"><ul class="nav-tabs"><li class="tab active"><a href="#deeplearning-numpy-broadcasting-1">标量和数组</a></li><li class="tab"><a href="#deeplearning-numpy-broadcasting-2">一维数组和二维数组</a></li><li class="tab"><a href="#deeplearning-numpy-broadcasting-3">不同形状的多维数组</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deeplearning-numpy-broadcasting-1"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">b = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 标量 b 被扩展为与数组 a 相同的形状</span></span><br><span class="line">result = a + b</span><br><span class="line"><span class="built_in">print</span>(result)  <span class="comment"># 输出 [3 4 5]</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="deeplearning-numpy-broadcasting-2"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">b = np.array([[<span class="number">4</span>], [<span class="number">5</span>], [<span class="number">6</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数组 a 被扩展为 [[1, 2, 3], [1, 2, 3], [1, 2, 3]]</span></span><br><span class="line">result = a + b</span><br><span class="line"><span class="built_in">print</span>(result)</span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="comment"># [[ 5  6  7]</span></span><br><span class="line"><span class="comment">#  [ 6  7  8]</span></span><br><span class="line"><span class="comment">#  [ 7  8  9]]</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="deeplearning-numpy-broadcasting-3"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line">b = np.array([[<span class="number">10</span>], [<span class="number">20</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数组 b 被扩展为 [[10, 10, 10], [20, 20, 20]]</span></span><br><span class="line">result = a + b</span><br><span class="line"><span class="built_in">print</span>(result)</span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="comment"># [[11 12 13]</span></span><br><span class="line"><span class="comment">#  [24 25 26]]</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="浅层神经网络（Shallow-NN）"><a href="#浅层神经网络（Shallow-NN）" class="headerlink" title="浅层神经网络（Shallow NN）"></a>浅层神经网络（Shallow NN）</h1><p>浅层神经网络（Shallow Neural Network）是指只有一个隐藏层的神经网络。</p>
+<ul>
+<li>结构简单，适用于较简单的数据集，应用在二分类、多分类或回归任务。</li>
+</ul>
+<h2 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h2><p><img data-src="/images/DeepLearning/shallow_neural_network.png"></p>
+<ol>
+<li>输入层：输入层接受输入数据，每个节点代表一个输入特征。</li>
+<li>一个隐藏层：隐藏层对输入层的数据进行非线性变换，通常包含若干个神经元，每个神经元都应用一个激活函数。</li>
+<li>输出层：输出层生成最终的预测结果，节点的数量取决于任务类型（如分类任务的类别数或回归任务的输出维度）。</li>
+</ol>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>浅层神经网络的计算步骤：</p>
+<ol>
+<li>前向传播（Forward Propagation）</li>
+</ol>
+<ul>
+<li>输入数据通过输入层传递到隐藏层。</li>
+<li>隐藏层对输入数据应用加权和<strong>激活函数</strong>进行非线性变换。</li>
+<li>变换后的数据从隐藏层传递到输出层，生成预测结果。</li>
+</ul>
+<ol start="2">
+<li>损失计算（Loss Calculation）</li>
+</ol>
+<ul>
+<li>使用损失函数计算预测结果与真实值之间的误差。</li>
+</ul>
+<ol start="3">
+<li>反向传播（Backward Propagation）</li>
+</ol>
+<ul>
+<li>计算损失相对于每个权重的梯度。</li>
+<li>使用梯度下降等优化算法更新权重，以最小化损失。</li>
+</ul>
+<h3 id="激活函数（Activate-Function）"><a href="#激活函数（Activate-Function）" class="headerlink" title="激活函数（Activate Function）"></a>激活函数（Activate Function）</h3><p>神经网络中的激活函数有多种，每种都有其独特的性质和适用场景。</p>
+<ul>
+<li><code>Sigmoid</code> 函数：$ \sigma(x) &#x3D; \frac{1}{1 + e^{-x}} $<ul>
+<li>输出范围在 (0, 1) 之间。</li>
+<li>常用于输出层进行二分类问题。</li>
+<li>缺点是容易导致梯度消失问题，因为在极端区域（很大的正值或负值）梯度趋近于0。<br><img data-src="/images/DeepLearning/activate_sigmoid.png"></li>
+</ul>
+</li>
+<li><code>Tanh</code> 双曲正切函数：$ \tanh(x) &#x3D; \frac{e^x - e^{-x}}{e^x + e^{-x}} $<ul>
+<li>输出范围在 (-1, 1) 之间。</li>
+<li>相对于 <code>Sigmoid</code>，在零点附近的梯度较大，收敛速度更快。</li>
+<li>仍然可能出现梯度消失问题，但程度较 <code>Sigmoid</code> 函数小。<br><img data-src="/images/DeepLearning/activate_tanh.png"></li>
+</ul>
+</li>
+<li><code>ReLU</code> (Rectified Linear Unit) 函数：$ \text{ReLU}(x) &#x3D; \max(0, x) $<ul>
+<li>非线性且计算简单。</li>
+<li>在正半轴上，梯度不会消失，有利于缓解梯度消失问题。</li>
+<li>缺点是有可能导致“神经元死亡”（死区），即某些神经元在训练过程中可能一直输出为零。<br><img data-src="/images/DeepLearning/activate_relu.png"></li>
+</ul>
+</li>
+<li><code>Leaky ReLU</code> 函数: $ \text{Leaky ReLU}(x) &#x3D; \begin{cases}<br>x &amp; \text{if } x &gt; 0 \\<br>\alpha x &amp; \text{if } x \leq 0<br>\end{cases} $<ul>
+<li>解决了 ReLU 的死区问题，通过在负半轴引入一个很小的斜率（$𝛼$）。</li>
+<li>输出范围为 $(-∞, +∞)$。<br><img data-src="/images/DeepLearning/activate_leakyrelu.png"></li>
+</ul>
+</li>
+<li><code>ELU</code> (Exponential Linear Unit) 函数：$ \text{ELU}(x) &#x3D; \begin{cases}<br>x &amp; \text{if } x &gt; 0 \\<br>\alpha(e^x - 1) &amp; \text{if } x \leq 0<br>\end{cases} $<ul>
+<li>负半轴部分平滑且非零，有助于防止神经元死亡。</li>
+<li>在负半轴的输出有一定范围，缓解了梯度消失问题。</li>
+<li>相对于 Leaky ReLU，更加平滑，训练速度较快。<br><img data-src="/images/DeepLearning/activate_elu.png"></li>
+</ul>
+</li>
+<li><code>Softmax</code> 函数：$ \text{softmax}(x_i) &#x3D; \frac{e^{x_i}}{\sum_{j&#x3D;1}^{n} e^{x_j}} $<ul>
+<li>常用于多分类问题的输出层，可以将一个包含实数的向量转换为一个概率分布向量。</li>
+<li>将输入转换为概率分布，输出的各值在 $(0, 1)$ 之间，总和为 1。<br><img data-src="/images/DeepLearning/activate_softmax.png"></li>
+</ul>
+</li>
+</ul>
+<p><strong>选择激活函数的考虑因素</strong></p>
+<ul>
+<li>梯度消失问题：Sigmoid 和 Tanh 在极端区域的梯度趋近于 0，容易导致梯度消失。ReLU 和其变种如 Leaky ReLU、ELU 在一定程度上缓解了这一问题。</li>
+<li>非线性：激活函数的非线性特性使得神经网络可以拟合复杂的函数。</li>
+<li>计算成本：ReLU 计算简单，常用于深层网络的隐藏层。ELU 和 Leaky ReLU 的计算复杂度略高，但有时能提供更好的性能。</li>
+<li>输出范围：根据任务需求选择合适的输出范围。如二分类问题常用 Sigmoid，多分类问题用 Softmax。</li>
+</ul>
+<p><strong>实际应用</strong></p>
+<ul>
+<li>隐藏层：ReLU 和其变种（Leaky ReLU、ELU）较为常用。</li>
+<li>输出层：二分类问题常用 Sigmoid，多分类问题常用 Softmax，回归问题常用线性激活函数。</li>
+</ul>
+<h2 id="初始化参数"><a href="#初始化参数" class="headerlink" title="初始化参数"></a>初始化参数</h2><p>在神经网络的训练中，随机初始化参数（Random Initialization）非常重要，主要原因是为了避免对称问题并确保网络能够有效地学习。</p>
+<h3 id="对称问题（symmetry-breaking-problem）"><a href="#对称问题（symmetry-breaking-problem）" class="headerlink" title="对称问题（symmetry breaking problem）"></a>对称问题（symmetry breaking problem）</h3><p>对称问题是指在神经网络的初始化阶段，如果所有权重都设置为相同的值（例如零），那么每个神经元在同一层中的输出都是相同的。这会导致反向传播中的梯度更新也是相同的，从而无法使网络中的神经元学习到不同的特征。这种情况会阻碍网络的学习能力，导致模型性能非常差。</p>
+<p>假设我们有一个简单的神经网络，每层有两个神经元。</p>
+<ul>
+<li>输入层： $ 𝑥 &#x3D; [𝑥_1, 𝑥_2] $</li>
+<li>隐藏层： $ ℎ &#x3D; [ℎ_1, ℎ_2] $<ul>
+<li>$ h_1​ &#x3D; f(w_1​ ⋅ x_1​ + w_2​ ⋅ x_2​) $</li>
+<li>$ h_2​ &#x3D; f(w_3​ ⋅ x_1​ + w_4​ ⋅ x_2​) $</li>
+</ul>
+</li>
+</ul>
+<p>设初始权重均为零（或者任何相同的值），然后进行一次前向传播和反向传播：</p>
+<ul>
+<li>前向传播：<ul>
+<li>由于 $ 𝑤_1 &#x3D; 𝑤_2 &#x3D; 𝑤_3 &#x3D; 𝑤_4 &#x3D; 0 $，所以 $ ℎ_1 &#x3D; ℎ_2 &#x3D; 𝑓(0) $</li>
+</ul>
+</li>
+<li>反向传播：<ul>
+<li>计算梯度时，所有梯度也是相同的，因为前向传播的输出是相同的。</li>
+<li>更新后的权重仍然保持相同的值，导致每次训练更新都一样。</li>
+</ul>
+</li>
+</ul>
+<h2 id="计算过程"><a href="#计算过程" class="headerlink" title="计算过程"></a>计算过程</h2><p>假设有一个浅层神经网络，具有以下结构：</p>
+<ul>
+<li>输入层：3个输入特征 $𝑥_1, 𝑥_2, 𝑥_3$</li>
+<li>隐藏层：2个神经元</li>
+<li>输出层：1个神经元<br>每个隐藏层的神经元和输出层的神经元都带有权重和偏差。激活函数假设为ReLU（Rectified Linear Unit）。</li>
+</ul>
+<p>那么，数学表示为：</p>
+<ol>
+<li>输入层到隐藏层：</li>
+</ol>
+<ul>
+<li>第一个隐藏层神经元的输出：$ h_1​ &#x3D; σ(w_{11}​ x_1​ + w_{12}​ x_2​ + w_{13}​ x_3​ + b_1) $</li>
+<li>第二个隐藏层神经元的输出：$ h_2​ &#x3D; σ(w_{21}​ x_1​ + w_{22}​ x_2​ + w_{23}​ x_3​ + b_2) $</li>
+<li>$𝜎$ 表示激活函数 <code>ReLU</code>，即 $𝜎(𝑧) &#x3D; max⁡(0, 𝑧)$</li>
+</ul>
+<ol start="2">
+<li>隐藏层到输出层：</li>
+</ol>
+<ul>
+<li>输出层神经元的输出：$ y​ &#x3D; w_{31}​ h_1​ + w_{32}​ h_2​​ + b_3 $</li>
+</ul>
+<p><img data-src="/images/DeepLearning/shallow_neural_network_sample.jpg"></p>
+<div class="tabs" id="deeplearning-shallownn-sample"><ul class="nav-tabs"><li class="tab active"><a href="#deeplearning-shallownn-sample-1">计算步骤</a></li><li class="tab"><a href="#deeplearning-shallownn-sample-2">矩阵运算</a></li><li class="tab"><a href="#deeplearning-shallownn-sample-3">PyTorch</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deeplearning-shallownn-sample-1"><ol>
+<li>输入层到隐藏层的计算<br><strong>输入特征向量：</strong><br>$$ \mathbf{X} &#x3D; \begin{bmatrix}<br>x_1 \\<br>x_2 \\<br>x_3<br>\end{bmatrix} $$<br><strong>隐藏层的权重矩阵和偏差向量：</strong><br>$$<br>\mathbf{W}^{(1)} &#x3D; \begin{bmatrix}<br>w_{11} &amp; w_{12} &amp; w_{13} \\<br>w_{21} &amp; w_{22} &amp; w_{23}<br>\end{bmatrix}<br>$$<br>$$<br>\mathbf{b}^{(1)} &#x3D; \begin{bmatrix}<br>b_1 \\<br>b_2<br>\end{bmatrix}<br>$$<br><strong>隐藏层的线性组合输出：</strong><br>$$<br>\mathbf{Z}^{(1)} &#x3D; \mathbf{W}^{(1)} \mathbf{X} + \mathbf{b}^{(1)} &#x3D;<br>\begin{bmatrix}<br>w_{11} &amp; w_{12} &amp; w_{13} \\<br>w_{21} &amp; w_{22} &amp; w_{23}<br>\end{bmatrix}<br>\begin{bmatrix}<br>x_1 \\<br>x_2 \\<br>x_3<br>\end{bmatrix}<br>\text{+}<br>\begin{bmatrix}<br>b_1 \\<br>b_2<br>\end{bmatrix}<br>$$<br><strong>应用激活函数（ReLU）后的隐藏层输出：</strong><br>$$<br>\mathbf{h}^{(1)} &#x3D; \sigma(\mathbf{Z}^{(1)}) &#x3D; \begin{bmatrix}<br>\sigma(z_1^{(1)}) \\<br>\sigma(z_2^{(1)})<br>\end{bmatrix}<br>$$<br>其中，即 $𝜎(𝑧) &#x3D; max⁡(0, 𝑧)$ 是<code>ReLU</code>激活函数。</li>
+<li>隐藏层到输出层的计算<br><strong>输出层的权重向量和偏差标量：</strong><br>$$<br>\mathbf{W}^{(2)} &#x3D; \begin{bmatrix}<br>w_{31} &amp; w_{32}<br>\end{bmatrix}<br>$$<br>$$<br>b^{(2)} &#x3D; b_3<br>$$<br><strong>输出层的线性组合输出：</strong><br>$$<br>Z^{(2)} &#x3D; \mathbf{W}^{(2)} \mathbf{h}^{(1)} + b^{(2)} &#x3D;<br>\begin{bmatrix}<br>w_{31} &amp; w_{32}<br>\end{bmatrix}<br>\begin{bmatrix}<br>\sigma(z_1^{(1)}) \\<br>\sigma(z_2^{(1)})<br>\end{bmatrix}<br>\text{+} b_3<br>$$<br>由于输出层的输出是线性激活，因此最终输出为：<br>$$<br>y &#x3D; Z^{(2)}<br>$$</li>
+</ol></div><div class="tab-pane" id="deeplearning-shallownn-sample-2"><p><strong>输入特征向量：</strong><br>$$ \mathbf{X} &#x3D; \begin{bmatrix}<br>1.0 \\<br>2.0 \\<br>3.0<br>\end{bmatrix} $$<br><strong>假设以下权重和偏差：</strong><br>$$ \mathbf{W}^{(1)} &#x3D; \begin{bmatrix}<br>0.2 &amp; 0.4 &amp; 0.6 \\<br>0.8 &amp; 0.1 &amp; 0.3<br>\end{bmatrix},<br>\mathbf{b}^{(1)} &#x3D; \begin{bmatrix}<br>0.1 \\<br>0.2<br>\end{bmatrix} $$<br>$$ \mathbf{W}^{(2)} &#x3D; \begin{bmatrix}<br>0.5 &amp; 0.7<br>\end{bmatrix},<br>\mathbf{b}^{(2)} &#x3D; \begin{bmatrix}<br>0.3<br>\end{bmatrix} $$<br><strong>计算过程：</strong></p>
+<ol>
+<li>第一层（隐藏层）线性组合（矩阵乘法加上偏差）<br>$$ \mathbf{Z}^{(1)} &#x3D; \mathbf{W}^{(1)} \mathbf{X} + \mathbf{b}^{(1)} &#x3D; \begin{bmatrix}<br>0.2 &amp; 0.4 &amp; 0.6 \\<br>0.8 &amp; 0.1 &amp; 0.3<br>\end{bmatrix}<br>\begin{bmatrix}<br>1.0 \\<br>2.0 \\<br>3.0<br>\end{bmatrix}<br>\text{+}<br>\begin{bmatrix}<br>0.1 \\<br>0.2<br>\end{bmatrix} $$<br>$$ \mathbf{Z}^{(1)} &#x3D; \begin{bmatrix}<br>0.2 \times 1 + 0.4 \times 2 + 0.6 \times 3 + 0.1 \\<br>0.8 \times 1 + 0.1 \times 2 + 0.3 \times 3 + 0.2<br>\end{bmatrix}<br>&#x3D; \begin{bmatrix}<br>2.9 \\<br>2.1<br>\end{bmatrix} $$</li>
+<li>第一层（隐藏层）激活函数 (ReLU)：<br>$$ \mathbf{h}^{(1)} &#x3D; \sigma(\mathbf{Z}^{(1)}) &#x3D; \begin{bmatrix}<br>max(0, 2.9) \\<br>max(0, 2.1)<br>\end{bmatrix} &#x3D; \begin{bmatrix}<br>2.9 \\<br>2.1<br>\end{bmatrix} $$</li>
+<li>第二层（输出层）线性组合：<br>$$ Z^{(2)} &#x3D; \mathbf{W}^{(2)} \mathbf{h}^{(1)} + b^{(2)} &#x3D; \begin{bmatrix}<br>0.5 &amp; 0.7<br>\end{bmatrix}<br>\begin{bmatrix}<br>2.9 \\<br>2.1<br>\end{bmatrix}<br>\text{+}<br>\begin{bmatrix}<br>0.3<br>\end{bmatrix}<br>&#x3D; 0.5 \times 2.9 + 0.7 \times 2.1 + 0.3<br>&#x3D; 3.22 $$<br>因此，最终输出 $𝑦 &#x3D; Z^{(2)} &#x3D; 3.22 $。</li>
+</ol></div><div class="tab-pane" id="deeplearning-shallownn-sample-3"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入向量</span></span><br><span class="line">X = torch.tensor([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第一层的权重和偏差</span></span><br><span class="line">W1 = torch.tensor([[<span class="number">0.2</span>, <span class="number">0.4</span>, <span class="number">0.6</span>],</span><br><span class="line">                   [<span class="number">0.8</span>, <span class="number">0.1</span>, <span class="number">0.3</span>]])</span><br><span class="line">b1 = torch.tensor([<span class="number">0.1</span>, <span class="number">0.2</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第二层的权重和偏差</span></span><br><span class="line">W2 = torch.tensor([<span class="number">0.5</span>, <span class="number">0.7</span>])</span><br><span class="line">b2 = torch.tensor(<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第一层线性组合</span></span><br><span class="line">Z1 = torch.matmul(W1, X) + b1</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Z1:&quot;</span>, Z1) <span class="comment"># Z1: tensor([2.9000, 2.1000])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 第一层激活函数 (ReLU)</span></span><br><span class="line">h1 = F.relu(Z1)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;h1:&quot;</span>, h1) <span class="comment"># h1: tensor([2.9000, 2.1000])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 第二层线性组合</span></span><br><span class="line">Z2 = torch.matmul(W2, h1) + b2</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Z2:&quot;</span>, Z2) <span class="comment"># Z2: tensor(3.2200)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最终输出</span></span><br><span class="line">y = Z2.item()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Output y:&quot;</span>, y) <span class="comment"># Output y: 3.2200000286102295</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="TensorFlow"><a href="#TensorFlow" class="headerlink" title="TensorFlow"></a>TensorFlow</h2><p>假设一个简单的浅层神经网络，输入层有 $𝑛$ 个特征，隐藏层有 $𝑚$ 个神经元，输出层有 $𝑘$ 个神经元。</p>
+<ol>
+<li>输入层到隐藏层：</li>
+</ol>
+<ul>
+<li>输入 $𝑥$ 是一个 $𝑛-维向量$。</li>
+<li>权重矩阵 $𝑊_1$​ 形状为 $𝑚×𝑛$，偏差向量 $𝑏_1$​ 形状为 $𝑚$。</li>
+<li>隐藏层的输出 $ℎ$ 通过激活函数 $𝜎$ 计算：<br>  $$ ℎ &#x3D; 𝜎(𝑊_1𝑥 + 𝑏_1) $$</li>
+</ul>
+<ol start="2">
+<li>隐藏层到输出层：</li>
+</ol>
+<ul>
+<li>权重矩阵 $𝑊_2$ 形状为 $𝑘$（假设单输出），偏差向量 $𝑏_2$ 形状为 $𝑘$。</li>
+<li>输出层的输出 $𝑦$：<br>  $$ 𝑦 &#x3D; 𝑊_2ℎ + 𝑏_2 $$</li>
+</ul>
+<p>示例代码：</p>
+<p>以下是一个使用 Python 和 TensorFlow 构建浅层神经网络的示例代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建浅层神经网络模型（按顺序堆叠各层的顺序模型）</span></span><br><span class="line">model = Sequential([</span><br><span class="line">    Dense(<span class="number">10</span>, activation=<span class="string">&#x27;relu&#x27;</span>, input_shape=(<span class="number">3</span>,)),  <span class="comment"># 隐藏层，10个神经元，输入维度为3，ReLU激活函数</span></span><br><span class="line">    Dense(<span class="number">1</span>)  <span class="comment"># 输出层，1个神经元（回归任务），用于输出一个标量值，没有激活函数（默认是线性激活）</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译模型（Adam优化器更新模型的权重；均方误差作为损失函数）</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>, loss=<span class="string">&#x27;mean_squared_error&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设有一些训练数据</span></span><br><span class="line">X_train = np.random.rand(<span class="number">100</span>, <span class="number">3</span>)  <span class="comment"># 生成100个样本，每个样本包含3个特征</span></span><br><span class="line">y_train = np.random.rand(<span class="number">100</span>, <span class="number">1</span>)  <span class="comment"># 生成100个目标值</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型（使用训练数据，训练10个周期）</span></span><br><span class="line">model.fit(X_train, y_train, epochs=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用模型进行预测</span></span><br><span class="line">X_test = np.random.rand(<span class="number">10</span>, <span class="number">3</span>)  <span class="comment"># 生成10个新的测试样本，每个样本包含3个特征</span></span><br><span class="line">predictions = model.predict(X_test) <span class="comment"># 使用训练好的模型对测试样本进行预测，得到每个样本的预测值</span></span><br><span class="line"><span class="built_in">print</span>(predictions) <span class="comment"># 每个结果对应一个测试样本。每个预测值是一个标量，表示模型对输入特征组合的预测输出</span></span><br><span class="line"><span class="comment"># [[0.292369  ]</span></span><br><span class="line"><span class="comment">#  [0.5589997 ]</span></span><br><span class="line"><span class="comment">#  [0.53765506]</span></span><br><span class="line"><span class="comment">#  [0.4641093 ]</span></span><br><span class="line"><span class="comment">#  [0.40080714]</span></span><br><span class="line"><span class="comment">#  [0.5647431 ]</span></span><br><span class="line"><span class="comment">#  [0.5349394 ]</span></span><br><span class="line"><span class="comment">#  [0.5442955 ]</span></span><br><span class="line"><span class="comment">#  [0.40377063]</span></span><br><span class="line"><span class="comment">#  [0.40167415]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证模型结果</span></span><br><span class="line">y_test = np.random.rand(<span class="number">10</span>, <span class="number">1</span>)  <span class="comment"># 假设有真实的目标值</span></span><br><span class="line">mse = mean_squared_error(y_test, predictions) <span class="comment"># 使用均方误差（MSE）来衡量预测性能</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;Mean Squared Error: <span class="subst">&#123;mse&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="comment"># Mean Squared Error: 0.4814553488417099</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="深层神经网络（Deep-NN）"><a href="#深层神经网络（Deep-NN）" class="headerlink" title="深层神经网络（Deep NN）"></a>深层神经网络（Deep NN）</h1><p>深层神经网络（Deep Neural Networks, DNN）是包含多个隐藏层（深度通常超过三层）的神经网络。</p>
+<p><img data-src="/images/DeepLearning/deep_neural_network.png"></p>
+<p>神经网络的层数是这么定义的：</p>
+<ul>
+<li>从左到右，由 0 开始定义，比如上图， $ [𝑥_1, 𝑥_2, 𝑥_3]$ 是第 0 层，这层左边的隐藏层是第 1 层，由此类推。</li>
+<li>当计算神经网络的层数时，通常忽略输入层，只算隐藏层和输出层。</li>
+</ul>
+<h2 id="超参数（hyperparameters）"><a href="#超参数（hyperparameters）" class="headerlink" title="超参数（hyperparameters）"></a>超参数（hyperparameters）</h2><p>超参数（hyperparameters）是指在模型训练之前需要设置的参数，这些参数不会在训练过程中更新，但会显著影响模型的性能和训练效果。</p>
+<ul>
+<li>预处理方法（Preprocessing Methods）：包括数据标准化、归一化、数据增强等。<ul>
+<li>良好的数据预处理能够加速训练过程，提高模型的性能和稳定性。</li>
+</ul>
+</li>
+<li>网络结构（Network Architecture）：包括层数、每层的神经元数量、激活函数类型等。<ul>
+<li>不同的网络结构能够捕捉到不同层次的特征，适应不同复杂度的任务。</li>
+</ul>
+</li>
+<li>批大小（Batch Size）：指的是每次参数更新时使用的训练样本的数量。<ul>
+<li>较小的批大小可以带来更多的更新次数，可能更快地收敛，但每次更新的波动较大。</li>
+<li>较大的批大小可以更稳定地更新权重，但每次更新的计算量较大，训练速度可能会变慢。</li>
+</ul>
+</li>
+<li>学习率（Learning Rate）：决定了每次参数更新的步长大小。在梯度下降算法中，它是用来调整每个权重的变化幅度的系数。<ul>
+<li>学习率过大可能会导致模型在训练过程中震荡或发散。</li>
+<li>学习率过小则会使训练过程变得非常缓慢，甚至可能陷入局部最优。</li>
+</ul>
+</li>
+<li>优化算法（Optimization Algorithm）：决定了如何根据损失函数更新模型的参数。<ul>
+<li>选择合适的优化算法可以加快训练速度，提高模型的收敛效果。</li>
+</ul>
+</li>
+<li>迭代次数（Number of Epochs）：指整个训练数据集被完整训练的次数。<ul>
+<li>迭代次数过少可能导致欠拟合，迭代次数过多可能导致过拟合。通常需要通过验证集来选择合适的迭代次数。</li>
+</ul>
+</li>
+<li>正则化参数（Regularization Parameters）：有助于提升模型的泛化能力，防止过拟合。</li>
+<li>激活函数（Activation Function）：决定了每个神经元的输出形式。<ul>
+<li>选择合适的激活函数可以提高模型的非线性表示能力，避免梯度消失和梯度爆炸问题。</li>
+</ul>
+</li>
+<li>损失函数（Loss Function）：模型预测值与真实值之间的差异。<ul>
+<li>选择合适的损失函数能够准确反映模型的训练效果，指导参数更新。</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据集（data-set）"><a href="#数据集（data-set）" class="headerlink" title="数据集（data set）"></a>数据集（data set）</h2><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">训练集（Training Set）</th>
+<th align="left">验证集（Validation Set）</th>
+<th align="left">测试集（Test Set）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>用途</strong></td>
+<td align="left">训练模型</td>
+<td align="left">调优模型和超参数</td>
+<td align="left">最终评估模型</td>
+</tr>
+<tr>
+<td align="left"><strong>数据使用</strong></td>
+<td align="left">多次迭代使用</td>
+<td align="left">调优过程中使用</td>
+<td align="left">训练和调优完成后使用</td>
+</tr>
+<tr>
+<td align="left"><strong>数据依赖</strong></td>
+<td align="left">用于调整模型参数</td>
+<td align="left">用于调整超参数，不参与训练</td>
+<td align="left">不参与训练和调优</td>
+</tr>
+<tr>
+<td align="left"><strong>数据独立性</strong></td>
+<td align="left">不独立</td>
+<td align="left">独立于训练集</td>
+<td align="left">独立于训练集和验证集</td>
+</tr>
+</tbody></table>
+<ul>
+<li>防止过拟合：通过验证集可以监控模型是否过拟合，即在训练集上表现良好但在验证集上表现不佳。</li>
+<li>模型选择：不同的模型和超参数设置在验证集上的表现差异，可以帮助选择最佳模型。</li>
+<li>评估泛化能力：测试集的表现反映了模型在新数据上的性能，是衡量模型实际应用效果的重要指标。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> OneHotEncoder</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载Iris数据集</span></span><br><span class="line">iris = load_iris()</span><br><span class="line">X = iris.data</span><br><span class="line">y = iris.target.reshape(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将目标变量进行One-hot编码</span></span><br><span class="line">encoder = OneHotEncoder(sparse_output=<span class="literal">False</span>)</span><br><span class="line">y = encoder.fit_transform(y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分训练集（60%），临时集（40%）</span></span><br><span class="line">X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=<span class="number">0.4</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分验证集和测试集（各占临时集的一半，即20%）</span></span><br><span class="line">X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=<span class="number">0.5</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建TensorFlow数据集</span></span><br><span class="line">train_dataset = tf.data.Dataset.from_tensor_slices((X_train, y_train)).batch(<span class="number">32</span>)</span><br><span class="line">val_dataset = tf.data.Dataset.from_tensor_slices((X_val, y_val)).batch(<span class="number">32</span>)</span><br><span class="line">test_dataset = tf.data.Dataset.from_tensor_slices((X_test, y_test)).batch(<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个简单的神经网络模型</span></span><br><span class="line">model = tf.keras.Sequential([</span><br><span class="line">    tf.keras.layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>, input_shape=(X.shape[<span class="number">1</span>],)),</span><br><span class="line">    tf.keras.layers.Dense(<span class="number">32</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">    tf.keras.layers.Dense(<span class="number">3</span>, activation=<span class="string">&#x27;softmax&#x27;</span>)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译模型</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>, loss=<span class="string">&#x27;categorical_crossentropy&#x27;</span>, metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型</span></span><br><span class="line">history = model.fit(train_dataset, epochs=<span class="number">10</span>, validation_data=val_dataset)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 评估模型</span></span><br><span class="line">test_loss, test_acc = model.evaluate(test_dataset)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;Test accuracy: <span class="subst">&#123;test_acc&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="comment"># Epoch 1/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 1s 53ms/step - accuracy: 0.2373 - loss: 1.5473 - val_accuracy: 0.0000e+00 - val_loss: 1.# 4492</span></span><br><span class="line"><span class="comment"># Epoch 2/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 0s 5ms/step - accuracy: 0.0389 - loss: 1.3015 - val_accuracy: 0.2000 - val_loss: 1.2407</span></span><br><span class="line"><span class="comment"># Epoch 3/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 0s 4ms/step - accuracy: 0.2879 - loss: 1.1624 - val_accuracy: 0.4000 - val_loss: 1.1172</span></span><br><span class="line"><span class="comment"># Epoch 4/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 0s 4ms/step - accuracy: 0.3089 - loss: 1.0956 - val_accuracy: 0.4000 - val_loss: 1.0437</span></span><br><span class="line"><span class="comment"># Epoch 5/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 0s 4ms/step - accuracy: 0.3262 - loss: 1.0574 - val_accuracy: 0.4000 - val_loss: 0.9875</span></span><br><span class="line"><span class="comment"># Epoch 6/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 0s 4ms/step - accuracy: 0.3262 - loss: 1.0167 - val_accuracy: 0.4000 - val_loss: 0.9420</span></span><br><span class="line"><span class="comment"># Epoch 7/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 0s 4ms/step - accuracy: 0.3373 - loss: 0.9718 - val_accuracy: 0.7333 - val_loss: 0.9028</span></span><br><span class="line"><span class="comment"># Epoch 8/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 0s 4ms/step - accuracy: 0.5963 - loss: 0.9303 - val_accuracy: 0.8333 - val_loss: 0.8623</span></span><br><span class="line"><span class="comment"># Epoch 9/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━ 0s 4ms/step - accuracy: 0.7127 - loss: 0.8940 - val_accuracy: 0.8333 - val_loss: 0.8183</span></span><br><span class="line"><span class="comment"># Epoch 10/10</span></span><br><span class="line"><span class="comment"># 3/3 ━━━━ 0s 4ms/step - accuracy: 0.7016 - loss: 0.8614 - val_accuracy: 0.8333 - val_loss: 0.7730</span></span><br><span class="line"><span class="comment"># 1/1 ━━━━ 0s 6ms/step - accuracy: 0.5667 - loss: 0.8338</span></span><br><span class="line"><span class="comment"># Test accuracy: 0.5666666626930237</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="偏差（Bias）和方差（Variance）"><a href="#偏差（Bias）和方差（Variance）" class="headerlink" title="偏差（Bias）和方差（Variance）"></a>偏差（Bias）和方差（Variance）</h3><ul>
+<li>偏差（Bias）表示模型预测值与真实值之间的偏离程度，它反映了模型对真实数据的拟合能力。<ul>
+<li>高偏差通常意味着模型过于简单，不能很好地捕捉数据中的模式，导致欠拟合。</li>
+</ul>
+</li>
+<li>方差（Variance）表示模型预测结果的变化程度，它反映了模型对训练数据的敏感度。<ul>
+<li>高方差通常意味着模型过于复杂，过于依赖训练数据中的噪声，导致过拟合。</li>
+</ul>
+</li>
+</ul>
+<p>假设存在一个只有 $𝑥_1$ 和 $𝑥_2$ 两个特征的二维数据集数据集:</p>
+<p><img data-src="/images/DeepLearning/dataset_fitting.png"></p>
+<ul>
+<li>如果给这个数据集拟合一条直线，可能得到一个逻辑回归拟合，但它并不能很好地拟合该数据，这是高偏差（high bias）。<ul>
+<li>欠拟合（Underfitting）：高偏差、低方差。模型过于简单，无法捕捉数据中的模式。</li>
+</ul>
+</li>
+<li>如果拟合一个非常复杂的分类器，比如深度神经网络，可能就非常适用于这个数据集，但也不是一种很好的拟合方式分类器，方差较高（ high variance）。<ul>
+<li>过拟合（Overfitting）：低偏差、高方差。模型过于复杂，捕捉到了训练数据中的噪声。</li>
+</ul>
+</li>
+<li>在上述两者之间，可能还有一些复杂程度适中的分类器，这个数据拟合看起来更加合理，我们称之为“适度拟合”（just right）。<ul>
+<li>最佳模型（Optimal Model）：适中的偏差和方差，能够在训练数据和新数据上表现良好。</li>
+</ul>
+</li>
+</ul>
+<h2 id="正则化（Regularization）"><a href="#正则化（Regularization）" class="headerlink" title="正则化（Regularization）"></a>正则化（Regularization）</h2><p>正则化（Regularization）是指一组技术和策略，通过限制模型的复杂度，防止其过于依赖训练数据中的噪声和细节，主要目的是减少模型的过拟合（overfitting），从而提高模型在新数据上的泛化能力。</p>
+<p>正则化方法：</p>
+<ul>
+<li>L1正则化（Lasso）：在损失函数中加入权重绝对值的和。<br>$$ \text{Loss} &#x3D; \text{Original Loss} + \lambda \sum_{i} |w_i| $$<br>$$ 其中，𝜆 是正则化参数，控制正则化项的强度； 𝑤_𝑖 是模型的权重。 $$<ul>
+<li>L1正则化倾向于使一些权重变为零，从而产生稀疏模型，适用于特征选择。</li>
+</ul>
+</li>
+<li>L2正则化（Ridge）：在损失函数中加入权重平方和。<br>$$ L(\mathbf{w}) &#x3D; L_0(\mathbf{w}) + \lambda \sum_{i} w_i^2 $$<br>$$ 其中，L(\mathbf{w}) 是正则化后的总损失函数；L_0(\mathbf{w}) 是原始损失函数（如均方误差或交叉熵）；$$<br>$$ 𝜆 是正则化参数，控制正则化项的强度；𝑤_𝑖 是模型的权重。 $$<br>假设使用梯度下降法来更新模型权重。在没有正则化的情况下，权重更新的公式是：<br>$$ w_i \leftarrow w_i - \eta \frac{\partial L_0(\mathbf{w})}{\partial w_i} $$<br>$$ 其中，η 是学习率；\frac{\partial L_0(\mathbf{w})}{\partial w_i} 是原始损失函数关于权重 𝑤_𝑖 的梯度。 $$<br>加入L2正则化后，损失函数变为 $𝐿(𝑤)$，计算正则化后损失函数的梯度：<br>$$ \frac{\partial L(\mathbf{w})}{\partial w_i} &#x3D; \frac{\partial L_0(\mathbf{w})}{\partial w_i} + \frac{\partial}{\partial w_i} \left( \lambda \sum w_i^2 \right) &#x3D; \frac{\partial L_0(\mathbf{w})}{\partial w_i} + 2\lambda w_i $$<br>于是，权重更新公式变为：<br>$$ w_i \leftarrow w_i - \eta \left( \frac{\partial L_0(\mathbf{w})}{\partial w_i} + 2\lambda w_i \right) &#x3D; \begin{cases}<br>w_i - \eta \frac{\partial L_0(\mathbf{w})}{\partial w_i} &amp; \text{原始梯度下降项} \\<br>w_i - 2\eta\lambda w_i &amp; \text{权重衰减项}<br>\end{cases} $$<ul>
+<li>这表明在每一步更新中，权重不仅根据原始损失函数的梯度进行更新，还会乘上一个因子 $(1 - 2\eta\lambda)$ 使得权重逐渐减小（权重衰减）。</li>
+<li>较小的权重值意味着模型更简单，更不容易过拟合训练数据，从而提高模型的泛化能力。</li>
+<li>L2正则化通过在损失函数中加入权重平方和的惩罚项，导致权重更新时有一个额外的衰减项，从而逐渐减小权重值。</li>
+</ul>
+</li>
+<li>Dropout：一种在训练过程中随机忽略一部分神经元的技术。在每次训练迭代时，随机选择一定比例的神经元，并将它们暂时从网络中移除。<ul>
+<li>相当于在训练多个不同的子网络，并将它们的预测结果进行平均，从而减少过拟合。</li>
+</ul>
+</li>
+<li>早停（Early Stopping）：监控验证集的性能，如果在若干个训练迭代后验证误差不再降低，则提前停止训练。<ul>
+<li>早停可以防止模型在训练数据上过拟合。</li>
+</ul>
+</li>
+<li>数据增强（Data Augmentation）：通过对训练数据进行随机变换（如旋转、缩放、平移、翻转等），生成更多的训练数据，增加数据多样性。<ul>
+<li>数据增强在图像分类和目标检测中尤其有效，可以显著提高模型的泛化能力。</li>
+</ul>
+</li>
+<li>批归一化（Batch Normalization）：通过标准化每一批次的数据，使其具有均值为0，方差为1的特性，进而稳定模型的学习过程。<br>1.计算批次均值和方差：对于给定的批次输入 $x &#x3D; \lbrace x_1, x_2, …, x_𝑚 \rbrace$，计算均值 $\mu_B$ 和方差 $\sigma_B^2$<br>  $$ \mu_B &#x3D; \frac{1}{m} \sum_{i&#x3D;1}^m x_i $$<br>  $$ \sigma_B^2 &#x3D; \frac{1}{m} \sum_{i&#x3D;1}^m (x_i - \mu_B)^2 $$<br>2.标准化：将每个输入标准化为均值为0，方差为1的形式<br>  $$ \hat{x}_i &#x3D; \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}} $$<br>  $$ 其中，\epsilon 是一个小的常数，用于防止除以零的情况。 $$<br>3.缩放和平移：引入可学习的参数 $\gamma$ 和 $\beta$，对标准化后的数据进行缩放和平移，以恢复模型的表达能力<br>  $$ y_i &#x3D; \gamma \hat{x}_i + \beta $$<br>  $$ 其中，\gamma 和 \beta 是与输入的每个维度相对应的可训练参数。 $$<ul>
+<li>稳定训练过程：批归一化通过减少输入数据的变化范围，稳定了梯度的更新过程，使得模型训练更加稳定，并且允许使用更高的学习率。</li>
+<li>加速收敛：通过标准化输入数据，批归一化可以使得损失函数的优化路径更加平滑，从而加速模型的收敛。</li>
+<li>减少对初始化的依赖：批归一化降低了权重初始化对模型性能的影响，使得模型对权重初始化的选择更加鲁棒。</li>
+<li>正则化效果：批归一化在训练过程中对每个批次的数据进行标准化，这引入了一定的噪声，相当于一种正则化手段，有助于减少模型的过拟合。</li>
+</ul>
+</li>
+</ul>
+<p>以下是一个基于TensorFlow和Keras，在MNIST数据集上使用L2正则化和Dropout的简单示例代码：</p>
+<div class="tabs" id="deeplearning-regularization"><ul class="nav-tabs"><li class="tab active"><a href="#deeplearning-regularization-1">L2正则化&Dropout</a></li><li class="tab"><a href="#deeplearning-regularization-2">BatchNormalization</a></li></ul><div class="tab-content"><div class="tab-pane active" id="deeplearning-regularization-1"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.datasets <span class="keyword">import</span> mnist</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense, Dropout, Flatten</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.regularizers <span class="keyword">import</span> l2</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.utils <span class="keyword">import</span> to_categorical</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载MNIST数据集</span></span><br><span class="line">(x_train, y_train), (x_test, y_test) = mnist.load_data()</span><br><span class="line">x_train, x_test = x_train / <span class="number">255.0</span>, x_test / <span class="number">255.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将标签进行one-hot编码</span></span><br><span class="line">y_train = to_categorical(y_train, <span class="number">10</span>)</span><br><span class="line">y_test = to_categorical(y_test, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建模型</span></span><br><span class="line">model = Sequential([</span><br><span class="line">    Flatten(input_shape=(<span class="number">28</span>, <span class="number">28</span>)), <span class="comment"># 将28x28的输入图像展平成一维向量</span></span><br><span class="line">    Dense(<span class="number">128</span>, activation=<span class="string">&#x27;relu&#x27;</span>, kernel_regularizer=l2(<span class="number">0.01</span>)),  <span class="comment"># 包含128个神经元，并应用L2正则化</span></span><br><span class="line">    Dropout(<span class="number">0.5</span>),  <span class="comment"># Dropout, 随机丢弃50%的神经元</span></span><br><span class="line">    Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>, kernel_regularizer=l2(<span class="number">0.01</span>)),  <span class="comment"># 包含64个神经元，并应用L2正则化</span></span><br><span class="line">    Dropout(<span class="number">0.5</span>),  <span class="comment"># Dropout, 随机丢弃50%的神经元</span></span><br><span class="line">    Dense(<span class="number">10</span>, activation=<span class="string">&#x27;softmax&#x27;</span>)  <span class="comment"># 包含10个神经元，使用softmax激活函数，用于多分类输出</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译模型</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>,</span><br><span class="line">              loss=<span class="string">&#x27;categorical_crossentropy&#x27;</span>,</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型（使用20%的数据作为验证集）</span></span><br><span class="line">model.fit(x_train, y_train, epochs=<span class="number">10</span>, validation_split=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 评估模型</span></span><br><span class="line">test_loss, test_acc = model.evaluate(x_test, y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;Test accuracy: <span class="subst">&#123;test_acc&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="comment"># Epoch 1/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 5s 3ms/step - accuracy: 0.6644 - loss: 1.9379 - val_accuracy: 0.9147 - val_loss: 0.6313</span></span><br><span class="line"><span class="comment"># Epoch 2/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8497 - loss: 0.8360 - val_accuracy: 0.9255 - val_loss: 0.5732</span></span><br><span class="line"><span class="comment"># Epoch 3/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8622 - loss: 0.7762 - val_accuracy: 0.9300 - val_loss: 0.5373</span></span><br><span class="line"><span class="comment"># Epoch 4/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8674 - loss: 0.7401 - val_accuracy: 0.9354 - val_loss: 0.5171</span></span><br><span class="line"><span class="comment"># Epoch 5/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8719 - loss: 0.7179 - val_accuracy: 0.9341 - val_loss: 0.5050</span></span><br><span class="line"><span class="comment"># Epoch 6/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8753 - loss: 0.7080 - val_accuracy: 0.9252 - val_loss: 0.5304</span></span><br><span class="line"><span class="comment"># Epoch 7/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8816 - loss: 0.6894 - val_accuracy: 0.9362 - val_loss: 0.4996</span></span><br><span class="line"><span class="comment"># Epoch 8/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8813 - loss: 0.6833 - val_accuracy: 0.9327 - val_loss: 0.4979</span></span><br><span class="line"><span class="comment"># Epoch 9/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8792 - loss: 0.6844 - val_accuracy: 0.9377 - val_loss: 0.4793</span></span><br><span class="line"><span class="comment"># Epoch 10/10</span></span><br><span class="line"><span class="comment"># 1500/1500 ━━━ 4s 3ms/step - accuracy: 0.8827 - loss: 0.6772 - val_accuracy: 0.9364 - val_loss: 0.4848</span></span><br><span class="line"><span class="comment"># 313/313 ━━━ 0s 1ms/step - accuracy: 0.9260 - loss: 0.5191</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="deeplearning-regularization-2"><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.datasets <span class="keyword">import</span> mnist</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense, Flatten, BatchNormalization</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.utils <span class="keyword">import</span> to_categorical</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载MNIST数据集</span></span><br><span class="line">(x_train, y_train), (x_test, y_test) = mnist.load_data()</span><br><span class="line">x_train, x_test = x_train / <span class="number">255.0</span>, x_test / <span class="number">255.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将标签进行one-hot编码</span></span><br><span class="line">y_train = to_categorical(y_train, <span class="number">10</span>)</span><br><span class="line">y_test = to_categorical(y_test, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建模型</span></span><br><span class="line">model = Sequential([</span><br><span class="line">    Flatten(input_shape=(<span class="number">28</span>, <span class="number">28</span>)),</span><br><span class="line">    Dense(<span class="number">128</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">    BatchNormalization(), <span class="comment"># 后面跟着一个 BatchNormalization 层进行批归一化</span></span><br><span class="line">    Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">    BatchNormalization(), <span class="comment"># 后面跟着一个 BatchNormalization 层进行批归一化</span></span><br><span class="line">    Dense(<span class="number">10</span>, activation=<span class="string">&#x27;softmax&#x27;</span>)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译模型</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>,</span><br><span class="line">              loss=<span class="string">&#x27;categorical_crossentropy&#x27;</span>,</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型</span></span><br><span class="line">model.fit(x_train, y_train, epochs=<span class="number">10</span>, validation_split=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 评估模型</span></span><br><span class="line">test_loss, test_acc = model.evaluate(x_test, y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;Test accuracy: <span class="subst">&#123;test_acc&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="梯度消失（vanishing-gradient）"><a href="#梯度消失（vanishing-gradient）" class="headerlink" title="梯度消失（vanishing gradient）"></a>梯度消失（vanishing gradient）</h2><p>梯度消失问题（Vanishing Gradient Problem）在深度神经网络（DNN）训练中的一个主要障碍。在反向传播过程中，神经网络的每一层会根据其权重和前一层的输出计算梯度。这些梯度被用于更新网络的权重，从而最小化损失函数。然而，当网络层数较多时，从输出层反向传播到输入层的梯度会逐层相乘，如果某些条件（如激活函数和权重初始化）不当，这些梯度可能会逐渐变得非常小，甚至接近于零，导致前层的权重几乎不更新。</p>
+<p>激活函数的影响：Sigmoid和Tanh激活函数的输出范围是有限的（Sigmoid在(0, 1)，Tanh在(-1, 1)），它们的导数最大值都小于1。当输入较大时，导数会趋近于0。</p>
+<ul>
+<li>这种特性在多层网络中会导致梯度迅速变小，从而导致前几层的梯度消失。</li>
+</ul>
+<p>权重初始化的影响：不合适的权重初始化也会导致梯度消失。若权重初始化过小，激活值会趋近于激活函数的饱和区间（如sigmoid的0或1），这会使得反向传播中的梯度变得非常小。</p>
+<h2 id="梯度爆炸（exploding-gradient）"><a href="#梯度爆炸（exploding-gradient）" class="headerlink" title="梯度爆炸（exploding gradient）"></a>梯度爆炸（exploding gradient）</h2><p>梯度爆炸问题（Exploding Gradient Problem）在深度神经网络（DNN）训练中是另一个常见的问题，与梯度消失问题相对立。梯度爆炸问题会导致模型参数更新过快，从而使模型不稳定，甚至使损失函数发散（即变得非常大）。</p>
+<p>解决方法：</p>
+<ul>
+<li>梯度裁剪（Gradient Clipping）：在反向传播过程中，若梯度超过某个阈值，则对其进行裁剪。例如，将梯度值限制在某个范围内，防止梯度爆炸。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设我们有一个简单的线性模型</span></span><br><span class="line">model = nn.Linear(<span class="number">10</span>, <span class="number">1</span>)</span><br><span class="line">criterion = nn.MSELoss()</span><br><span class="line">optimizer = optim.SGD(model.parameters(), lr=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一些随机数据</span></span><br><span class="line">inputs = torch.randn(<span class="number">100</span>, <span class="number">10</span>)</span><br><span class="line">targets = torch.randn(<span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练步骤</span></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    outputs = model(inputs)</span><br><span class="line">    loss = criterion(outputs, targets)</span><br><span class="line">    loss.backward()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 梯度裁剪</span></span><br><span class="line">    torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=<span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;Epoch <span class="subst">&#123;epoch+<span class="number">1</span>&#125;</span>, Loss: <span class="subst">&#123;loss.item()&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="梯度检验（Gradient-Checking）"><a href="#梯度检验（Gradient-Checking）" class="headerlink" title="梯度检验（Gradient Checking）"></a>梯度检验（Gradient Checking）</h2><p>梯度检验（Gradient Checking）是一种用于验证反向传播实现正确性的方法。<br>1.定义损失函数：假设损失函数为 $𝐽(𝜃)$，其中 $𝜃$ 表示模型的参数。<br>2.计算数值梯度：使用以下公式计算数值梯度<br>  $$ \frac{\partial J(\theta)}{\partial \theta_i} \approx \frac{J(\theta_i + \epsilon) - J(\theta_i - \epsilon)}{2\epsilon} $$<br>  $$ 其中，𝜖 是一个非常小的值，一般取 𝜖 &#x3D; 10^{-7}。 $$<br>3.计算反向传播梯度：使用反向传播算法计算损失函数相对于权重的梯度。<br>4.比较梯度：将数值梯度与反向传播计算的梯度进行比较。</p>
+<ul>
+<li>如果两者非常接近，则说明反向传播实现是正确的；</li>
+<li>如果差异较大，则可能存在错误。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>梯度检验只验证单个参数的梯度是否正确，无法验证整个反向传播过程的所有细节。因此，梯度检验通过并不意味着反向传播实现完全没有错误。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">numerical_gradient</span>(<span class="params">f, x</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;计算函数f在x点的数值梯度&quot;&quot;&quot;</span></span><br><span class="line">    grad = np.zeros_like(x)</span><br><span class="line">    h = <span class="number">1e-7</span>  <span class="comment"># 一个非常小的值</span></span><br><span class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> <span class="built_in">range</span>(x.size):</span><br><span class="line">        temp_val = x[idx]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算 f(x+h)</span></span><br><span class="line">        x[idx] = temp_val + h</span><br><span class="line">        fxh1 = f(x)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算 f(x-h)</span></span><br><span class="line">        x[idx] = temp_val - h</span><br><span class="line">        fxh2 = f(x)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 数值梯度</span></span><br><span class="line">        grad[idx] = (fxh1 - fxh2) / (<span class="number">2</span> * h)</span><br><span class="line">        x[idx] = temp_val  <span class="comment"># 还原值</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> grad</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gradient_check</span>(<span class="params">f, grad_f, x</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;比较数值梯度和反向传播梯度&quot;&quot;&quot;</span></span><br><span class="line">    num_grad = numerical_gradient(f, x)</span><br><span class="line">    backprop_grad = grad_f(x)</span><br><span class="line">    diff = np.linalg.norm(num_grad - backprop_grad) / (np.linalg.norm(num_grad) + np.linalg.norm(backprop_grad))</span><br><span class="line">    <span class="keyword">return</span> diff</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例函数和其梯度</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">loss_function</span>(<span class="params">theta</span>):</span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">sum</span>(theta ** <span class="number">2</span>)  <span class="comment"># 简单的二次函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">loss_gradient</span>(<span class="params">theta</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * theta  <span class="comment"># 二次函数的梯度</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 参数初始化</span></span><br><span class="line">theta = np.random.randn(<span class="number">3</span>)  <span class="comment"># 假设有三个参数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行梯度检验</span></span><br><span class="line">difference = gradient_check(loss_function, loss_gradient, theta)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;Gradient difference: <span class="subst">&#123;difference&#125;</span>&#x27;</span>) <span class="comment"># Gradient difference: 2.7624883396806477e-10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 差异应该非常小，例如小于 1e-7</span></span><br><span class="line"><span class="keyword">assert</span> difference &lt; <span class="number">1e-7</span>, <span class="string">&quot;梯度检验失败，反向传播实现可能有误&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="优化算法"><a href="#优化算法" class="headerlink" title="优化算法"></a>优化算法</h2><h3 id="Mini-Batch"><a href="#Mini-Batch" class="headerlink" title="Mini-Batch"></a>Mini-Batch</h3><p>Batch梯度下降法是最常用的梯度下降形式，即同时处理整个训练集，一次遍历训练集只能让你做一个梯度下降。<br>Mini-Batch 梯度下降法每次同时处理单个的 mini-batch，一次遍历训练集，能让你做 mini-batch 个梯度下降。</p>
+<p><img data-src="/images/DeepLearning/minibatch_gradient_descent.png"></p>
+<ul>
+<li>Batch梯度下降法每次迭代都会历遍整个训练集，每次迭代成本都会下降，随着迭代次数而减少。</li>
+<li>Mini-Batch梯度下降法每次迭代都在训练不同的样本集（不同的mini-batch），在整个过程中成本函数并不是每次<br>迭代都下降，但走势应该向下。<ul>
+<li>$mini-batch&#x3D;𝑚$ (整个训练集)时，等同于 batch 梯度下降法。<ul>
+<li>每一次迭代时间较长，训练过程慢。</li>
+</ul>
+</li>
+<li>$mini-batch&#x3D;1$ 时，称为随机梯度下降法（stochastic gradient descent），每个样本都是独立的 mini-batch。<ul>
+<li>训练速度快，但丢失了向量化带来的计算加速</li>
+<li>成本函数总体趋势向全局最小值靠近，但永远不会收敛，而是一直在最小值附近波动</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h3><p><strong>指数加权平均数（Exponentially Weighted Moving Average, EWMA）</strong>是一种平滑技术，用于去噪和趋势分析。它通过对时间序列数据应用指数加权来计算平均值，使最近的数据点对平均值的影响更大，而较旧的数据点影响较小。其公式如下：<br>$$ S_t &#x3D; αX_t​ + (1−α)S_{t−1} $$<br>$$ S_t 是时间 t 的加权平均值；S_{t−1} 是时间 t−1 的加权平均值 $$<br>$$ X_t 是时间 t 的实际数据值 $$<br>$$ α 是平滑系数，取值范围在 (0, 1) 之间，通常设定为接近 1 的值 $$</p>
+<ul>
+<li>这种方法的优点在于，它能够快速响应数据中的变化，同时保留历史数据的影响。<br>​</li>
+</ul>
+<p><strong>Momentum 优化算法</strong>和 EWMA 的基本思想非常相似，都是通过指数加权平均的方法来平滑数据。具体来说，Momentum 优化算法可以看作是对梯度的指数加权平均，它通过累积过去梯度的动量来更新参数，从而加速收敛和减少震荡。其公式如下：<br>$$ v_t &#x3D; βv_{t−1} + α∇J(θ) &#x3D; βv_{t−1} + (1-β)∇J(θ) $$<br>$$ θ &#x3D; θ − v_t​ $$<br>$$ v_t 是当前时刻的速度；α 是学习率（可取值 1-β）；∇J(θ) 是当前时刻的梯度 $$<br>$$ β 是动量因子（通常取值在 0 到 1 之间），通常取值为β&#x3D;0.9 $$<br>$$ PS: 传统梯度下降算法公式为 θ &#x3D; θ − α∇J(θ)​ $$</p>
+<p>算法步骤：</p>
+<ol>
+<li>初始化速度 $v&#x3D;0$。</li>
+<li>迭代更新：</li>
+</ol>
+<ul>
+<li>计算当前的梯度 $∇J(θ)$</li>
+<li>更新速度：$v_t &#x3D; βv_{t−1} + α∇J(θ)$</li>
+<li>更新参数（权重w与偏差b）：θ &#x3D; θ − v_t</li>
+</ul>
+<ol start="3">
+<li>重复步骤 2 直到满足终止条件（如达到最大迭代次数或损失函数收敛）。</li>
+</ol>
+<p>形象解释：<br>将成本函数想象为一个碗状，从顶部开始运动的小球向下滚，其中 $dw$，$db$ 想象成球的加速度；而 $vdw$、$vdb$ 相当于速度。<br>小球在向下滚动的过程中，因为加速度的存在速度会变快，但是由于 $β$ 的存在，其值小于 1，可以认为是摩擦力，所以球不会无限加速下去。</p>
+<h3 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h3><p>RMSprop (Root Mean Square Propagation，均方根传播) 的的关键思想是保持一个移动平均数（Moving Average）来估计梯度的平方，然后使用这个估计值来调整学习率。这有助于在训练过程中稳定参数更新，避免较大的梯度导致学习率过大，从而跳出局部最优解。<br>$$ 梯度平方的指数加权移动平均：E[g^2]_t &#x3D; \beta E[g^2]_{t-1} + (1 - \beta) g_t^2 $$<br>$$ 参数更新：\theta_{t+1} &#x3D; \theta_t - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} g_t $$<br>$$ E[g^2]_t 是梯度平方的指数加权移动平均 $$<br>$$ β 是衰减率，控制移动平均的记忆长度，通常取值在 0.9 左右。 $$<br>$$ η 是学习率 $$<br>$$ ϵ 是一个很小的值（如 1×10^{−8}），用于防止除零。 $$<br>$$ g_t 是当前梯度 $$</p>
+<ul>
+<li>RMSProp 有助于减少抵达最小值路径上的摆动，并允许使用一个更大的学习率 $α$，从而加快算法学习速度。</li>
+</ul>
+<h3 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h3><p>Adam (Adaptive Moment Estimation) 算法结合了 Momentum 和 RMSprop 梯度下降法，并且是一种极其常用的学习算法，被证明能有效适用于不同神经网络，适用于广泛的结构。其通过计算梯度的一阶矩（动量）和二阶矩（梯度的平方的指数加权平均）来调整每个参数的学习率。这使得算法在训练过程中能够自适应地调整学习率，从而加快收敛速度并提高训练稳定性。其公式如下：<br>$$ 一阶矩估计（动量）：m_t &#x3D; \beta_1 m_{t-1} + (1 - \beta_1) g_t $$<br>$$ 二阶矩估计（梯度的平方）：v_t &#x3D; \beta_2 v_{t-1} + (1 - \beta_2) g_t^2 $$<br>$$ 偏差修正：\hat{m}_t &#x3D; \frac{m_t}{1 - \beta_1^t}; \hat{v}_t &#x3D; \frac{v_t}{1 - \beta_2^t} $$<br>$$ 参数更新：θ_{t+1} &#x3D; θ_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon} $$<br>$$ 𝑔_𝑡 是时间步 t 的梯度；m_t 是一阶矩（动量）；v_t 是二阶矩（梯度的平方）$$<br>$$ \hat{m}_t 和 \hat{v}_t 是经过偏差修正的一阶矩和二阶矩 $$<br>$$ β_1 和 𝛽_2 分别是一阶和二阶矩的指数加权衰减率，通常 𝛽_1 &#x3D; 0.9 和 𝛽_2 &#x3D; 0.999 $$<br>$$ η 是学习率；ϵ 是一个小常数，用于防止除零，通常取10^{−8} $$</p>
+<p>算法步骤：</p>
+<ol>
+<li>初始化参数：设定初始参数 $𝜃$，一阶矩 $𝑚&#x3D;0$ 和二阶矩 $𝑣&#x3D;0$，时间步 $𝑡&#x3D;0$。</li>
+<li>更新时间步：$𝑡 &#x3D; 𝑡 + 1$。</li>
+<li>计算梯度：计算当前参数 $𝜃$ 下的梯度 $𝑔_𝑡$。</li>
+<li>更新一阶矩和二阶矩：计算 $m_t$ 和 $v_t$</li>
+<li>进行偏差修正：计算$\hat{m}_t$ 和 $\hat{v}_t$</li>
+<li>更新参数：计算$θ_{t+1}$</li>
+<li>重复步骤 2 到 6 直到满足终止条件（如达到最大迭代次数或损失函数收敛）。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个简单的二次损失函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">loss_function</span>(<span class="params">theta</span>):</span><br><span class="line">    <span class="keyword">return</span> theta ** <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数的梯度</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gradient</span>(<span class="params">theta</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * theta</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化参数</span></span><br><span class="line">theta = <span class="number">10.0</span></span><br><span class="line">learning_rate = <span class="number">0.01</span></span><br><span class="line">beta1 = <span class="number">0.9</span></span><br><span class="line">beta2 = <span class="number">0.999</span></span><br><span class="line">epsilon = <span class="number">1e-8</span></span><br><span class="line">m = <span class="number">0.0</span></span><br><span class="line">v = <span class="number">0.0</span></span><br><span class="line">num_iterations = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Adam 优化算法</span></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, num_iterations + <span class="number">1</span>):</span><br><span class="line">    grad = gradient(theta)</span><br><span class="line">    m = beta1 * m + (<span class="number">1</span> - beta1) * grad</span><br><span class="line">    v = beta2 * v + (<span class="number">1</span> - beta2) * grad ** <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 偏差修正</span></span><br><span class="line">    m_hat = m / (<span class="number">1</span> - beta1 ** t)</span><br><span class="line">    v_hat = v / (<span class="number">1</span> - beta2 ** t)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新参数</span></span><br><span class="line">    theta -= learning_rate * m_hat / (np.sqrt(v_hat) + epsilon)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> t % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Iteration <span class="subst">&#123;t&#125;</span>: theta = <span class="subst">&#123;theta&#125;</span>, loss = <span class="subst">&#123;loss_function(theta)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Final parameters: theta = <span class="subst">&#123;theta&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># Iteration 100: theta = 9.017435976334866, loss = 81.31415158729834</span></span><br><span class="line"><span class="comment"># Iteration 200: theta = 8.084813902170069, loss = 65.36421583272242</span></span><br><span class="line"><span class="comment"># Iteration 300: theta = 7.204569788364201, loss = 51.905825835410184</span></span><br><span class="line"><span class="comment"># Iteration 400: theta = 6.3776805733702, loss = 40.67480949594364</span></span><br><span class="line"><span class="comment"># Iteration 500: theta = 5.605075235194148, loss = 31.416868392186732</span></span><br><span class="line"><span class="comment"># Iteration 600: theta = 4.887571069967223, loss = 23.888350963980542</span></span><br><span class="line"><span class="comment"># Iteration 700: theta = 4.225799960920499, loss = 17.857385309715692</span></span><br><span class="line"><span class="comment"># Iteration 800: theta = 3.6201255435505493, loss = 13.10530895106716</span></span><br><span class="line"><span class="comment"># Iteration 900: theta = 3.0705548357573003, loss = 9.428306999392541</span></span><br><span class="line"><span class="comment"># Iteration 1000: theta = 2.576650248553287, loss = 6.639126503369717</span></span><br><span class="line"><span class="comment"># Final parameters: theta = 2.576650248553287</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="学习率衰减"><a href="#学习率衰减" class="headerlink" title="学习率衰减"></a>学习率衰减</h2><p>学习率衰减（Learning rate decay）是指随时间慢慢减少学习率。学习率是优化算法中的一个重要超参数，它决定了参数更新的步长大小，即在每次迭代中参数沿着梯度方向更新的幅度。学习率衰减的目的是使得模型在训练初期能够更快地收敛到最优解附近，并在训练后期更细致地搜索最优解，从而提高模型的泛化能力和稳定性。</p>
+<h2 id="鞍点（saddle）"><a href="#鞍点（saddle）" class="headerlink" title="鞍点（saddle）"></a>鞍点（saddle）</h2><p>鞍点（saddle）在深度学习中是指损失函数在某个方向上是局部最小值而在另一个方向上是局部最大值的点。换句话说，鞍点是损失函数的梯度为零但不是全局最优点的位置。（想想损失函数是马鞍形状的曲面，侧面看是马背的高点是最小极值，正面看实际还能继续往两侧梯度下降）</p>
+<p>鞍点的特征：</p>
+<ul>
+<li>梯度为零：在鞍点处，损失函数的梯度为零，即沿着该方向不再有明显的上升或下降趋势。</li>
+<li>非全局最优点：尽管梯度为零，但鞍点不是全局最优点，因为损失函数在其他方向上仍然存在更优的点。</li>
+<li>局部极值：鞍点通常被认为是局部极值，但并非是局部最小值或局部最大值，而是损失函数在某个方向上是局部最小值而在另一个方向上是局部最大值。</li>
+</ul>
+<p>鞍点的影响：</p>
+<ul>
+<li>优化困难：在优化过程中，当算法遇到鞍点时，梯度下降可能会停滞，导致优化过程变慢或陷入局部极值点。</li>
+<li>参数更新缓慢：由于梯度接近零，参数更新会变得非常缓慢，特别是在高维空间中。</li>
+<li>不稳定性：鞍点可能会导致优化算法在训练过程中不稳定，使得模型收敛困难。</li>
+</ul>
+<p>如何应对鞍点：</p>
+<ul>
+<li>使用更复杂的优化算法：某些优化算法（如Adam）对鞍点具有更好的处理能力，可以更快地跳出鞍点并继续优化。</li>
+<li>增加随机性：随机梯度下降等带有一定随机性的优化算法有助于跳出鞍点，避免陷入局部最优解。</li>
+<li>降低学习率：在鞍点附近降低学习率，使得算法更容易跳出鞍点，避免优化过程停滞。</li>
+<li>初始化策略：良好的参数初始化策略有助于避免模型陷入鞍点。</li>
+</ul>
+<h2 id="Softmax回归"><a href="#Softmax回归" class="headerlink" title="Softmax回归"></a>Softmax回归</h2><p>Softmax回归是一种用于多分类任务的广义逻辑回归方法，通过Softmax函数将模型输出转换为概率分布，并使用交叉熵损失函数进行优化。</p>
+<ul>
+<li>与逻辑回归不同，后者仅限于二分类任务，而Softmax回归能够处理多个类别的情况。</li>
+<li>Softmax回归通过计算每个类别的概率，并选择概率最大的类别作为预测结果。</li>
+</ul>
+<p>Softmax回归的具体过程：</p>
+<ol>
+<li>输入和模型输出：假设我们有一个输入向量 $𝑥$，它的维度是 $𝑑$。我们的目标是预测 $𝐾$ 个类别中的一个。因此，模型的输出将是一个 $𝐾$ 维向量，表示每个类别的得分（logits）。模型的输出可以表示为<br>$$ \mathbf{z} &#x3D; \mathbf{W}\mathbf{x} + \mathbf{b}，其中，W 是权重矩阵，维度为 𝐾×𝑑；b 是偏置向量，维度为 𝐾 $$</li>
+<li>计算Softmax函数：Softmax函数将模型的输出转换为概率分布<br>$$ \hat{y}_i &#x3D; \frac{e^{z_i}}{\sum_{j&#x3D;1}^K e^{z_j}}，其中，\hat{y}_i 是输入 𝑥 属于第 𝑖 类的概率 $$<br><img data-src="/images/DeepLearning/softmax_function.png"></li>
+<li>交叉熵损失函数：对于多分类任务，常用的损失函数是交叉熵损失函数。假设我们有一个样本，其真实标签为 $𝑦$，用one-hot编码表示为向量 $𝑦$。交叉熵损失函数定义为：<br>$$ L(\mathbf{y}, \hat{\mathbf{y}}) &#x3D; -\sum_{i&#x3D;1}^K y_i \log(\hat{y}_i) $$<br>one-hot编码示例：<br><img data-src="/images/DeepLearning/onehot_encode.png"></li>
+<li>参数更新（梯度下降）：为了最小化损失函数，我们使用梯度下降法来更新模型的参数（$𝑊$ 和 $𝑏$）</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一些样本数据</span></span><br><span class="line">num_classes = <span class="number">3</span>  <span class="comment"># 类别的数量（3类）</span></span><br><span class="line">num_features = <span class="number">4</span> <span class="comment"># 每个样本的特征数（4个特征）</span></span><br><span class="line">num_samples = <span class="number">10</span> <span class="comment"># 样本数量（10个样本）</span></span><br><span class="line">np.random.seed(<span class="number">42</span>) <span class="comment"># 设置随机种子以确保结果可重复</span></span><br><span class="line">X_data = np.random.rand(num_samples, num_features).astype(np.float32) <span class="comment"># 生成形状为(10, 4)的随机浮点数数组，表示样本的特征</span></span><br><span class="line">y_data = np.random.randint(num_classes, size=num_samples) <span class="comment"># 生成形状为(10,)的随机整数数组，表示样本的真实标签。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建数据集（将样本数据和标签创建为一个TensorFlow数据集，并将其分成批次，每批次包含5个样本）</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices((X_data, y_data)).batch(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建模型（一个全连接层，输出维度为类别数（3），没有激活函数）</span></span><br><span class="line">model = tf.keras.Sequential([</span><br><span class="line">    tf.keras.layers.Dense(num_classes, activation=<span class="literal">None</span>)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 选择优化器和损失函数</span></span><br><span class="line">optimizer = tf.keras.optimizers.SGD(learning_rate=<span class="number">0.01</span>) <span class="comment"># 选择随机梯度下降（SGD）优化器，学习率为0.01</span></span><br><span class="line">loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=<span class="literal">True</span>) <span class="comment"># 选择稀疏分类交叉熵损失函数，参数from_logits=True表示输入是logits</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型</span></span><br><span class="line">epochs = <span class="number">100</span></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs): <span class="comment"># 迭代100个训练轮次</span></span><br><span class="line">    <span class="keyword">for</span> X_batch, y_batch <span class="keyword">in</span> dataset: <span class="comment"># 迭代数据集的每个批次</span></span><br><span class="line">        <span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> tape: <span class="comment"># 记录计算梯度的操作</span></span><br><span class="line">            logits = model(X_batch) <span class="comment"># 通过模型前向传播计算logits</span></span><br><span class="line">            loss = loss_fn(y_batch, logits) <span class="comment"># 计算当前批次的损失</span></span><br><span class="line"></span><br><span class="line">        gradients = tape.gradient(loss, model.trainable_variables) <span class="comment"># 计算损失对模型参数的梯度</span></span><br><span class="line">        optimizer.apply_gradients(<span class="built_in">zip</span>(gradients, model.trainable_variables)) <span class="comment"># 应用梯度更新模型参数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (epoch + <span class="number">1</span>) % <span class="number">10</span> == <span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Epoch <span class="subst">&#123;epoch + <span class="number">1</span>&#125;</span>, Loss: <span class="subst">&#123;loss.numpy()&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 预测</span></span><br><span class="line">logits = model(X_data) <span class="comment"># 通过模型前向传播计算所有样本的logits</span></span><br><span class="line">predictions = tf.argmax(logits, axis=<span class="number">1</span>) <span class="comment"># 找到每个样本logits中最大值的索引，作为预测类别</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;Predictions: <span class="subst">&#123;predictions.numpy()&#125;</span>&#x27;</span>) <span class="comment"># 打印预测结果</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;True labels: <span class="subst">&#123;y_data&#125;</span>&#x27;</span>) <span class="comment"># 打印真实标签</span></span><br><span class="line"><span class="comment"># Epoch 10, Loss: 0.8509548902511597</span></span><br><span class="line"><span class="comment"># Epoch 20, Loss: 0.8373783230781555</span></span><br><span class="line"><span class="comment"># Epoch 30, Loss: 0.8273806571960449</span></span><br><span class="line"><span class="comment"># Epoch 40, Loss: 0.8200419545173645</span></span><br><span class="line"><span class="comment"># Epoch 50, Loss: 0.8146781921386719</span></span><br><span class="line"><span class="comment"># Epoch 60, Loss: 0.8107778429985046</span></span><br><span class="line"><span class="comment"># Epoch 70, Loss: 0.8079572916030884</span></span><br><span class="line"><span class="comment"># Epoch 80, Loss: 0.8059269189834595</span></span><br><span class="line"><span class="comment"># Epoch 90, Loss: 0.8044678568840027</span></span><br><span class="line"><span class="comment"># Epoch 100, Loss: 0.8034144639968872</span></span><br><span class="line"><span class="comment"># Predictions: [1 1 1 0 1 1 1 1 1 1]</span></span><br><span class="line"><span class="comment"># True labels: [2 0 2 2 1 0 1 1 1 1]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://github.com/fengdu78/deeplearning_ai_books">深度学习教程中文笔记</a><br><a target="_blank" rel="noopener" href="https://github.com/WithHades/deep_learning">吴恩达深度学习作业</a><br><a target="_blank" rel="noopener" href="https://kyonhuang.top/Andrew-Ng-Deep-Learning-notes">《深度学习》课程笔记</a><br><a target="_blank" rel="noopener" href="https://dennybritz.com/posts/wildml/implementing-a-neural-network-from-scratch/">Implementing a Neural Network from Scratch in Python</a><br><a target="_blank" rel="noopener" href="https://github.com/imssyang/python/tree/main/sample/custom/deeplearning">deeplearning_code</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+              <a href="/tags/ArtificialIntelligence/" rel="tag"><i class="fa fa-tag"></i> ArtificialIntelligence</a>
+              <a href="/tags/NeuralNetwork/" rel="tag"><i class="fa fa-tag"></i> NeuralNetwork</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/ProgrammingLanguage/Swift/Basic.html" rel="prev" title="Swift基础">
+                  <i class="fa fa-chevron-left"></i> Swift基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/DeepLearning/CNN.html" rel="next" title="卷积神经网络（CNN）">
+                  卷积神经网络（CNN） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:27</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/DeepLearning/Basic.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/disqusjs/dist/disqusjs.css" integrity="sha256-GxdCIOyfxQ1OBfS99qAIJDoGK1ADuBsxhMTqXG82fAY=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqus.com/api/","apikey":"9zaN2jW6zXMHxC3NctLnrVsVuNe4yZ8CyZ1rWAJQKcIc7JMaHNPP9m4vra2AJeIA","shortname":"imssyang","js":{"url":"/lib/disqusjs/dist/disqus.js","integrity":"sha256-LVaMHPQ2zLqOc5rXSAfr4d1PIkEGNLyyUTDNPZmTtUw="}}</script>
+<script src="/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>
