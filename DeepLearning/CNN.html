@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="卷积神经网络（CNN - Convolutional Neural Network）是一种专门用于处理具有网格状结构数据（例如图像）的深度学习模型。它特别擅长于图像分类、目标检测和语义分割等任务。CNN 通过使用卷积层、池化层和全连接层来提取和组合特征，逐渐从低层次特征（如边缘、角点）到高层次特征（如物体、图案）进行表示学习。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷积神经网络（CNN）">
+<meta property="og:url" content="https://blog.imssyang.com/DeepLearning/CNN.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="卷积神经网络（CNN - Convolutional Neural Network）是一种专门用于处理具有网格状结构数据（例如图像）的深度学习模型。它特别擅长于图像分类、目标检测和语义分割等任务。CNN 通过使用卷积层、池化层和全连接层来提取和组合特征，逐渐从低层次特征（如边缘、角点）到高层次特征（如物体、图案）进行表示学习。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/conv_vertical_pos.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/conv_horizontals.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/conv_padding.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/conv_stride.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/conv_vertical3d.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/pooling_max.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/resnet_idblock2.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/resnet_idblock3.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/resnet_convblock.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/resnet_layer50.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_classification.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_sliding_windows.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_fc2conv.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_sliding_win_conv.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_sliding_win_conv2.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_box_label.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_yolo_anchor_box.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_yolo_architecture.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_yolo_probability_extraction.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_yolo_flatten.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_yolo_proba_map.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_yolo_nonmax_suppression.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_yolo_iou.png">
+<meta property="og:image" content="https://blog.imssyang.com/images/DeepLearning/car_region_cnn.png">
+<meta property="article:published_time" content="2024-06-03T04:43:30.000Z">
+<meta property="article:modified_time" content="2024-07-30T16:00:00.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="DeepLearning">
+<meta property="article:tag" content="ConvolutionalNeuralNetwork">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.imssyang.com/images/DeepLearning/conv_vertical_pos.png">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/DeepLearning/CNN.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/DeepLearning/CNN.html","path":"DeepLearning/CNN.html","title":"卷积神经网络（CNN）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>卷积神经网络（CNN） | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97%EF%BC%88Convolution%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">卷积计算（Convolution）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A1%AB%E5%85%85%EF%BC%88Padding%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">填充（Padding）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E5%B9%85%EF%BC%88Stride%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">步幅（Stride）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%BB%B4%EF%BC%88Conv3d%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">三维（Conv3d）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E6%A0%B8%EF%BC%88-1-times-1-%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">卷积核（$1 \times 1$）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">卷积神经网络（CNN）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E5%B1%82%EF%BC%88ConvLayer%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">卷积层（ConvLayer）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%A0%E5%8C%96%E5%B1%82%EF%BC%88PoolingLayer%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">池化层（PoolingLayer）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E8%BF%9E%E6%8E%A5%E5%B1%82%EF%BC%88FullyConnLayer%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">全连接层（FullyConnLayer）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.4.</span> <span class="nav-text">数字识别示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AE%8B%E5%B7%AE%E7%BD%91%E7%BB%9C%EF%BC%88ResNet%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">残差网络（ResNet）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%92%E7%AD%89%E5%9D%97%EF%BC%88Identity-Block%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">恒等块（Identity Block）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E5%9D%97%EF%BC%88Convolution-Block%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">卷积块（Convolution Block）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ResNet-50"><span class="nav-number">3.3.</span> <span class="nav-text">ResNet-50</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%EF%BC%88Object-Detection%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">目标检测（Object Detection）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%EF%BC%88Sliding-Windows%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">滑动窗口（Sliding Windows）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YOLOv2"><span class="nav-number">4.2.</span> <span class="nav-text">YOLOv2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E6%B3%A8%E5%9B%BE%E5%83%8F"><span class="nav-number">4.2.1.</span> <span class="nav-text">标注图像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96"><span class="nav-number">4.2.2.</span> <span class="nav-text">特征提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%9E%81%E5%A4%A7%E5%80%BC%E6%8A%91%E5%88%B6%EF%BC%88NMS%EF%BC%89"><span class="nav-number">4.2.3.</span> <span class="nav-text">非极大值抑制（NMS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E5%B9%B6%E6%AF%94%EF%BC%88IoU%EF%BC%89"><span class="nav-number">4.2.3.1.</span> <span class="nav-text">交并比（IoU）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%80%99%E9%80%89%E5%8C%BA%E5%9F%9F%EF%BC%88R-CNN%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">候选区域（R-CNN）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cuDNN"><span class="nav-number">5.</span> <span class="nav-text">cuDNN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PyTorch"><span class="nav-number">6.</span> <span class="nav-text">PyTorch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT"><span class="nav-number">7.</span> <span class="nav-text">TensorRT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/DeepLearning/CNN.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          卷积神经网络（CNN）
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/DeepLearning/" itemprop="url" rel="index"><span itemprop="name">DeepLearning</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 6/3/2024 12:43:30" itemprop="dateCreated datePublished" datetime="2024-06-03T12:43:30+08:00">6/3/2024</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 7/31/2024 00:00:00" itemprop="dateModified" datetime="2024-07-31T00:00:00+08:00">7/31/2024</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>15k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>13 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>卷积神经网络（CNN - Convolutional Neural Network）是一种专门用于处理具有网格状结构数据（例如图像）的深度学习模型。它特别擅长于图像分类、目标检测和语义分割等任务。CNN 通过使用卷积层、池化层和全连接层来提取和组合特征，逐渐从低层次特征（如边缘、角点）到高层次特征（如物体、图案）进行表示学习。</p>
+<span id="more"></span>
+
+<h1 id="卷积计算（Convolution）"><a href="#卷积计算（Convolution）" class="headerlink" title="卷积计算（Convolution）"></a>卷积计算（Convolution）</h1><p>卷积计算（Convolution）在数学和信号处理领域中是一种重要的操作。具体来说，卷积是通过“滑动”一个函数（称为卷积核kernel，或滤波器filter）在另一个函数（通常是信号或图像）上，并计算它们重叠部分的点积的过程。广泛应用于信号处理、图像处理、统计分析等领域。</p>
+<p>假定存在一个 $6 \times 6 \times 1$ 的灰度图像，为了检测图像中的垂直边缘，可以先构造一个 $3 \times 3$ 的过滤器（或者叫卷积核），然后对这个图像进行卷积运算：</p>
+<p><img data-src="/images/DeepLearning/conv_vertical_pos.png"></p>
+<p>从输入矩阵（Input Metrix） 左上角开始，按照从左到右，从上到下的顺序移动卷积核（Convolution Kernel，也称为滤波器 Filter），依次计算矩阵点积结果得到输出矩阵（Output Metrix）， 以输出矩阵中得到30为例说明：<br>$$<br>\vec{a} \cdot \vec{b} &#x3D; \sum_{ij} a_{ij} b_{ij} &#x3D;<br>\begin{bmatrix}<br>10 &amp; 10 &amp; 0 \\<br>10 &amp; 10 &amp; 0 \\<br>10 &amp; 10 &amp; 0<br>\end{bmatrix}<br>\cdot<br>\begin{bmatrix}<br>1 &amp; 0 &amp; -1 \\<br>1 &amp; 0 &amp; -1 \\<br>1 &amp; 0 &amp; -1<br>\end{bmatrix}<br>\text{&#x3D;}<br>\sum_{ij}<br>\begin{bmatrix}<br>10\times1 &amp; 10\times0 &amp; 0\times-1 \\<br>10\times1 &amp; 10\times0 &amp; 0\times-1 \\<br>10\times1 &amp; 10\times0 &amp; 0\times-1<br>\end{bmatrix}<br>\text{&#x3D;}<br>\sum_{ij}<br>\begin{bmatrix}<br>10 &amp; 0 &amp; 0 \\<br>10 &amp; 0 &amp; 0 \\<br>10 &amp; 0 &amp; 0<br>\end{bmatrix}<br>\text{&#x3D;}<br>30<br>$$</p>
+<ul>
+<li>卷积运算提供了一个方便的方法来发现图像中的垂直边缘。</li>
+</ul>
+<p><img data-src="/images/DeepLearning/conv_horizontals.png"></p>
+<ul>
+<li>同一个边缘过滤器可以区分明暗变化（由亮到暗，或者由暗到亮），取绝对值可以忽略明暗变化。</li>
+<li>使用不同的过滤器，可以找出垂直或是水平的边缘。</li>
+</ul>
+<h2 id="填充（Padding）"><a href="#填充（Padding）" class="headerlink" title="填充（Padding）"></a>填充（Padding）</h2><p>上述在一个 $6 \times 6 \times 1$ 的灰度图像（input）上用 $3 \times 3$ 的卷积核（kernel）过滤，会得到 $4 \times 4 \times 1$ 的特征输出（output）。这样会产生两个缺点：</p>
+<ul>
+<li>每次做卷积操作，图像都会缩小，多次操作后，图像可能变得非常小；</li>
+<li>在角落或边缘区域的像素点，参与卷积计算的程度较少，意味着输出中丢掉了图像边缘位置的许多信息；</li>
+<li>（Valid卷积，无填充）计算输出矩阵的维度：<br>$$output &#x3D; (input - kernel) + 1$$</li>
+</ul>
+<p>为了解决这些问题，可以卷积操作之前填充（padding）图像。在上述示例中，沿着图像边缘再填充一层像素变成为 $8 \times 8 \times 1$ 的灰度图像，再用 $3 \times 3$ 的卷积核过滤后得到 $6 \times 6 \times 1$ 的特征输出，这与原始图像尺寸完全一致。</p>
+<p><img data-src="/images/DeepLearning/conv_padding.png"></p>
+<ul>
+<li>通常用 0 作为填充项，这样图像边缘信息发挥作用较小的缺点也被削弱了；</li>
+<li>计算输出矩阵的维度<br>$$output &#x3D; (input - kernel + 2 * padding) + 1$$<br>$$（Same卷积）input &#x3D; output 时，padding &#x3D; (kernel - 1) &#x2F; 2$$</li>
+</ul>
+<h2 id="步幅（Stride）"><a href="#步幅（Stride）" class="headerlink" title="步幅（Stride）"></a>步幅（Stride）</h2><p>步幅（Stride）是另一个影响卷积输出的基本操作，之前移动卷积核的步长为 1。下面在一个 $6 \times 6 \times 1$ 的灰度图像（input）上用 $3 \times 3$ 的卷积核（kernel）过滤，填充（padding）纬度为 1，每次步幅（stride）为 2，会得到 $3 \times 3 \times 1$ 的特征输出（output）。</p>
+<p><img data-src="/images/DeepLearning/conv_stride.png"></p>
+<ul>
+<li>计算输出矩阵的维度：<br>$$output &#x3D; (input - kernel + 2 * padding) &#x2F; stride + 1$$<br>$$（Same卷积）input &#x3D; output 时，padding &#x3D; (input * (stride - 1) - stride + kernel) &#x2F; 2$$</li>
+<li>通常卷积核必须完全处于图像区域中才输出相应的结果（当output不是整数时，向下取整到最近的整数）。</li>
+</ul>
+<h2 id="三维（Conv3d）"><a href="#三维（Conv3d）" class="headerlink" title="三维（Conv3d）"></a>三维（Conv3d）</h2><p>卷积计算不仅仅用在二维灰度图像上，也可以用于分析彩色 RGB 图像。假定一个彩色图像为 $6 \times 6 \times 3$，这里 3 指三个颜色通道，为了检测图像的垂直边缘，采用一个三维的垂直卷积核 $3 \times 3 \times 3$，也对应 R, G, B 三个颜色通道，卷积计算后会得到 $4 \times 4 \times 1$ 的二维特征输出。</p>
+<p><img data-src="/images/DeepLearning/conv_vertical3d.png"></p>
+<ul>
+<li>卷积核的通道数必须与输入图像的通道数一致；</li>
+<li>卷积核有 27 个元素，每次滑动时会计算 27 个元素的点积，所以最终输出是二维的；</li>
+</ul>
+<p>当需要同时检测多种特征，比如检测垂直边缘、水平边缘、45°倾斜边缘等时，需要在多个卷积核上分别进行卷积计算，并将各个卷积核的输出堆叠在一起作为最终输出：</p>
+<p>$$<br>\text{Input}<br>\begin{bmatrix}<br>6 \times 6 \times 3<br>\end{bmatrix}<br>\text{*}<br>\begin{cases}<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (45°) \\<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (90°) \\<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (180°)<br>\end{cases}<br>\text{&#x3D;}<br>\begin{cases}<br>\text{Output}\begin{bmatrix} 4 \times 4 \times 1 \end{bmatrix} (45°) \\<br>\text{Output}\begin{bmatrix} 4 \times 4 \times 1 \end{bmatrix} (90°) \\<br>\text{Output}\begin{bmatrix} 4 \times 4 \times 1 \end{bmatrix} (180°)<br>\end{cases}<br>\text{&#x3D;}<br>\text{Output}<br>\begin{bmatrix}<br>4 \times 4 \times 3<br>\end{bmatrix}<br>$$</p>
+<ul>
+<li>输出的通道数等于卷积核的数量，也即是要检测的特征数。</li>
+</ul>
+<h2 id="卷积核（-1-times-1-）"><a href="#卷积核（-1-times-1-）" class="headerlink" title="卷积核（$1 \times 1$）"></a>卷积核（$1 \times 1$）</h2><p>卷积核（或滤波器）（$1 \times 1$）有几个重要的作用：</p>
+<ul>
+<li>降维：1x1卷积减少特征图（通道）的数量，同时保持空间维度（高度和宽度）不变。<ul>
+<li>这在特征图数量较大且希望降低后续层计算复杂度或内存使用量时特别有用。</li>
+<li>通过应用多个1x1卷积，可以在不丢失空间信息的情况下压缩特征图。</li>
+</ul>
+</li>
+<li>引入非线性：在1x1卷积之后，通常会应用激活函数（如ReLU），为模型增加非线性。<ul>
+<li>这有助于增强模型学习复杂模式和表示的能力。</li>
+</ul>
+</li>
+<li>特征聚合：1x1卷积在每个空间位置上执行输入通道的加权组合，这允许网络从不同通道中聚合特征，从而通过组合各种特征来学习更复杂的表示。</li>
+<li>ResNet中的瓶颈层：在ResNet等架构中，1x1卷积用于瓶颈层，在应用3x3卷积之前减少通道数，然后再恢复原始通道数。<ul>
+<li>这种结构有助于减少参数数量和计算成本，同时保持网络的深度和容量。</li>
+</ul>
+</li>
+</ul>
+<h1 id="卷积神经网络（CNN）"><a href="#卷积神经网络（CNN）" class="headerlink" title="卷积神经网络（CNN）"></a>卷积神经网络（CNN）</h1><p><a target="_blank" rel="noopener" href="https://betterexplained.com/articles/intuitive-convolution/">Intuitive Guide to Convolution</a><br><a target="_blank" rel="noopener" href="https://mlnotebook.github.io/post/CNN1/">Convolutional Neural Networks - Basics</a></p>
+<p>卷积神经网络（Convolutional Neural Networks，CNNs）是一种深度学习模型，专门用于处理具有网格状拓扑结构的数据，例如图像。CNNs 利用卷积计算作为其核心操作（代替矩阵乘法），以有效提取和处理图像中的空间特征。其基本组成有：</p>
+<ol>
+<li>卷积层（Convolutional Layer）</li>
+</ol>
+<ul>
+<li>卷积操作：使用多个卷积核（filters）对输入图像进行卷积运算，提取局部特征，生成特征图（feature maps）。</li>
+<li>激活函数：通常使用ReLU（Rectified Linear Unit）激活函数，添加非线性特性。</li>
+</ul>
+<ol start="2">
+<li>池化层（Pooling Layer）</li>
+</ol>
+<ul>
+<li>最大池化（Max Pooling）：取局部区域中的最大值，减少特征图的尺寸，保留重要特征。</li>
+<li>平均池化（Average Pooling）：取局部区域中的平均值。</li>
+</ul>
+<ol start="3">
+<li>全连接层（Fully Connected Layer）</li>
+</ol>
+<ul>
+<li>将池化层输出的特征图展开成一维向量，连接到全连接层，最终用于分类或回归任务。</li>
+</ul>
+<p>卷积计算与CNN的关系：</p>
+<ul>
+<li>卷积计算是CNN的核心操作，通过卷积核在输入数据上的滑动，提取局部特征。</li>
+<li>多层卷积计算使得CNN能够从简单的边缘特征逐步提取更复杂的模式和结构。</li>
+<li>参数共享和局部连接使得CNN在处理大规模图像数据时更加高效。</li>
+</ul>
+<h2 id="卷积层（ConvLayer）"><a href="#卷积层（ConvLayer）" class="headerlink" title="卷积层（ConvLayer）"></a>卷积层（ConvLayer）</h2><p>用一个卷积层分析一个 $6 \times 6 \times 3$ 的彩色 RGB 图像，采用 3 个三维卷积核 $3 \times 3 \times 3$分析不同的特征，卷积计算后会得到 $4 \times 4 \times 3$ 的堆叠特征输出。输入层到卷积层的计算过程如下：</p>
+<p><strong>输入图像 RGB 矩阵：</strong><br>$$ \mathbf{X} &#x3D;<br>\text{Input}<br>\begin{bmatrix}<br>6 \times 6 \times 3<br>\end{bmatrix}<br>$$<br><strong>各种特征的卷积核组合成权重矩阵和偏差量：</strong><br>$$<br>\mathbf{W}^{(1)} &#x3D;<br>\begin{cases}<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (45°) \\<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (90°) \\<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (180°)<br>\end{cases}<br>$$<br>$$<br>\mathbf{b}^{(1)} &#x3D;<br>\begin{cases}<br>b_1 (45°) \\<br>b_2 (90°) \\<br>b_3 (180°)<br>\end{cases}<br>$$<br><strong>卷积层的线性组合输出：</strong><br>$$<br>\mathbf{Z}^{(1)} &#x3D;  \mathbf{X} \mathbf{W}^{(1)} + \mathbf{b}^{(1)} &#x3D;<br>\text{Input}\begin{bmatrix}6 \times 6 \times 3\end{bmatrix}<br>\text{*}<br>\begin{cases}<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (45°) \\<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (90°) \\<br>\text{Kernel}\begin{bmatrix} 3 \times 3 \times 3 \end{bmatrix} (180°)<br>\end{cases}<br>\text{+}<br>\begin{cases}<br>b_1 (45°) \\<br>b_2 (90°) \\<br>b_3 (180°)<br>\end{cases}<br>\text{&#x3D;}<br>\begin{bmatrix}<br>\text{Input} * \text{Kernel} (45°) + b_1 (45°) \\<br>\text{Input} * \text{Kernel} (90°) + b_2 (90°) \\<br>\text{Input} * \text{Kernel} (180°) + b_3 (180°)<br>\end{bmatrix}<br>$$<br><strong>应用激活函数（ReLU）后的卷积层输出：</strong><br>$$<br>\mathbf{h}^{(1)} &#x3D; \sigma(\mathbf{Z}^{(1)}) &#x3D;<br>\begin{bmatrix}<br>\sigma(z_1^{(1)}) \\<br>\sigma(z_2^{(1)}) \\<br>\sigma(z_3^{(1)})<br>\end{bmatrix}<br>\text{&#x3D;}<br>\begin{bmatrix}<br>\text{Output}\begin{bmatrix} 4 \times 4 \times 1 \end{bmatrix} (45°) \\<br>\text{Output}\begin{bmatrix} 4 \times 4 \times 1 \end{bmatrix} (90°) \\<br>\text{Output}\begin{bmatrix} 4 \times 4 \times 1 \end{bmatrix} (180°)<br>\end{bmatrix}<br>\text{&#x3D;}<br>\text{Output}\begin{bmatrix}4 \times 4 \times 3\end{bmatrix}<br>$$<br>其中，即 $𝜎(𝑧) &#x3D; max⁡(0, 𝑧)$ 是<code>ReLU</code>激活函数。</p>
+<ul>
+<li>一个卷积层的输出可以作为另一个卷积层的输入，形成多层卷积网络；</li>
+<li>彩色图像 $6 \times 6 \times 3$，经过卷积层后得到 $4 \times 4 \times 3$ 的堆叠特征输出，将其平滑处理后得到一个有 48 个单元的向量，可以用在 logistic 回归或者 softmax 回归上处理分类问题。</li>
+</ul>
+<h2 id="池化层（PoolingLayer）"><a href="#池化层（PoolingLayer）" class="headerlink" title="池化层（PoolingLayer）"></a>池化层（PoolingLayer）</h2><p>卷积网络也常用池化层来缩减模型的大小，提高计算速度。假如输入是一个 $4 \times 4$ 矩阵，用 $2 \times 2$ 的最大池化（max pooling，计算区域内最大值），按步幅 2 移动，最终会得到 $2 \times 2$ 的特征输出。</p>
+<p><img data-src="/images/DeepLearning/pooling_max.png"></p>
+<ul>
+<li>池化的超级参数包括过滤器大小（filter size）和步幅（stride），很少需要填充（padding）。</li>
+<li>池化类型除了常用的最大池（max pooling）外，还有平均池（avg pooling）。</li>
+<li>池化层的输出通道数与输入通道数一致（三维池化）。</li>
+<li>池化层只有超参数，没有可以学习的参数（权重和偏差），因此不影响反向传播，有时和卷积层合并表示为一层神经网络。</li>
+</ul>
+<h2 id="全连接层（FullyConnLayer）"><a href="#全连接层（FullyConnLayer）" class="headerlink" title="全连接层（FullyConnLayer）"></a>全连接层（FullyConnLayer）</h2><p>全连接层通常位于 CNN 网络的最后几层，它接收前一层（通常是卷积层或池化层）的输出，将其展平为一维向量，然后通过一系列的权重和偏置进行线性变换，并通过激活函数（如ReLU或softmax）进行非线性变换。最终，全连接层输出的结果用于分类或回归任务（类似于 NN 网络）。</p>
+<h2 id="数字识别示例"><a href="#数字识别示例" class="headerlink" title="数字识别示例"></a>数字识别示例</h2><p>假设有一张 $32 \times 32 \times 3$ 的 RGB 图片，构建一个卷积神经网络，用来识别它是 0~9 中的哪一个数字。网络结构如下：</p>
+<ol>
+<li>（Input）输入层，处理成 $32 \times 32 \times 3$ 的矩阵；</li>
+<li>（Conv1）第一层，卷积层采用 $5 \times 5$ 的卷积核分析 8 个特征，步幅为 1，填充为 0。卷积计算后加上偏差（bias），再应用 ReLU 激活函数得到结果为 $28 \times 28 \times 8$，其中</li>
+</ol>
+<ul>
+<li>图片宽高 $o &#x3D; (i - kernel + 2 \times padding)&#x2F;stride + 1 &#x3D; (32 - 5 + 2 \times 0) &#x2F; 1 + 1 &#x3D; 28$</li>
+<li>图片通道从输入层 RGB 3 个色彩通道变更为 8 个特征通道；</li>
+</ul>
+<ol start="3">
+<li>（Pool1）第一层，池化层采用最大池化 $2 \times 2$，步幅为 2，得到结果为 $14 \times 14 \times 8$，其中</li>
+</ol>
+<ul>
+<li>图片宽高 $o &#x3D; (i - kernel)&#x2F;stride + 1 &#x3D; (28 - 2) &#x2F; 2 + 1 &#x3D; 14$</li>
+<li>图片通道保持卷积后得到的 8 个特征通道；</li>
+</ul>
+<ol start="4">
+<li>（Conv2）第二层，卷积层采用 $5 \times 5$ 的卷积核分析 16 个特征，步幅为 1，填充为 0。卷积计算后加上偏差（bias），再应用 ReLU 激活函数得到结果为 $10 \times 10 \times 16$，其中</li>
+</ol>
+<ul>
+<li>图片宽高 $o &#x3D; (i - kernel + 2 \times padding)&#x2F;stride + 1 &#x3D; (14 - 5 + 2 \times 0) &#x2F; 1 + 1 &#x3D; 10$</li>
+<li>图片通道从上一次卷积的 8 个特征通道变更为新的 16 个特征通道；</li>
+</ul>
+<ol start="5">
+<li>（Pool2）第二层，池化层采用最大池化 $2 \times 2$，步幅为 2，得到池化层结果为 $5 \times 5 \times 16$，其中</li>
+</ol>
+<ul>
+<li>图片宽高 $o &#x3D; (i - kernel)&#x2F;stride + 1 &#x3D; (10 - 2) &#x2F; 2 + 1 &#x3D; 5$</li>
+<li>图片通道保持卷积后得到的 16 个特征通道；</li>
+</ul>
+<ol start="6">
+<li>（FC3）第三层，全连接层采用 $120$ 个单元（权重）。将上一层的结果 $5 \times 5 \times 16$ 平滑展开为 $400$ 个单元后，与当前层的 $120$ 个单元相连再加上偏差，得到结果为 $120 \times 1$。</li>
+<li>（FC4）第四层，全连接层采用 $84$ 个单元（权重）。将上一层的结果 $120$ 个单元与当前层的 $84$ 个单元相连再加上偏差，得到当前层的结果为 $84 \times 1$。</li>
+<li>（Softmax）输出层，用上一层的结果 $84 \times 1$ 填充一个 softmax 单元，输出 0~9 范围中的其中一个。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">Layer (type)</th>
+<th align="center">Activation Shape</th>
+<th align="center">Activation Size</th>
+<th align="right">Params #</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Input</td>
+<td align="center">(32, 32, 3)</td>
+<td align="center">3072</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Conv1 (5x5_8, stride&#x3D;1, ReLU)</td>
+<td align="center">(28, 28, 8)</td>
+<td align="center">6272</td>
+<td align="right">($5 \ast 5 \ast 8 + 8$) 208</td>
+</tr>
+<tr>
+<td align="left">Pool1 (2x2, stride&#x3D;2)</td>
+<td align="center">(14, 14, 8)</td>
+<td align="center">1568</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">Conv2 (5x5_16, stride&#x3D;1, ReLU)</td>
+<td align="center">(10, 10, 16)</td>
+<td align="center">1600</td>
+<td align="right">($5 \ast 5 \ast 16 \ast 8 + 16$) 3216</td>
+</tr>
+<tr>
+<td align="left">Pool2 (2x2, stride&#x3D;2)</td>
+<td align="center">(5, 5, 16)</td>
+<td align="center">400</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">FC3</td>
+<td align="center">(120, 1)</td>
+<td align="center">120</td>
+<td align="right">($120 \ast 400 + 120$) 48120</td>
+</tr>
+<tr>
+<td align="left">FC4</td>
+<td align="center">(84, 1)</td>
+<td align="center">84</td>
+<td align="right">($84 \ast 120 + 84$) 10164</td>
+</tr>
+<tr>
+<td align="left">Softmax</td>
+<td align="center">(10, 1)</td>
+<td align="center">10</td>
+<td align="right">($10 \ast 84+10$) 850</td>
+</tr>
+</tbody></table>
+<ul>
+<li>随着神经网络的加深，图片的宽和高通常都会减少（$32 \times 32$ -&gt; $5 \times 5$），激活值尺寸会逐渐变小（$6272$ -&gt; $10$），而通道数会增加（$3$ -&gt; $8$ -&gt; $16$）。<ul>
+<li>如果激活值尺寸下降太快，也会影响神经网络性能。</li>
+</ul>
+</li>
+<li>对于可学习的参数（权重和偏差），输入层和池化层没有参数，卷积层的参数相对较少。卷积层参数少主要有两个原因：<ul>
+<li>参数共享：每个特征检测器以及输出都可以在输入图片的不同区域中使用同样的参数，以便提取垂直边缘或其它特征。它不仅适用于边缘特征这样的低阶特征，同样适用于高阶特征，例如提取脸上的眼睛，猫或者其他特征对象。</li>
+<li>稀疏连接：卷积计算的每个输出都只与输入特征中的卷积区域相关，而卷积区域外的输入像素并不会影响当前输出值。</li>
+</ul>
+</li>
+</ul>
+<h1 id="残差网络（ResNet）"><a href="#残差网络（ResNet）" class="headerlink" title="残差网络（ResNet）"></a>残差网络（ResNet）</h1><p>深度神经网络可以表示很复杂的功能，学习到许多不同抽象层次的特征，从边缘(在较低的层)到非常复杂的特征(在较深的层)。然而深度神经网络在实际训练中有如下问题：</p>
+<ul>
+<li>梯度问题：容易遇到一个迅速下降到接近 0 的梯度信号（梯度爆炸），使得后续梯度下降慢的难以忍受（梯度消失）。更具体地说，在梯度下降过程中，当从最后一层反向传播回第一层时，每一步都要乘以权重矩阵，因此梯度可能会以指数速度下降到零（或者，在极少数情况下，以指数速度增长并“爆炸”到非常大的值）。</li>
+<li>退化问题：更深的网络反而比浅层网络表现更差。</li>
+</ul>
+<p>残差网络（Residual Network）是一种特殊类型的神经网络，通过添加捷径连接（shortcut connections）或跳跃连接（skip connections）形成“残差块（residual block）”，用来减轻深度神经网络的退化问题。通过这些捷径连接，输入可以绕过一个或多个层，直接传递到后面的层。残差网络是由微软研究院的Kaiming He等人在2015年提出的，并在图像分类任务中取得了显著的成功。</p>
+<p>残差块输出表示：<br>$$ 𝑦 &#x3D; 𝐹(𝑥, {𝑊_𝑖}) + 𝑥 $$<br>$$<br>其中：<br>𝑥 是输入，<br>𝐹(𝑥, {𝑊_𝑖}) 是通过主路径得到的变换，<br>𝑦 是残差块的输出。<br>$$</p>
+<p><strong>残差块使得网络在训练过程中更容易学习到恒等映射（identity mapping），从而避免了退化问题。</strong></p>
+<h2 id="恒等块（Identity-Block）"><a href="#恒等块（Identity-Block）" class="headerlink" title="恒等块（Identity Block）"></a>恒等块（Identity Block）</h2><p>恒等块（Identity Block）是一种残差块类型，主要结构：</p>
+<ul>
+<li>主路径（main path）：通常是两层或三层卷积网络，可能包括ReLU激活函数和批量归一化（Batch Normalization）。</li>
+<li>捷径连接（shortcut connection）：直接将输入传递到输出，不经过主路径中的层，不改变输入张量的尺寸和通道数。</li>
+</ul>
+<p><img data-src="/images/DeepLearning/resnet_idblock2.png" alt="Identity Block (&quot;skips over&quot; 2 layers)"><br><img data-src="/images/DeepLearning/resnet_idblock3.png" alt="Identity Block (&quot;skips over&quot; 3 layers)"></p>
+<ul>
+<li>恒等块不改变输入张量，只适用于输入和输出尺寸相同的情况。</li>
+</ul>
+<h2 id="卷积块（Convolution-Block）"><a href="#卷积块（Convolution-Block）" class="headerlink" title="卷积块（Convolution Block）"></a>卷积块（Convolution Block）</h2><p>卷积块（Convolution Block）是一种残差块类型，主要结构：</p>
+<ul>
+<li>主路径（main path）：通常是两层或三层卷积网络，可能包括ReLU激活函数和批量归一化（Batch Normalization）。</li>
+<li>捷径连接（shortcut connection）：通常包括 1x1 卷积层，用于调整输入张量的尺寸和通道数以匹配主路径的输出，不经过主路径中的层。</li>
+</ul>
+<p><img data-src="/images/DeepLearning/resnet_convblock.png" alt="Convolutional block"></p>
+<ul>
+<li>卷积块引入了 1x1 卷积层调整张量尺寸，可以处理输入和输出尺寸不同的情况，更加灵活。</li>
+</ul>
+<h2 id="ResNet-50"><a href="#ResNet-50" class="headerlink" title="ResNet-50"></a>ResNet-50</h2><p>残差网络由多个残差块堆叠而成，可以有不同的深度，如ResNet-18、ResNet-34、ResNet-50、ResNet-101和ResNet-152等，数字代表网络的层数。ResNet-50的架构示例：</p>
+<p><img data-src="/images/DeepLearning/resnet_layer50.png"></p>
+<p>ResNet-50 网络结构：</p>
+<p>IdentityBlock([f1, f2, f3], f), with BatchNorm, ReLU:</p>
+<ul>
+<li>MainPath:<ul>
+<li>Conv2D (Valid): {f1} filters, filter $1 \times 1$, stride $1 \times 1$. [channel &#x3D; f1, i &#x3D; o]</li>
+<li>Conv2D (Same): {f2} filters, filter ${f} \times {f}$, stride $1 \times 1$, with padding. [channel &#x3D; f2, i &#x3D; o]</li>
+<li>Conv2D (Valid): {f3} filters, filter $1 \times 1$, stride $1 \times 1$. [channel &#x3D; f3, i &#x3D; o]</li>
+</ul>
+</li>
+</ul>
+<p>ConvBlock([f1, f2, f3], f, s), with BatchNorm, ReLU:</p>
+<ul>
+<li>MainPath:<ul>
+<li>Conv2D (Valid): {f1} filters, filter $1 \times 1$, stride ${s} \times {s}$. [channel &#x3D; f1, size &#x3D; (i - 1) &#x2F;&#x2F; s + 1 &#x3D; o]</li>
+<li>Conv2D (Same): {f2} filters, filter ${f} \times {f}$, stride $1 \times 1$, with padding. [channel &#x3D; f2, size &#x3D; i &#x3D; o]</li>
+<li>Conv2D (Valid): {f3} filters, filter $1 \times 1$, stride $1 \times 1$. [channel &#x3D; f3, size &#x3D; i &#x3D; o]</li>
+</ul>
+</li>
+<li>ShortcutPath:<ul>
+<li>Conv2D (Valid): {f3} filters, filter $1 \times 1$, stride ${s} \times {s}$. [channel &#x3D; f3, size &#x3D; (i - 1) &#x2F;&#x2F; s + 1 &#x3D; o]</li>
+</ul>
+</li>
+</ul>
+<p>ResNet-50:</p>
+<ul>
+<li>Input：image $64 \times 64 \times 3$, padding $3 \times 3$. [channel &#x3D; 3, size &#x3D; 70 &#x3D; 64 + 2 * 3]</li>
+<li>Stage 1 (1 layers):<ul>
+<li>Conv2D：filter $7 \times 7$, 64 filters, stride $2 \times 2$. [channel &#x3D; 64, size &#x3D; 32 &#x3D; (70 - 7) &#x2F;&#x2F; 2 + 1]</li>
+<li>BatchNorm: Apply to the channels axis of the input.</li>
+<li>MaxPooling: $3 \times 3$, stride $2 \times 2$. [channel &#x3D; 64, size &#x3D; 15 &#x3D; (32 - 3) &#x2F;&#x2F; 2 + 1]</li>
+</ul>
+</li>
+<li>Stage 2 (9 layers):<ul>
+<li>ConvBlock: ([64, 64, 256], f&#x3D;3, s&#x3D;1), with BatchNorm, ReLU. [channel &#x3D; 256, size &#x3D; 15 &#x3D; (15 - 1) &#x2F;&#x2F; 1 + 1]</li>
+<li>IdentityBlock * 2: ([64, 64, 256], f&#x3D;3), with BatchNorm, ReLU.</li>
+</ul>
+</li>
+<li>Stage 3 (12 layers):<ul>
+<li>ConvBlock: ([128, 128, 512], f&#x3D;3, s&#x3D;2), with BatchNorm, ReLU. [channel &#x3D; 512, size &#x3D; 8 &#x3D; (15 - 1) &#x2F;&#x2F; 2 + 1]</li>
+<li>IdentityBlock * 3: ([128,128,512], f&#x3D;3), with BatchNorm, ReLU.</li>
+</ul>
+</li>
+<li>Stage 4 (18 layers):<ul>
+<li>ConvBlock: ([256, 256, 1024], f&#x3D;3, s&#x3D;2), with BatchNorm, ReLU. [channel &#x3D; 1024, size &#x3D; 4 &#x3D; (8 - 1) &#x2F;&#x2F; 2 + 1]</li>
+<li>IdentityBlock * 5: ([256, 256, 1024], f&#x3D;3), with BatchNorm, ReLU.</li>
+</ul>
+</li>
+<li>Stage 5 (9 layers):<ul>
+<li>ConvBlock: ([512, 512, 2048], f&#x3D;3, s&#x3D;2), with BatchNorm, ReLU. [channel &#x3D; 2048, size &#x3D; 2 &#x3D; (4 - 1) &#x2F;&#x2F; 2 + 1]</li>
+<li>IdentityBlock * 2: ([512, 512, 2048], f&#x3D;3), with BatchNorm, ReLU.</li>
+</ul>
+</li>
+<li>AvgPooling: $2 \times 2$. [channel &#x3D; 2048, size &#x3D; 1]</li>
+<li>Flatten: $1 \times 1 \times 2048$ expands smoothly into $2048$. [channel &amp; size &#x3D; 2048]</li>
+<li>FullyConnected (Dense): reduces $2048$ to the number of classes using a softmax activation.</li>
+</ul>
+<h1 id="目标检测（Object-Detection）"><a href="#目标检测（Object-Detection）" class="headerlink" title="目标检测（Object Detection）"></a>目标检测（Object Detection）</h1><p>目标检测（Object Detection）是计算机视觉领域中的一个应用方向，其任务是对输入图像进行分类的同时，检测图像中是否包含某些目标，并对他们准确定位并标识。</p>
+<p>分类（Classification）问题只要求判断出图片中物体的种类，定位（Positioning）还要在图片中标记出它的具体位置，一般用边界框（Bounding Box，或者称包围盒）把物体圈起来。在目标检测（Object Detection）问题中，图片可以含有多个对象，甚至单张图片中会有多个不同分类的对象。</p>
+<h2 id="滑动窗口（Sliding-Windows）"><a href="#滑动窗口（Sliding-Windows）" class="headerlink" title="滑动窗口（Sliding Windows）"></a>滑动窗口（Sliding Windows）</h2><p>以自动驾驶领域的车辆识别为例：</p>
+<p><strong>滑动窗口的目标检测算法（Sliding Windows Detection）</strong>：原理简单，但是性能不佳，效率较低。</p>
+<ol>
+<li>要求训练集选用小尺寸图片，使得目标对象处于中心位置且基本占据整张图片；<br>  <img data-src="/images/DeepLearning/car_classification.png"></li>
+<li>使用上述训练集构建 CNN 模型（带展开的全连接层FC），使得模型对单个对象有较高的识别率；</li>
+<li>选用适宜的窗口大小和步幅，对输入图像从左到右、从上到下的滑动遍历，每次滑动时用上述 CNN 模型进行识别判断；<br>  <img data-src="/images/DeepLearning/car_sliding_windows.png"></li>
+<li>逐渐增大滑动窗口，对输入图像重复上述遍历过程，直至识别到最佳对象位置；</li>
+</ol>
+<p><strong>基于卷积的滑动窗口实现</strong>：</p>
+<p>相比从较大图片多次截取，在卷积层上应用滑动窗口目标检测算法可以提高运行速度。所要做的仅是将全连接层换成卷积层，即使用与上一层尺寸一致的滤波器进行卷积运算。具体过程如下：</p>
+<ol>
+<li>神经网络的全连接层转化成卷积层<br>  <img data-src="/images/DeepLearning/car_fc2conv.png"></li>
+</ol>
+<ul>
+<li>第一个全连接层改为 400 个 $5 \times 5 \times 16$ 的卷积核，得到输出结果 $1 \times 1 \times 400$。</li>
+<li>第二个全连接层改为 400 个 $1 \times 1 \times 400$ 的卷积核，得到输出结果 $1 \times 1 \times 400$。</li>
+<li>最后的 softmax 输出层改为 4 个 $1 \times 1 \times 400$ 的卷积核，得到输出结果 $1 \times 1 \times 4$ （4种目标对象的特征）。</li>
+</ul>
+<ol start="2">
+<li>通过卷积实现滑动窗口对象检测算法<br>  <img data-src="/images/DeepLearning/car_sliding_win_conv.png"></li>
+</ol>
+<ul>
+<li>假定训练集中对象小尺寸图片为 $14 \times 14 \times 3$（滑动窗口尺寸），设计卷积网络，将全连接层改成卷积层，得到输出 $1 \times 1 \times 4$ （4种目标对象的特征）</li>
+<li>将上述网络用在 $16 \times 16 \times 3$ 的图片上滑动遍历时，按步幅 2 移动，可以得到 $2 \times 2 \times 4$ （4种目标对象在4个滑动位置上的特征）<ul>
+<li>全部通过卷积实现网络后，不需要把输入图像分割成四个子集，分别执行前向传播，这样会产生很多重复的计算。</li>
+<li>将整张图片一次性交给卷积网络计算，与滑动方式分别计算四个子集的特征结果是一致的。<br><img data-src="/images/DeepLearning/car_sliding_win_conv2.png"></li>
+</ul>
+</li>
+<li>将上述网络用在 $28 \times 28 \times 3$ 的整张图片时，一次即可得到结果 $8 \times 8 \times 4$ （4种目标对象在64个滑动位置上的特征）</li>
+</ul>
+<p>NOTE: <strong>滑动窗口算法采用是固定的窗口尺寸，因此检测到的边界框位置可能不够准确。</strong></p>
+<h2 id="YOLOv2"><a href="#YOLOv2" class="headerlink" title="YOLOv2"></a>YOLOv2</h2><p>YOLO（You Only Look Once）是一种实时目标检测算法，它将目标检测问题转换为回归问题，并能够在单次神经网络运行中完成图像中所有物体的检测和定位。YOLO的设计目标是速度与精度的平衡，适合需要快速处理的应用场景，如自动驾驶、视频分析等。相比滑动窗口算法，边界框位置也更加精准。</p>
+<p>YOLO 算法将输入图片划分为 $n \times n$ 的网格（例如n&#x3D;19），并将上述的图像分类和定位算法，逐一应用在每个网格中，每个网格的识别结果标签为 $y$。</p>
+<h3 id="标注图像"><a href="#标注图像" class="headerlink" title="标注图像"></a>标注图像</h3><p>通常用输入图像（input）为 $416 \times 416 \times 3$ 或 $608 \times 608 \times 3$，在训练集中标注对象的标签 $y$ :</p>
+<p><img data-src="/images/DeepLearning/car_box_label.png"></p>
+<ul>
+<li>$c&#x3D;3$ 表示对象类别是 <em>car</em>。</li>
+<li>$P_c&#x3D;1$ 表示对象出现在边界框（Bounding Box），$P_c&#x3D;0$ 表示对象不在边界框中。</li>
+<li>$(b_x, b_y, b_h, b_w)$ 表示边界框的中心点、高和宽，以边界框的左上角坐标记为 $(0, 0)$，右下角坐标为 $(1, 1)$。</li>
+</ul>
+<h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><p>YOLO网络规格：</p>
+<ul>
+<li>$19 \times 19$ 尺寸的网格（grid）：有 361 个网格单元（grid cell）。<ul>
+<li>每个网格单元负责预测所有锚框（anchor box）的位置、大小和置信度。</li>
+</ul>
+</li>
+<li>$5$ 种锚框（anchor box）：预定义的一组边界框，用于检测不同形状或尺寸的对象。<br><img data-src="/images/DeepLearning/car_yolo_anchor_box.png"></li>
+<li>$80$ 种对象（object）：例如车辆（car）、路灯（road sign）、信号灯（traffic light）等。</li>
+</ul>
+<p>训练集采用 $m$ 张 $608 \times 608 \times 3$ 尺寸的图像，经过YOLO网络处理后，会产生特征输出 $(m, 19, 19, 5, 85)$。其中，一张图片的特征结果如下：</p>
+<p><img data-src="/images/DeepLearning/car_yolo_architecture.png"></p>
+<ul>
+<li>$(p_c, b_x, b_y, b_h, b_w, c_1, c_2, …, c_{80})$ 表示一个锚框的输出结果，其中，$c_3$ 表示识别成 car 对象的概率。</li>
+<li>对象的中心点（center&#x2F;midpoint）所在的网格单元负责给出对象的特征结果。</li>
+</ul>
+<p>在一个锚框（anchor box）上会得到 80 种对象的预测结果，过滤出最大置信度（或得分）的对象作为锚框判定的对象类型：</p>
+<p><img data-src="/images/DeepLearning/car_yolo_probability_extraction.png"></p>
+<p>为了简化特征，将一张图片的输出结果 $(19, 19, 5, 85)$ 的后两个维度展开（flatten）得到 5 种锚框的输出结果 $(19, 19, 425)$，过滤出最大置信度（或得分）的对象作为网格单元的对象类型：</p>
+<p><img data-src="/images/DeepLearning/car_yolo_flatten.png"></p>
+<p>计算出 $19 \times 19$ 网格的每一个单元的对象，可以通过颜色区分对象类型将识别结果绘制出来：</p>
+<p><img data-src="/images/DeepLearning/car_yolo_proba_map.png"></p>
+<h3 id="非极大值抑制（NMS）"><a href="#非极大值抑制（NMS）" class="headerlink" title="非极大值抑制（NMS）"></a>非极大值抑制（NMS）</h3><p>YOLO 算法中，一个对象可能占据很多个网格，根据阈值过滤掉低置信度的预测结果后，仍可能会有多个网格检测到同一目标的情况。非极大值抑制（NMS, Non-max Suppression）算法只保留置信度最高的一个网格，然后将剩余的网格结果依此与最高置信度网格比较，清理掉那些相近的网格（交并比IoU会比较大），从而确保算法对每个目标对象只保留一个方框位置。</p>
+<p><img data-src="/images/DeepLearning/car_yolo_nonmax_suppression.png"></p>
+<ul>
+<li>非极大值抑制意味着只输出概率最大的预测结果，但抑制很接近但不是最大的其他预测结果。</li>
+<li>当进行多种对象目标检测时，对于每个对象，应该单独做一次非极大值抑制。</li>
+</ul>
+<h4 id="交并比（IoU）"><a href="#交并比（IoU）" class="headerlink" title="交并比（IoU）"></a>交并比（IoU）</h4><p>交并比（IoU, Intersection over Union）函数是计算两个边界框交集（I）和并集（U）之比。公式如下：</p>
+<p>$$<br>IoU &#x3D; \frac{I}{U}<br>$$</p>
+<p><img data-src="/images/DeepLearning/car_yolo_iou.png"></p>
+<ul>
+<li>IoU 的值在 0～1 之间，且越接近 1 表示目标的定位越准确。</li>
+<li>IoU &gt;&#x3D; 0.5 时，一般可以认为预测边框是正确的，当然也可以更加严格地要求一个更高的阈值。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/imssyang/python/tree/main/sample/custom/deeplearning/cnn_yolo">YOLOv2 sample code</a></p>
+<h2 id="候选区域（R-CNN）"><a href="#候选区域（R-CNN）" class="headerlink" title="候选区域（R-CNN）"></a>候选区域（R-CNN）</h2><p>滑动窗口目标检测算法对一些明显没有目标的区域也进行了扫描，这降低了算法的运行效率。R-CNN（Region CNN）是解决这个问题的一种方法，通过对输入图片运行<strong>图像分割算法</strong>，在不同的色块上找出<strong>候选区域（Region Proposal）</strong>，就只需要在这些区域上运行分类器。</p>
+<p><img data-src="/images/DeepLearning/car_region_cnn.png"></p>
+<h1 id="cuDNN"><a href="#cuDNN" class="headerlink" title="cuDNN"></a>cuDNN</h1><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/cudnn/developer-guide/index.html">NVIDIA cuDNN documention</a></p>
+<p>cuDNN (CUDA Deep Neural Network Library) 是用于深度神经网络的GPU加速库，实现了DNN应用中频繁使用的例程的高度优化实现:</p>
+<ul>
+<li>前后向卷积（Convolution forward and backward）</li>
+<li>矩阵乘法（Matrix multiplication）</li>
+<li>张量变换函数（Tensor transformation functions）</li>
+<li>神经元前后激活（Neuron activations forward and backward）：relu, tanh, sigmoid, elu, gelu, softplus, swish</li>
+</ul>
+<h1 id="PyTorch"><a href="#PyTorch" class="headerlink" title="PyTorch"></a>PyTorch</h1><h1 id="TensorRT"><a href="#TensorRT" class="headerlink" title="TensorRT"></a>TensorRT</h1><ul>
+<li><p>NVIDIA TensorRT是一套在GPU上进行高性能推理的C++库。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/release-notes/overview.html">发布说明</a>：</p>
+<ul>
+<li>EA(Early Acess)是早期测试和反馈的版本；</li>
+<li>RC(Release Candidate)是预发产品版本；</li>
+<li>GA(General Availability)是正式产品版本；</li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html">安装指导</a>:</p>
+<ul>
+<li>依赖环境：<ul>
+<li>CUDA</li>
+<li>cuDNN</li>
+<li>Python</li>
+<li>依赖PyCUDA: <ul>
+<li><code>pip install numpy</code></li>
+<li><code>pip install &#39;pycuda&lt;2021.1&#39;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html">快速入门</a>:</p>
+</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://github.com/fengdu78/deeplearning_ai_books">深度学习教程中文笔记</a><br><a target="_blank" rel="noopener" href="https://github.com/WithHades/deep_learning">吴恩达深度学习作业</a><br><a target="_blank" rel="noopener" href="https://kyonhuang.top/Andrew-Ng-Deep-Learning-notes">《深度学习》课程笔记</a><br><a target="_blank" rel="noopener" href="https://dennybritz.com/posts/wildml/implementing-a-neural-network-from-scratch/">Implementing a Neural Network from Scratch in Python</a><br><a target="_blank" rel="noopener" href="https://github.com/imssyang/python/tree/main/sample/custom/deeplearning">deeplearning_code</a><br><a target="_blank" rel="noopener" href="https://github.com/imssyang/python/tree/main/sample/custom/deeplearning">Python Deeplearning Code</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+              <a href="/tags/ConvolutionalNeuralNetwork/" rel="tag"><i class="fa fa-tag"></i> ConvolutionalNeuralNetwork</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DeepLearning/Basic.html" rel="prev" title="深度学习基础">
+                  <i class="fa fa-chevron-left"></i> 深度学习基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Media/AudioBasic.html" rel="next" title="音频基础">
+                  音频基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:27</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/DeepLearning/CNN.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/disqusjs/dist/disqusjs.css" integrity="sha256-GxdCIOyfxQ1OBfS99qAIJDoGK1ADuBsxhMTqXG82fAY=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqus.com/api/","apikey":"9zaN2jW6zXMHxC3NctLnrVsVuNe4yZ8CyZ1rWAJQKcIc7JMaHNPP9m4vra2AJeIA","shortname":"imssyang","js":{"url":"/lib/disqusjs/dist/disqus.js","integrity":"sha256-LVaMHPQ2zLqOc5rXSAfr4d1PIkEGNLyyUTDNPZmTtUw="}}</script>
+<script src="/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>

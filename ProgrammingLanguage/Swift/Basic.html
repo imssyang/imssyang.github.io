@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#ddd">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#ddd">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="/lib/@fortawesome/fontawesome-free/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/animate.css/animate.min.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.imssyang.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"right","width":300,"display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"rgba(255, 255, 255, 0.1)","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Disqus","order":-1},"gitalk":{"text":"Github","order":-2}}},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":3,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Swift是用于开发IOS和Mac应用的开发语言，从obj-c演变而来，且生态上向前兼容。语言语法有源于cpp的身影，灵活性上相比python更甚，值得看看Apple引领的开发语言演变成的样子。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift基础">
+<meta property="og:url" content="https://blog.imssyang.com/ProgrammingLanguage/Swift/Basic.html">
+<meta property="og:site_name" content="Just Do It">
+<meta property="og:description" content="Swift是用于开发IOS和Mac应用的开发语言，从obj-c演变而来，且生态上向前兼容。语言语法有源于cpp的身影，灵活性上相比python更甚，值得看看Apple引领的开发语言演变成的样子。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-05-13T08:09:22.000Z">
+<meta property="article:modified_time" content="2024-05-13T12:08:30.000Z">
+<meta property="article:author" content="Ssyang">
+<meta property="article:tag" content="Swift">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.imssyang.com/ProgrammingLanguage/Swift/Basic.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.imssyang.com/ProgrammingLanguage/Swift/Basic.html","path":"ProgrammingLanguage/Swift/Basic.html","title":"Swift基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Swift基础 | Just Do It</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Just Do It</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by Ssyang</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%80%BC%EF%BC%88Value%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">值（Value）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%EF%BC%88Type%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">类型（Type）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Structure"><span class="nav-number">3.1.</span> <span class="nav-text">Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">3.1.1.</span> <span class="nav-text">String</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class"><span class="nav-number">3.2.</span> <span class="nav-text">Class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enumeration"><span class="nav-number">3.3.</span> <span class="nav-text">Enumeration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Protocol"><span class="nav-number">3.4.</span> <span class="nav-text">Protocol</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Error"><span class="nav-number">3.4.1.</span> <span class="nav-text">Error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optional"><span class="nav-number">3.5.</span> <span class="nav-text">Optional</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array"><span class="nav-number">3.6.</span> <span class="nav-text">Array</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dictionary"><span class="nav-number">3.7.</span> <span class="nav-text">Dictionary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tuple"><span class="nav-number">3.8.</span> <span class="nav-text">Tuple</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function"><span class="nav-number">3.9.</span> <span class="nav-text">Function</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Closure"><span class="nav-number">3.9.1.</span> <span class="nav-text">Closure</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%EF%BC%88Build-in%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">内置函数（Build-in）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#assert"><span class="nav-number">4.1.</span> <span class="nav-text">assert</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#precondition"><span class="nav-number">4.2.</span> <span class="nav-text">precondition</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E6%B5%81%EF%BC%88Control-Flow%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">控制流（Control Flow）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%EF%BC%88condition%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">条件（condition）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#if"><span class="nav-number">5.1.1.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#guard"><span class="nav-number">5.1.2.</span> <span class="nav-text">guard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#switch"><span class="nav-number">5.1.3.</span> <span class="nav-text">switch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%EF%BC%88loop%EF%BC%89"><span class="nav-number">5.2.</span> <span class="nav-text">循环（loop）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for-in"><span class="nav-number">5.2.1.</span> <span class="nav-text">for-in</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while"><span class="nav-number">5.2.2.</span> <span class="nav-text">while</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%EF%BC%88scope%EF%BC%89"><span class="nav-number">5.3.</span> <span class="nav-text">作用域（scope）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#defer"><span class="nav-number">5.3.1.</span> <span class="nav-text">defer</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%EF%BC%88Concurrency%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">并发（Concurrency）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%EF%BC%88Generics%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">泛型（Generics）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">8.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ssyang"
+      src="/images/imssyang/windmill.png">
+  <p class="site-author-name" itemprop="name">Ssyang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/imssyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;imssyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:imssyang@gmail.com" title="E-Mail → mailto:imssyang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/lib/@creativecommons/vocabulary/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.dabeaz.com/" title="https:&#x2F;&#x2F;www.dabeaz.com" rel="noopener" target="_blank">David Beazley</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://coldattic.info/" title="http:&#x2F;&#x2F;coldattic.info" rel="noopener" target="_blank">A Foo Walks into a Bar...</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.brendangregg.com/" title="https:&#x2F;&#x2F;www.brendangregg.com" rel="noopener" target="_blank">Brendan Gregg's Homepage</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wowza.com/blog" title="https:&#x2F;&#x2F;www.wowza.com&#x2F;blog" rel="noopener" target="_blank">WOWZA Media Systems</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://preshing.com/" title="https:&#x2F;&#x2F;preshing.com" rel="noopener" target="_blank">Preshing on Programming</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.yinwang.org/" title="https:&#x2F;&#x2F;www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.jianchihu.net/" title="https:&#x2F;&#x2F;blog.jianchihu.net" rel="noopener" target="_blank">剑痴乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://betterexplained.com/" title="https:&#x2F;&#x2F;betterexplained.com" rel="noopener" target="_blank">Better Explained</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mathsisfun.com/" title="https:&#x2F;&#x2F;www.mathsisfun.com" rel="noopener" target="_blank">Math is Fun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://notes.shichao.io/" title="https:&#x2F;&#x2F;notes.shichao.io" rel="noopener" target="_blank">Shichao's Notes</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.shuxuele.com/" title="https:&#x2F;&#x2F;www.shuxuele.com" rel="noopener" target="_blank">数学乐</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://thispointer.com/" title="https:&#x2F;&#x2F;thispointer.com" rel="noopener" target="_blank">thisPointer</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://refactoring.guru/" title="https:&#x2F;&#x2F;refactoring.guru" rel="noopener" target="_blank">Refactoring.Guru</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.imssyang.com/ProgrammingLanguage/Swift/Basic.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/imssyang/windmill.png">
+      <meta itemprop="name" content="Ssyang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Just Do It">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Swift基础
+            <div class="post-categories">
+              [
+                  <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                    <a href="/categories/ProgrammingLanguage/Swift/" itemprop="url" rel="index"><span itemprop="name">Swift</span></a>
+                  </span>
+              ]
+            </div>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 5/13/2024 16:09:22 / Modified: 20:08:30" itemprop="dateCreated datePublished" datetime="2024-05-13T16:09:22+08:00">5/13/2024</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>20k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>18 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Swift是用于开发IOS和Mac应用的开发语言，从obj-c演变而来，且生态上向前兼容。语言语法有源于cpp的身影，灵活性上相比python更甚，值得看看Apple引领的开发语言演变成的样子。</p>
+<span id="more"></span>
+
+<h1 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h1><ul>
+<li>变量用前初始化（initialized before use）</li>
+<li>数组越界检测（out-of-bounds errors），会抛出错误</li>
+<li>整型溢出检测（overflow），会抛出错误</li>
+<li>通过可选值语义显式处理nil值（optional value）</li>
+<li>自动垃圾回收（garbage-collected）</li>
+<li>是类型安全的（type-safe），或者说强类型的</li>
+<li>支持类型推理（type inference）</li>
+<li>支持错误恢复（error recovery）</li>
+</ul>
+<h1 id="值（Value）"><a href="#值（Value）" class="headerlink" title="值（Value）"></a>值（Value）</h1><ul>
+<li><code>let</code>定义常量，支持运行时初始化（allow unknown at compile-time）</li>
+<li><code>var</code>定义变量（like JavaScript）</li>
+<li>初始化时支持编译器自动推理值类型</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Constant</span></span><br><span class="line"><span class="keyword">let</span> implicitInteger <span class="operator">=</span> <span class="number">42</span> <span class="comment">// Compiler infer its type</span></span><br><span class="line"><span class="keyword">let</span> explicitDouble: <span class="type">Double</span> <span class="operator">=</span> <span class="number">70</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Variable</span></span><br><span class="line"><span class="keyword">var</span> myVariable <span class="operator">=</span> <span class="number">42</span></span><br><span class="line">myVariable <span class="operator">=</span> <span class="number">50</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="类型（Type）"><a href="#类型（Type）" class="headerlink" title="类型（Type）"></a>类型（Type）</h1><ul>
+<li>命名类型（named type）：有具体名称的类型<ul>
+<li>Structure：基本类型在标准库中是基于结构体类型实现的<ul>
+<li>Int: 32&#x2F;64bit (UInt8, UInt16, Int32, Int64, … like C)</li>
+<li>Float: 32bit</li>
+<li>Double: 64bit</li>
+<li>Bool: true, false</li>
+<li>String</li>
+</ul>
+</li>
+<li>Class</li>
+<li>Enumeration</li>
+<li>Protocol</li>
+<li>集合类型（collection type）<ul>
+<li>Array</li>
+<li>Set</li>
+<li>Dictionary</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>组合类型（compound type）：没有具体名称的类型<ul>
+<li>Function</li>
+<li>Tuple: <code>let http404Error = (404, &quot;Not Found&quot;) // type (Int, String)</code></li>
+</ul>
+</li>
+<li>值类型（value type）：赋值和传参按copyed传递（语义同cpp）<ul>
+<li>String</li>
+<li>Array</li>
+<li>Dictionary</li>
+<li>Structure</li>
+<li>Enumeration</li>
+<li>Tuple</li>
+</ul>
+</li>
+<li>引用类型（reference type）：赋值和传参按linked传递（语义同cpp）<ul>
+<li>Class</li>
+<li>Actor</li>
+<li>Closure</li>
+</ul>
+</li>
+<li>显式类型转换：<code>Int(3.1415)</code></li>
+<li>类型别名：<code>typealias AudioSample = UInt16</code></li>
+</ul>
+<div class="tabs" id="swift-type"><ul class="nav-tabs"><li class="tab active"><a href="#swift-type-1">ValueType</a></li><li class="tab"><a href="#swift-type-2">ReferenceType</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-type-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Document</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> text: <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myDoc <span class="operator">=</span> <span class="type">Document</span>(text: <span class="string">&quot;Great new article&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> friendDoc <span class="operator">=</span> myDoc</span><br><span class="line"></span><br><span class="line">friendDoc.text <span class="operator">=</span> <span class="string">&quot;Blah blah blah&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(friendDoc.text) <span class="comment">// prints &quot;Blah blah blah&quot;</span></span><br><span class="line"><span class="built_in">print</span>(myDoc.text) <span class="comment">// prints &quot;Great new article&quot;</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-type-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Document</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> text: <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myDoc <span class="operator">=</span> <span class="type">Document</span>(text: <span class="string">&quot;Great new article&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> friendDoc <span class="operator">=</span> myDoc</span><br><span class="line"></span><br><span class="line">friendDoc.text <span class="operator">=</span> <span class="string">&quot;Blah blah blah&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(friendDoc.text) <span class="comment">// prints &quot;Blah blah blah&quot;</span></span><br><span class="line"><span class="built_in">print</span>(myDoc.text) <span class="comment">// prints &quot;Blah blah blah&quot;</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h2><ul>
+<li>默认按值传递结构体数据（always copied when passed）</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Card</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> rank: <span class="type">Rank</span></span><br><span class="line">    <span class="keyword">var</span> suit: <span class="type">Suit</span></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">simpleDescription</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;The <span class="subst">\(rank.simpleDescription())</span> of <span class="subst">\(suit.simpleDescription())</span>&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> threeOfSpades <span class="operator">=</span> <span class="type">Card</span>(rank: .three, suit: .spades)</span><br><span class="line"><span class="keyword">let</span> threeOfSpadesDescription <span class="operator">=</span> threeOfSpades.simpleDescription()</span><br></pre></td></tr></table></figure>
+
+<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><ul>
+<li><code>&quot;&quot;&quot;str&quot;&quot;&quot;</code>定义多行字面量，与尾部双引号所在行相同的缩进字符会被自动移除</li>
+<li><code>\()</code>语法支持隐式转换值类型</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Constant (convent to string type)</span></span><br><span class="line"><span class="keyword">let</span> label <span class="operator">=</span> <span class="string">&quot;The width is &quot;</span></span><br><span class="line"><span class="keyword">let</span> left <span class="operator">=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">let</span> right <span class="operator">=</span> <span class="number">5</span></span><br><span class="line"><span class="keyword">let</span> title1 <span class="operator">=</span> label <span class="operator">+</span> <span class="type">String</span>(left <span class="operator">+</span> right)   <span class="comment">// Must explicit desired type</span></span><br><span class="line"><span class="keyword">let</span> title2 <span class="operator">=</span> <span class="string">&quot;The width is <span class="subst">\(left <span class="operator">+</span> right)</span>&quot;</span> <span class="comment">// \(String)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Constant (multi-line)</span></span><br><span class="line"><span class="keyword">let</span> quotation <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Even though there&#x27;s whitespace to the left,</span></span><br><span class="line"><span class="string">        the actual lines aren&#x27;t indented.</span></span><br><span class="line"><span class="string">            Except for this line.</span></span><br><span class="line"><span class="string">        Double quotes (&quot;) can appear without being escaped.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        I still have <span class="subst">\(apples <span class="operator">+</span> oranges)</span> pieces of fruit.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><ul>
+<li>默认按引用传递数据（passed by reference）</li>
+<li><code>class</code>关键字用于创建类，其中定义的变量和函数即为类的属性和方法</li>
+<li><code>init()</code>用于定义初始化器（initializer），类似cpp中的构造函数<ul>
+<li>每个属性都需要赋值，要么在<code>let,var</code>声明中，要么在<code>init()</code>中</li>
+<li>属性可以有自定义的<code>getter</code>和<code>setter</code></li>
+<li>在初始化器外部更改属性时，更改前会运行<code>didSet</code>，更改后运行<code>willSet</code></li>
+</ul>
+</li>
+<li><code>deinit()</code>用于定义析构器（deinitializer），类似cpp中的析构函数</li>
+<li><code>override</code>用于标识子类重写父类的实现，否则编译器会抛出error</li>
+<li><code>?.</code>用于访问可选实例的属性</li>
+</ul>
+<div class="tabs" id="swift-class"><ul class="nav-tabs"><li class="tab active"><a href="#swift-class-1">Class</a></li><li class="tab"><a href="#swift-class-2">Subclass</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-class-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> numberOfSides: <span class="type">Int</span> <span class="operator">=</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> name: <span class="type">String</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span>(<span class="params">name</span>: <span class="type">String</span>) &#123;</span><br><span class="line">       <span class="keyword">self</span>.name <span class="operator">=</span> name</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">description</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;A shape with <span class="subst">\(numberOfSides)</span> sides.&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> shape <span class="operator">=</span> <span class="type">Shape</span>(name: <span class="string">&quot;Base&quot;</span>)</span><br><span class="line">shape.numberOfSides <span class="operator">=</span> <span class="number">7</span></span><br><span class="line"><span class="keyword">var</span> description <span class="operator">=</span> shape.description()</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-class-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Square</span>: <span class="title class_">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> sideLength: <span class="type">Double</span></span><br><span class="line">    <span class="keyword">var</span> perimeter: <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123;</span><br><span class="line">             <span class="keyword">return</span> <span class="number">4.0</span> <span class="operator">*</span> sideLength</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">set</span> &#123;</span><br><span class="line">            sideLength <span class="operator">=</span> newValue <span class="operator">/</span> <span class="number">4.0</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span>(<span class="params">sideLength</span>: <span class="type">Double</span>, <span class="params">name</span>: <span class="type">String</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.sideLength <span class="operator">=</span> sideLength</span><br><span class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>(name: name)</span><br><span class="line">        numberOfSides <span class="operator">=</span> <span class="number">4</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">area</span>() -&gt; <span class="type">Double</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> sideLength <span class="operator">*</span> sideLength</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">description</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;A square with sides of length <span class="subst">\(sideLength)</span>.&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> square <span class="operator">=</span> <span class="type">Square</span>(sideLength: <span class="number">5.2</span>, name: <span class="string">&quot;Test square&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> area <span class="operator">=</span> square.area()</span><br><span class="line"><span class="keyword">var</span> desc <span class="operator">=</span> square.description()</span><br><span class="line"><span class="built_in">print</span>(square.perimeter) <span class="comment">// 20.8</span></span><br><span class="line">square.perimeter <span class="operator">=</span> <span class="number">20</span></span><br><span class="line"><span class="built_in">print</span>(square.sideLength) <span class="comment">// 5.0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Triangle</span>: <span class="title class_">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> sideLength: <span class="type">Double</span> <span class="operator">=</span> <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">init</span>(<span class="params">sideLength</span>: <span class="type">Double</span>, <span class="params">name</span>: <span class="type">String</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.sideLength <span class="operator">=</span> sideLength</span><br><span class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>(name: name)</span><br><span class="line">        numberOfSides <span class="operator">=</span> <span class="number">3</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">description</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;An equilateral triangle with sides of length <span class="subst">\(sideLength)</span>.&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Ensures that the side length is same</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TriangleAndSquare</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> triangle: <span class="type">Triangle</span> &#123;</span><br><span class="line">        <span class="keyword">willSet</span> &#123;</span><br><span class="line">            square.sideLength <span class="operator">=</span> newValue.sideLength</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> square: <span class="type">Square</span> &#123;</span><br><span class="line">        <span class="keyword">willSet</span> &#123;</span><br><span class="line">            triangle.sideLength <span class="operator">=</span> newValue.sideLength</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">init</span>(<span class="params">size</span>: <span class="type">Double</span>, <span class="params">name</span>: <span class="type">String</span>) &#123;</span><br><span class="line">        square <span class="operator">=</span> <span class="type">Square</span>(sideLength: size, name: name)</span><br><span class="line">        triangle <span class="operator">=</span> <span class="type">Triangle</span>(sideLength: size, name: name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> tas <span class="operator">=</span> <span class="type">TriangleAndSquare</span>(size: <span class="number">10</span>, name: <span class="string">&quot;another test shape&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(tas.square.sideLength) <span class="comment">// Prints &quot;10.0&quot;</span></span><br><span class="line"><span class="built_in">print</span>(tas.triangle.sideLength) <span class="comment">// Prints &quot;10.0&quot;</span></span><br><span class="line">tas.square <span class="operator">=</span> <span class="type">Square</span>(sideLength: <span class="number">50</span>, name: <span class="string">&quot;larger square&quot;</span>) <span class="comment">// Modify square property</span></span><br><span class="line"><span class="built_in">print</span>(tas.triangle.sideLength) <span class="comment">// Prints &quot;50.0&quot; (affect triangle property)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Optional property</span></span><br><span class="line"><span class="keyword">let</span> optionalSquare: <span class="type">Square</span>? <span class="operator">=</span> <span class="type">Square</span>(sideLength: <span class="number">2.5</span>, name: <span class="string">&quot;optional square&quot;</span>)</span><br><span class="line"><span class="keyword">let</span> sideLength <span class="operator">=</span> optionalSquare<span class="operator">?</span>.sideLength</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h2><ul>
+<li>枚举的<code>rawValue</code>属性默认为从0开始的<code>Int</code>类型，也支持浮点数或<code>String</code>类型</li>
+<li>枚举允许自定义方法</li>
+<li>枚举的<code>case</code>支持携带值，此时枚举项在实例间也是不同的</li>
+</ul>
+<div class="tabs" id="swift-enum"><ul class="nav-tabs"><li class="tab active"><a href="#swift-enum-1">General</a></li><li class="tab"><a href="#swift-enum-2">CaseWithValues</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-enum-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Rank</span>: <span class="title class_">Int</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> ace <span class="operator">=</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">case</span> two, three, four, five, six, seven, eight, nine, ten</span><br><span class="line">    <span class="keyword">case</span> jack, queen, king</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">description</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> <span class="keyword">self</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> .ace:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;ace&quot;</span></span><br><span class="line">        <span class="keyword">case</span> .jack:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;jack&quot;</span></span><br><span class="line">        <span class="keyword">case</span> .queen:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;queen&quot;</span></span><br><span class="line">        <span class="keyword">case</span> .king:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;king&quot;</span></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="type">String</span>(<span class="keyword">self</span>.rawValue)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> ace <span class="operator">=</span> <span class="type">Rank</span>.ace</span><br><span class="line"><span class="keyword">let</span> aceRawValue <span class="operator">=</span> ace.rawValue</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> convertedRank <span class="operator">=</span> <span class="type">Rank</span>(rawValue: <span class="number">3</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> threeDescription <span class="operator">=</span> convertedRank.description()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-enum-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">ServerResponse</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> result(<span class="type">String</span>, <span class="type">String</span>)</span><br><span class="line">    <span class="keyword">case</span> failure(<span class="type">String</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> success <span class="operator">=</span> <span class="type">ServerResponse</span>.result(<span class="string">&quot;6:00 am&quot;</span>, <span class="string">&quot;8:09 pm&quot;</span>)</span><br><span class="line"><span class="keyword">let</span> failure <span class="operator">=</span> <span class="type">ServerResponse</span>.failure(<span class="string">&quot;Out of cheese.&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> success &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> .result(sunrise, sunset):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Sunrise is at <span class="subst">\(sunrise)</span> and sunset is at <span class="subst">\(sunset)</span>.&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> .failure(message):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Failure...  <span class="subst">\(message)</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;Sunrise is at 6:00 am and sunset is at 8:09 pm.&quot;</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="Protocol"><a href="#Protocol" class="headerlink" title="Protocol"></a>Protocol</h2><ul>
+<li><code>protocol</code>用于定义协议，类似java中的接口、cpp中的纯虚类<ul>
+<li><code>mutating</code>标记允许方法修改内部数据</li>
+</ul>
+</li>
+<li><code>class</code>,<code>struct</code>和<code>enum</code>都可以采用协议</li>
+<li><code>extension</code>用于为已经存在的类型扩展功能</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">ExampleProtocol</span> &#123;</span><br><span class="line">     <span class="keyword">var</span> simpleDescription: <span class="type">String</span> &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">     <span class="keyword">mutating</span> <span class="keyword">func</span> <span class="title function_">adjust</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleClass</span>: <span class="title class_">ExampleProtocol</span> &#123;</span><br><span class="line">     <span class="keyword">var</span> simpleDescription: <span class="type">String</span> <span class="operator">=</span> <span class="string">&quot;Simple class.&quot;</span></span><br><span class="line">     <span class="keyword">var</span> anotherProperty: <span class="type">Int</span> <span class="operator">=</span> <span class="number">69105</span></span><br><span class="line">     <span class="keyword">func</span> <span class="title function_">adjust</span>() &#123; <span class="comment">// Doesn’t need mutating, it&#x27;s default in class</span></span><br><span class="line">          simpleDescription <span class="operator">+=</span> <span class="string">&quot; Adjusted.&quot;</span></span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a <span class="operator">=</span> <span class="type">SimpleClass</span>()</span><br><span class="line">a.adjust()</span><br><span class="line"><span class="keyword">let</span> aDescription <span class="operator">=</span> a.simpleDescription</span><br><span class="line"><span class="keyword">let</span> protocolValue: <span class="keyword">any</span> <span class="type">ExampleProtocol</span> <span class="operator">=</span> a</span><br><span class="line"><span class="built_in">print</span>(protocolValue.simpleDescription) <span class="comment">// Prints &quot;Simple class. Adjusted.&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">SimpleStructure</span>: <span class="title class_">ExampleProtocol</span> &#123;</span><br><span class="line">     <span class="keyword">var</span> simpleDescription: <span class="type">String</span> <span class="operator">=</span> <span class="string">&quot;Simple structure&quot;</span></span><br><span class="line">     <span class="keyword">mutating</span> <span class="keyword">func</span> <span class="title function_">adjust</span>() &#123;</span><br><span class="line">          simpleDescription <span class="operator">+=</span> <span class="string">&quot; (adjusted)&quot;</span></span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> b <span class="operator">=</span> <span class="type">SimpleStructure</span>()</span><br><span class="line">b.adjust()</span><br><span class="line"><span class="keyword">let</span> bDescription <span class="operator">=</span> b.simpleDescription</span><br><span class="line"></span><br><span class="line"><span class="keyword">extension</span> <span class="title class_">Int</span>: <span class="title class_">ExampleProtocol</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> simpleDescription: <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;The number <span class="subst">\(<span class="keyword">self</span>)</span>&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">mutating</span> <span class="keyword">func</span> <span class="title function_">adjust</span>() &#123;</span><br><span class="line">        <span class="keyword">self</span> <span class="operator">+=</span> <span class="number">42</span></span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="number">7</span>.simpleDescription) <span class="comment">// Prints &quot;The number 7&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><ul>
+<li>通过实现<code>Error</code>协议定义错误类型</li>
+<li><code>throw</code>在执行流程中抛出error</li>
+<li><code>throws</code>标识函数可以抛出error</li>
+<li><code>do-catch</code>结构用于捕获error<ul>
+<li>(do) <code>try</code>前置标记后面代码可以抛出error</li>
+<li>(do) <code>try?</code>前置标记会丢弃错误信息并将结果转为可选的，允许为<code>nil</code></li>
+<li>(catch) <code>error</code>为内置错误信息的标识</li>
+<li>(catch) 支持的匹配模式类似于<code>switch-case</code></li>
+</ul>
+</li>
+<li><code>defer</code>定义在函数范围前执行的代码，即使抛出了error也会执行它（同golang的语义）</li>
+</ul>
+<div class="tabs" id="swift-error"><ul class="nav-tabs"><li class="tab active"><a href="#swift-error-1">General</a></li><li class="tab"><a href="#swift-error-2">defer</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-error-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Define error</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">PrinterError</span>: <span class="title class_">Error</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> outOfPaper</span><br><span class="line">    <span class="keyword">case</span> noToner</span><br><span class="line">    <span class="keyword">case</span> onFire</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Throw error in function</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">send</span>(<span class="params">job</span>: <span class="type">Int</span>, <span class="params">toPrinter</span> <span class="params">printerName</span>: <span class="type">String</span>) <span class="keyword">throws</span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> printerName <span class="operator">==</span> <span class="string">&quot;Never Has Toner&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="type">PrinterError</span>.noToner</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Job sent&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Handle error</span></span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> printerResponse <span class="operator">=</span> <span class="keyword">try</span> send(job: <span class="number">1040</span>, toPrinter: <span class="string">&quot;Bi Sheng&quot;</span>)</span><br><span class="line">    <span class="keyword">let</span> printerSuccess2 <span class="operator">=</span> <span class="keyword">try?</span> send(job: <span class="number">1884</span>, toPrinter: <span class="string">&quot;Mergenthaler&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(printerResponse) <span class="comment">// Prints &quot;Job sent&quot;</span></span><br><span class="line">&#125; <span class="keyword">catch</span> <span class="type">PrinterError</span>.onFire &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;I&#x27;ll just put this over here, with the rest of the fire.&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">catch</span> <span class="keyword">let</span> printerError <span class="keyword">as</span> <span class="type">PrinterError</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Printer error: <span class="subst">\(printerError)</span>.&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-error-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fridgeIsOpen <span class="operator">=</span> <span class="literal">false</span></span><br><span class="line"><span class="keyword">let</span> fridgeContent <span class="operator">=</span> [<span class="string">&quot;milk&quot;</span>, <span class="string">&quot;eggs&quot;</span>, <span class="string">&quot;leftovers&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">fridgeContains</span>(<span class="keyword">_</span> <span class="params">food</span>: <span class="type">String</span>) -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">    fridgeIsOpen <span class="operator">=</span> <span class="literal">true</span></span><br><span class="line">    <span class="keyword">defer</span> &#123;</span><br><span class="line">        fridgeIsOpen <span class="operator">=</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> result <span class="operator">=</span> fridgeContent.contains(food)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> fridgeContains(<span class="string">&quot;banana&quot;</span>) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Found a banana&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(fridgeIsOpen) <span class="comment">// Prints &quot;false&quot;</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h2><ul>
+<li><code>type?</code>标识为<code>optional</code>类型，例如<code>Int</code>和<code>Int?</code>是两种类型，后者允许为<code>nil</code>值</li>
+<li><code>optional</code>类型未初始化时，默认为<code>nil</code>值</li>
+<li>变量可能会<code>nil</code>值时，也必须是<code>optional</code>的，否则会报<code>compile-time error</code></li>
+<li>相关语法：<ul>
+<li><code>a?.b?.c</code>传播<code>nil</code>值</li>
+<li><code>a ?? b</code>遇到<code>nil</code>值时，使用备选值</li>
+<li><code>var!</code>强制解包optional值，遇到<code>nil</code>会触发<code>runtime error</code></li>
+</ul>
+</li>
+<li><code>type!</code>标识为隐式解包可选值（Implicitly Unwrapped Optional）<ul>
+<li>用于声明时为<code>nil</code>值，后续一定为非<code>nil</code>值的场景中，每次访问时都无需显式解包</li>
+<li>隐式解包时遇到<code>nil</code>值也会触发<code>runtime error</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> possibleNumber <span class="operator">=</span> <span class="string">&quot;123&quot;</span> <span class="comment">// String type</span></span><br><span class="line"><span class="keyword">let</span> convertedNumber <span class="operator">=</span> <span class="type">Int</span>(possibleNumber) <span class="comment">// optional Int type</span></span><br><span class="line"><span class="keyword">let</span> number <span class="operator">=</span> convertedNumber<span class="operator">!</span> <span class="comment">// Force Unwrapping (warning)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> serverResponseCode: <span class="type">Int</span>? <span class="operator">=</span> <span class="number">404</span></span><br><span class="line">serverResponseCode <span class="operator">=</span> <span class="literal">nil</span> <span class="comment">//  no value</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> surveyAnswer: <span class="type">String</span>? <span class="comment">// automatically set to nil</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> name: <span class="type">String</span>? <span class="operator">=</span> <span class="literal">nil</span></span><br><span class="line"><span class="keyword">let</span> greeting <span class="operator">=</span> <span class="string">&quot;Hello, &quot;</span> <span class="operator">+</span> (name <span class="operator">??</span> <span class="string">&quot;friend&quot;</span>) <span class="operator">+</span> <span class="string">&quot;!&quot;</span> <span class="comment">// Use Fallback Value</span></span><br><span class="line"><span class="built_in">print</span>(greeting) <span class="comment">// Prints &quot;Hello, friend!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> assumedString: <span class="type">String</span>! <span class="operator">=</span> <span class="string">&quot;An implicitly unwrapped optional string.&quot;</span></span><br><span class="line"><span class="keyword">let</span> implicitString: <span class="type">String</span> <span class="operator">=</span> assumedString <span class="comment">// Unwrapped automatically</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Array"><a href="#Array" class="headerlink" title="Array"></a>Array</h2><ul>
+<li><code>[element]</code>定义数组，允许尾部元素后的逗号(<code>,</code>)</li>
+<li><code>[index]</code>通过索引访问元素</li>
+<li>支持增加元素时自动扩容</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fruits <span class="operator">=</span> [<span class="string">&quot;strawberries&quot;</span>, <span class="string">&quot;limes&quot;</span>, <span class="string">&quot;tangerines&quot;</span>]</span><br><span class="line">fruits[<span class="number">1</span>] <span class="operator">=</span> <span class="string">&quot;grapes&quot;</span>          <span class="comment">// Modify element</span></span><br><span class="line">fruits.append(<span class="string">&quot;blueberries&quot;</span>)  <span class="comment">// Add element</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> emptyArray: [<span class="type">String</span>] <span class="operator">=</span> [] <span class="comment">// Empty array</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Dictionary"><a href="#Dictionary" class="headerlink" title="Dictionary"></a>Dictionary</h2><ul>
+<li>字典是未排序（unordered）的集合</li>
+<li><code>[key:value]</code>定义字典，允许尾部元素后的逗号(<code>,</code>)</li>
+<li><code>[key]</code>通过key访问元素</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> occupations <span class="operator">=</span> [</span><br><span class="line">    <span class="string">&quot;Malcolm&quot;</span>: <span class="string">&quot;Captain&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Kaylee&quot;</span>: <span class="string">&quot;Mechanic&quot;</span>,</span><br><span class="line">]</span><br><span class="line">occupations[<span class="string">&quot;Jayne&quot;</span>] <span class="operator">=</span> <span class="string">&quot;Public Relations&quot;</span>  <span class="comment">// Add element</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> emptyDictionary: [<span class="type">String</span>: <span class="type">Float</span>] <span class="operator">=</span> [:] <span class="comment">// Empty dictionary</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Tuple"><a href="#Tuple" class="headerlink" title="Tuple"></a>Tuple</h2><ul>
+<li><code>(a, b)</code>或<code>(n1: a, n2: b)</code>语法创建tuple，常用于函数返回多个值（类似python的tuple）</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> http404Error <span class="operator">=</span> (<span class="number">404</span>, <span class="string">&quot;Not Found&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The status is <span class="subst">\(http404Error.<span class="number">0</span>)</span> : <span class="subst">\(http404Error.<span class="number">1</span>)</span>&quot;</span>) <span class="comment">// access by index</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> (statusCode, statusMessage) <span class="operator">=</span> http404Error</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The status is <span class="subst">\(statusCode)</span> : <span class="subst">\(statusMessage)</span>&quot;</span>) <span class="comment">// decompose tuple</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> (justStatusCode, <span class="keyword">_</span>) <span class="operator">=</span> http404Error <span class="comment">// decompose parts of tuple</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The status code is <span class="subst">\(justStatusCode)</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> http200Status <span class="operator">=</span> (statusCode: <span class="number">200</span>, description: <span class="string">&quot;OK&quot;</span>) <span class="comment">// create tuple with named elememts</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The status is <span class="subst">\(http200Status.statusCode)</span> : <span class="subst">\(http200Status.description)</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h2><ul>
+<li>函数作为<code>first-class</code>类型，支持作为函数参数和返回值</li>
+<li>支持返回多个值（基于<code>tuple</code>）</li>
+<li>支持嵌套（nested）函数</li>
+<li><code>-&gt;</code>用于分割函数参数和返回值类型</li>
+<li>函数参数<ul>
+<li>前置<code>_</code>限制只能按位置传递参数</li>
+<li>前置其他标识限制只能按自定义名称（label）传递参数</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="swift-func"><ul class="nav-tabs"><li class="tab active"><a href="#swift-func-1">Argument</a></li><li class="tab"><a href="#swift-func-2">Return</a></li><li class="tab"><a href="#swift-func-3">Nested</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-func-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">greet</span>(<span class="params">person</span>: <span class="type">String</span>, <span class="params">day</span>: <span class="type">String</span>) -&gt; <span class="type">String</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Hello <span class="subst">\(person)</span>, today is <span class="subst">\(day)</span>.&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">greet(person: <span class="string">&quot;Bob&quot;</span>, day: <span class="string">&quot;Tuesday&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// No argument label and custom argument label</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">greet</span>(<span class="keyword">_</span> <span class="params">person</span>: <span class="type">String</span>, <span class="params">on</span> <span class="params">day</span>: <span class="type">String</span>) -&gt; <span class="type">String</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Hello <span class="subst">\(person)</span>, today is <span class="subst">\(day)</span>.&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">greet(<span class="string">&quot;John&quot;</span>, on: <span class="string">&quot;Wednesday&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Func as argument</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">hasAnyMatches</span>(<span class="params">list</span>: [<span class="type">Int</span>], <span class="params">condition</span>: (<span class="type">Int</span>) -&gt; <span class="type">Bool</span>) -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> list &#123;</span><br><span class="line">        <span class="keyword">if</span> condition(item) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> <span class="title function_">lessThanTen</span>(<span class="params">number</span>: <span class="type">Int</span>) -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> number <span class="operator">&lt;</span> <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> numbers <span class="operator">=</span> [<span class="number">20</span>, <span class="number">19</span>, <span class="number">7</span>, <span class="number">12</span>]</span><br><span class="line">hasAnyMatches(list: numbers, condition: lessThanTen)</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-func-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Return multiple values based on tuple</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">calculateStatistics</span>(<span class="params">scores</span>: [<span class="type">Int</span>]) -&gt; (min: <span class="type">Int</span>, max: <span class="type">Int</span>, sum: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> min <span class="operator">=</span> scores[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">var</span> max <span class="operator">=</span> scores[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">var</span> sum <span class="operator">=</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> score <span class="keyword">in</span> scores &#123;</span><br><span class="line">        <span class="keyword">if</span> score <span class="operator">&gt;</span> max &#123;</span><br><span class="line">            max <span class="operator">=</span> score</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> score <span class="operator">&lt;</span> min &#123;</span><br><span class="line">            min <span class="operator">=</span> score</span><br><span class="line">        &#125;</span><br><span class="line">        sum <span class="operator">+=</span> score</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (min, max, sum)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> statistics <span class="operator">=</span> calculateStatistics(scores: [<span class="number">5</span>, <span class="number">3</span>, <span class="number">100</span>, <span class="number">3</span>, <span class="number">9</span>])</span><br><span class="line"><span class="built_in">print</span>(statistics.sum) <span class="comment">// Prints &quot;120&quot;</span></span><br><span class="line"><span class="built_in">print</span>(statistics.<span class="number">2</span>) <span class="comment">// Prints &quot;120&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Return another function</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">makeIncrementer</span>() -&gt; ((<span class="type">Int</span>) -&gt; <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">addOne</span>(<span class="params">number</span>: <span class="type">Int</span>) -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> <span class="operator">+</span> number</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> addOne</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> increment <span class="operator">=</span> makeIncrementer()</span><br><span class="line">increment(<span class="number">7</span>)</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-func-3"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">returnFifteen</span>() -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> y <span class="operator">=</span> <span class="number">10</span></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">add</span>() &#123;</span><br><span class="line">        y <span class="operator">+=</span> <span class="number">5</span></span><br><span class="line">    &#125;</span><br><span class="line">    add()</span><br><span class="line">    <span class="keyword">return</span> y</span><br><span class="line">&#125;</span><br><span class="line">returnFifteen()</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h3 id="Closure"><a href="#Closure" class="headerlink" title="Closure"></a>Closure</h3><ul>
+<li>闭包（closure）语法是用<code>&#123;&#125;</code>包围的代码块，其中用<code>in</code>将参数和返回值类型与body分隔开<ul>
+<li>在执行环境作用域中仍能访问被闭包捕获的变量或函数（内嵌函数使用外部变量并作为返回值）</li>
+<li>函数实际也是闭包的一种特例</li>
+</ul>
+</li>
+<li><code>$0, $1, ...</code>支持通过数字索引代替参数名字，以创建更简洁的闭包</li>
+<li>当函数只有一个闭包类型的参数时，可以省略函数参数上圆括号<code>()</code></li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> numbers <span class="operator">=</span> [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>]</span><br><span class="line"><span class="keyword">let</span> triple <span class="operator">=</span> &#123; (number: <span class="type">Int</span>) -&gt; <span class="type">Int</span> <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">let</span> result <span class="operator">=</span> <span class="number">3</span> <span class="operator">*</span> number</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(triple(numbers[<span class="number">1</span>])) <span class="comment">// 9</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Ignore arguments and return type</span></span><br><span class="line"><span class="keyword">let</span> mappedNumbers <span class="operator">=</span> numbers.map(&#123; number <span class="keyword">in</span> <span class="number">3</span> <span class="operator">*</span> number &#125;)</span><br><span class="line"><span class="built_in">print</span>(mappedNumbers) <span class="comment">// [6, 9, 15, 21, 33, 39]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Refer to params by number and omit parenthese</span></span><br><span class="line"><span class="keyword">let</span> sortedNumbers <span class="operator">=</span> numbers.sorted &#123; <span class="variable">$0</span> <span class="operator">&gt;</span> <span class="variable">$1</span> &#125;</span><br><span class="line"><span class="built_in">print</span>(sortedNumbers) <span class="comment">// [13, 11, 7, 5, 3, 2]</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="内置函数（Build-in）"><a href="#内置函数（Build-in）" class="headerlink" title="内置函数（Build-in）"></a>内置函数（Build-in）</h1><h2 id="assert"><a href="#assert" class="headerlink" title="assert"></a>assert</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> age <span class="operator">=</span> <span class="operator">-</span><span class="number">3</span></span><br><span class="line"><span class="built_in">assert</span>(age <span class="operator">&gt;=</span> <span class="number">0</span>, <span class="string">&quot;A person&#x27;s age can&#x27;t be less than zero.&quot;</span>) <span class="comment">// assertion fails</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> age <span class="operator">&gt;=</span> <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;You can ride the ferris wheel.&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">assertionFailure</span>(<span class="string">&quot;A person&#x27;s age can&#x27;t be less than zero.&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="precondition"><a href="#precondition" class="headerlink" title="precondition"></a>precondition</h2><ul>
+<li>用于越界检查或实参是否有效</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">precondition</span>(index <span class="operator">&gt;</span> <span class="number">0</span>, <span class="string">&quot;Index must be greater than zero.&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="控制流（Control-Flow）"><a href="#控制流（Control-Flow）" class="headerlink" title="控制流（Control Flow）"></a>控制流（Control Flow）</h1><ul>
+<li><code>()</code>语法在条件判断上是可选的</li>
+<li><code>&#123;&#125;</code>语法在执行块上是必须的</li>
+</ul>
+<h2 id="条件（condition）"><a href="#条件（condition）" class="headerlink" title="条件（condition）"></a>条件（condition）</h2><h3 id="if"><a href="#if" class="headerlink" title="if"></a>if</h3><ul>
+<li>语法结构中的条件必须是<code>Boolean</code>表达式，不支持将值隐式转为<code>Boolean</code></li>
+<li>支持用在赋值语句（<code>let/var</code>）或返回语句（<code>return</code>）上</li>
+<li>用<code>if let</code>语法可以安全的解包optional值</li>
+</ul>
+<div class="tabs" id="swift-if"><ul class="nav-tabs"><li class="tab active"><a href="#swift-if-1">General</a></li><li class="tab"><a href="#swift-if-2">if let</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-if-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> score <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">if</span> score <span class="operator">&gt;</span> <span class="number">50</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Large&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Small&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// if used on assignment</span></span><br><span class="line"><span class="keyword">let</span> scoreDesc <span class="operator">=</span> <span class="keyword">if</span> score <span class="operator">&gt;</span> <span class="number">10</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Large&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Small&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-if-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Unwrap value (if let)</span></span><br><span class="line"><span class="keyword">var</span> optionalName: <span class="type">String</span>? <span class="operator">=</span> <span class="string">&quot;John&quot;</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> name <span class="operator">=</span> optionalName &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello, <span class="subst">\(name)</span>&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;nil&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> optionalName &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello, <span class="subst">\(optionalName)</span>&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;nil&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// With Multi-Condition</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> first <span class="operator">=</span> <span class="type">Int</span>(<span class="string">&quot;4&quot;</span>), <span class="keyword">let</span> second <span class="operator">=</span> <span class="type">Int</span>(<span class="string">&quot;42&quot;</span>), first <span class="operator">&lt;</span> second <span class="operator">&amp;&amp;</span> second <span class="operator">&lt;</span> <span class="number">100</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(first)</span> &lt; <span class="subst">\(second)</span> &lt; 100&quot;</span>) <span class="comment">// Prints &quot;4 &lt; 42 &lt; 100&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> first <span class="operator">=</span> <span class="type">Int</span>(<span class="string">&quot;4&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> second <span class="operator">=</span> <span class="type">Int</span>(<span class="string">&quot;42&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> first <span class="operator">&lt;</span> second <span class="operator">&amp;&amp;</span> second <span class="operator">&lt;</span> <span class="number">100</span> &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(first)</span> &lt; <span class="subst">\(second)</span> &lt; 100&quot;</span>) <span class="comment">// Prints &quot;4 &lt; 42 &lt; 100&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h3 id="guard"><a href="#guard" class="headerlink" title="guard"></a>guard</h3><ul>
+<li><code>guard-else</code>语句在条件为false时执行else代码块（<code>if</code>的变形，提高可读性）</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Unpack optional values</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">process</span>(<span class="params">name</span>: <span class="type">String</span>?) &#123;</span><br><span class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> unwrappedName <span class="operator">=</span> name <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Name is nil.&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Name is <span class="subst">\(unwrappedName)</span>.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// conditional statement</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">checkAge</span>(<span class="params">age</span>: <span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">guard</span> age <span class="operator">&gt;=</span> <span class="number">18</span> <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;You must be at least 18 years old.&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;You are old enough.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Early exit loop</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">findValue</span>(<span class="params">target</span>: <span class="type">Int</span>, <span class="params">array</span>: [<span class="type">Int</span>]) -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> array &#123;</span><br><span class="line">        <span class="keyword">guard</span> value <span class="operator">!=</span> target <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Value found: <span class="subst">\(target)</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Value not found.&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h3><ul>
+<li>支持任何数据类型和广泛的比较操作</li>
+<li>执行完<code>case</code>代码块后自动退出，显式<code>break</code>语句是可选的，使用后会忽略后续的代码块</li>
+<li><code>fallthrough</code>语句可以将case转为C-style行为，会继续执行下一个case</li>
+</ul>
+<div class="tabs" id="swift-switch"><ul class="nav-tabs"><li class="tab active"><a href="#swift-switch-1">General</a></li><li class="tab"><a href="#swift-switch-2">fallthrough</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-switch-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> vegetable <span class="operator">=</span> <span class="string">&quot;red pepper&quot;</span></span><br><span class="line"><span class="keyword">switch</span> vegetable &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;celery&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Add some raisins and make ants on a log.&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;cucumber&quot;</span>, <span class="string">&quot;watercress&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;That would make a good tea sandwich.&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> x <span class="keyword">where</span> x.hasSuffix(<span class="string">&quot;pepper&quot;</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Is it a spicy <span class="subst">\(x)</span>?&quot;</span>)</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Everything tastes good in soup.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;Is it a spicy red pepper?&quot;</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-switch-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> integerToDescribe <span class="operator">=</span> <span class="number">5</span></span><br><span class="line"><span class="keyword">var</span> description <span class="operator">=</span> <span class="string">&quot;The number <span class="subst">\(integerToDescribe)</span> is&quot;</span></span><br><span class="line"><span class="keyword">switch</span> integerToDescribe &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>:</span><br><span class="line">    description <span class="operator">+=</span> <span class="string">&quot; a prime number, and also&quot;</span></span><br><span class="line">    <span class="keyword">fallthrough</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    description <span class="operator">+=</span> <span class="string">&quot; an integer.&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(description) <span class="comment">// Prints &quot;The number 5 is a prime number, and also an integer.&quot;</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h2 id="循环（loop）"><a href="#循环（loop）" class="headerlink" title="循环（loop）"></a>循环（loop）</h2><h3 id="for-in"><a href="#for-in" class="headerlink" title="for-in"></a>for-in</h3><ul>
+<li>迭代索引范围（range of indexes）<ul>
+<li><code>..&lt;</code>语法支持范围为<code>[from,to)</code></li>
+<li><code>...</code>语法支持范围为<code>[from,to]</code></li>
+</ul>
+</li>
+<li><code>break &lt;label&gt;</code>指定终止lable所在的循环</li>
+<li><code>continue &lt;label&gt;</code>指定在label所在的循环上继续</li>
+</ul>
+<div class="tabs" id="swift-for-in"><ul class="nav-tabs"><li class="tab active"><a href="#swift-for-in-1">General</a></li><li class="tab"><a href="#swift-for-in-2">Break</a></li><li class="tab"><a href="#swift-for-in-3">Continue</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-for-in-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// For array</span></span><br><span class="line"><span class="keyword">let</span> individualScores <span class="operator">=</span> [<span class="number">75</span>, <span class="number">43</span>, <span class="number">103</span>, <span class="number">87</span>, <span class="number">12</span>]</span><br><span class="line"><span class="keyword">for</span> score <span class="keyword">in</span> individualScores &#123;</span><br><span class="line">    <span class="built_in">print</span>(score)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// For dictionary</span></span><br><span class="line"><span class="keyword">let</span> interestingNumbers <span class="operator">=</span> [</span><br><span class="line">    <span class="string">&quot;Prime&quot;</span>: [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>],</span><br><span class="line">    <span class="string">&quot;Fibonacci&quot;</span>: [<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>],</span><br><span class="line">    <span class="string">&quot;Square&quot;</span>: [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>],</span><br><span class="line">]</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">_</span>, numbers) <span class="keyword">in</span> interestingNumbers &#123;</span><br><span class="line">    <span class="built_in">print</span>(numbers)</span><br><span class="line"></span><br><span class="line"><span class="comment">// For range loop</span></span><br><span class="line"><span class="keyword">var</span> total <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span><span class="operator">..&lt;</span><span class="number">4</span> &#123;</span><br><span class="line">    total <span class="operator">+=</span> i</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(total) <span class="comment">// Prints &quot;6&quot;</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-for-in-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">outerLoop: <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span><span class="operator">...</span><span class="number">3</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span><span class="operator">...</span><span class="number">3</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> j <span class="operator">==</span> <span class="number">2</span> &#123;</span><br><span class="line">            <span class="keyword">break</span> outerLoop <span class="comment">// jump out outerLoop</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;i = <span class="subst">\(i)</span>, j = <span class="subst">\(j)</span>&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// i = 1, j = 1</span></span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-for-in-3"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">outerLoop: <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span><span class="operator">...</span><span class="number">3</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span><span class="operator">...</span><span class="number">3</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> j <span class="operator">==</span> <span class="number">2</span> &#123;</span><br><span class="line">            <span class="keyword">continue</span> outerLoop <span class="comment">// jump out outerLoop</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;i: <span class="subst">\(i)</span>, j: <span class="subst">\(j)</span>&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// i: 1, j: 1</span></span><br><span class="line"><span class="comment">// i: 2, j: 1</span></span><br><span class="line"><span class="comment">// i: 3, j: 1</span></span><br></pre></td></tr></table></figure></div></div></div>
+
+<h3 id="while"><a href="#while" class="headerlink" title="while"></a>while</h3><ul>
+<li><code>repeat...while</code>语法支持循环体至少运行一次</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> n <span class="operator">=</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">while</span> n <span class="operator">&lt;</span> <span class="number">100</span> &#123;</span><br><span class="line">    n <span class="operator">*=</span> <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(n) <span class="comment">// Prints &quot;128&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Condition at the end, ensuring run at least once</span></span><br><span class="line"><span class="keyword">var</span> m <span class="operator">=</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">repeat</span> &#123;</span><br><span class="line">    m <span class="operator">*=</span> <span class="number">2</span></span><br><span class="line">&#125; <span class="keyword">while</span> m <span class="operator">&lt;</span> <span class="number">100</span></span><br><span class="line"><span class="built_in">print</span>(m) <span class="comment">// Prints &quot;128&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="作用域（scope）"><a href="#作用域（scope）" class="headerlink" title="作用域（scope）"></a>作用域（scope）</h2><h3 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h3><ul>
+<li><code>defer</code>代码块会延迟到离开作用域时被执行</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> score <span class="operator">=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">if</span> score <span class="operator">&lt;</span> <span class="number">100</span> &#123;</span><br><span class="line">    score <span class="operator">+=</span> <span class="number">100</span></span><br><span class="line">    <span class="keyword">defer</span> &#123;</span><br><span class="line">        score <span class="operator">-=</span> <span class="number">100</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">print</span>(score)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;103&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="并发（Concurrency）"><a href="#并发（Concurrency）" class="headerlink" title="并发（Concurrency）"></a>并发（Concurrency）</h1><ul>
+<li><code>async</code>定义异步函数</li>
+<li><code>async let</code>定义异步值，不会阻塞，支持并行运算（parallel）</li>
+<li><code>await</code>阻塞等待异步函数或值</li>
+<li><code>Task</code>用于调用异步函数，但不会阻塞当前执行栈</li>
+<li><code>actor</code>可看成是异步安全的类，多个异步函数可以同时与同一个<code>actor</code>实例安全的交互</li>
+</ul>
+<div class="tabs" id="swift-concurrency"><ul class="nav-tabs"><li class="tab active"><a href="#swift-concurrency-1">async&await</a></li><li class="tab"><a href="#swift-concurrency-2">Task</a></li><li class="tab"><a href="#swift-concurrency-3">actor</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-concurrency-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Async function</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">fetchUserID</span>(<span class="params">from</span> <span class="params">server</span>: <span class="type">String</span>) <span class="keyword">async</span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> server <span class="operator">==</span> <span class="string">&quot;primary&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">97</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">501</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Call async func by await</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">fetchUsername</span>(<span class="params">from</span> <span class="params">server</span>: <span class="type">String</span>) <span class="keyword">async</span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> userID <span class="operator">=</span> <span class="keyword">await</span> fetchUserID(from: server)</span><br><span class="line">    <span class="keyword">if</span> userID <span class="operator">==</span> <span class="number">501</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;John&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Guest&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Parallel by &#x27;async let&#x27;</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">connectUser</span>(<span class="params">to</span> <span class="params">server</span>: <span class="type">String</span>) <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">let</span> userID <span class="operator">=</span> fetchUserID(from: server)</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">let</span> username <span class="operator">=</span> fetchUsername(from: server)</span><br><span class="line">    <span class="keyword">let</span> greeting <span class="operator">=</span> <span class="keyword">await</span> <span class="string">&quot;Hello <span class="subst">\(username)</span>, user ID <span class="subst">\(userID)</span>&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(greeting)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-concurrency-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Call async func by Task</span></span><br><span class="line"><span class="type">Task</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> connectUser(to: <span class="string">&quot;primary&quot;</span>) <span class="comment">// Prints &quot;Hello Guest, user ID 97&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Call async func by TaskGroup</span></span><br><span class="line"><span class="keyword">let</span> userIDs <span class="operator">=</span> <span class="keyword">await</span> withTaskGroup(of: <span class="type">Int</span>.<span class="keyword">self</span>) &#123; group <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">for</span> server <span class="keyword">in</span> [<span class="string">&quot;primary&quot;</span>, <span class="string">&quot;secondary&quot;</span>, <span class="string">&quot;development&quot;</span>] &#123;</span><br><span class="line">        group.addTask &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">await</span> fetchUserID(from: server)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> results: [<span class="type">Int</span>] <span class="operator">=</span> []</span><br><span class="line">    <span class="keyword">for</span> <span class="keyword">await</span> result <span class="keyword">in</span> group &#123;</span><br><span class="line">        results.append(result)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> results</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-concurrency-3"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">actor</span> <span class="title class_">ServerConnection</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> server: <span class="type">String</span> <span class="operator">=</span> <span class="string">&quot;primary&quot;</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> activeUsers: [<span class="type">Int</span>] <span class="operator">=</span> []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">connect</span>() <span class="keyword">async</span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> userID <span class="operator">=</span> <span class="keyword">await</span> fetchUserID(from: server)</span><br><span class="line">        <span class="comment">// ... communicate with server ...</span></span><br><span class="line">        activeUsers.append(userID)</span><br><span class="line">        <span class="keyword">return</span> userID</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> server <span class="operator">=</span> <span class="type">ServerConnection</span>()</span><br><span class="line"><span class="keyword">let</span> userID <span class="operator">=</span> <span class="keyword">await</span> server.connect()</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="泛型（Generics）"><a href="#泛型（Generics）" class="headerlink" title="泛型（Generics）"></a>泛型（Generics）</h1><ul>
+<li><code>&lt;&gt;</code>标识泛型标识符（同cpp）</li>
+<li><code>where</code>后置用于指定泛型的一系列约束条件<ul>
+<li><code>&lt;T: Equatable&gt;</code> 等同于 <code>&lt;T&gt; ... where T: Equatable</code></li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="swift-generics"><ul class="nav-tabs"><li class="tab active"><a href="#swift-generics-1">General</a></li><li class="tab"><a href="#swift-generics-2">where</a></li></ul><div class="tab-content"><div class="tab-pane active" id="swift-generics-1"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">makeArray</span>&lt;<span class="type">Item</span>&gt;(<span class="params">repeating</span> <span class="params">item</span>: <span class="type">Item</span>, <span class="params">numberOfTimes</span>: <span class="type">Int</span>) -&gt; [<span class="type">Item</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> result: [<span class="type">Item</span>] <span class="operator">=</span> []</span><br><span class="line">    <span class="keyword">for</span> <span class="keyword">_</span> <span class="keyword">in</span> <span class="number">0</span><span class="operator">..&lt;</span>numberOfTimes &#123;</span><br><span class="line">         result.append(item)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line">makeArray(repeating: <span class="string">&quot;knock&quot;</span>, numberOfTimes: <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reimplement the Swift standard library&#x27;s optional type</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">OptionalValue</span>&lt;<span class="title class_">Wrapped</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">case</span> none</span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">some</span>(<span class="type">Wrapped</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> possibleInteger: <span class="type">OptionalValue</span>&lt;<span class="type">Int</span>&gt; <span class="operator">=</span> .none</span><br><span class="line">possibleInteger <span class="operator">=</span> .some(<span class="number">100</span>)</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="swift-generics-2"><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">anyCommonElements</span>&lt;<span class="type">T</span>: <span class="type">Sequence</span>, <span class="type">U</span>: <span class="type">Sequence</span>&gt;(<span class="keyword">_</span> <span class="params">lhs</span>: <span class="type">T</span>, <span class="keyword">_</span> <span class="params">rhs</span>: <span class="type">U</span>) -&gt; <span class="type">Bool</span></span><br><span class="line">    <span class="keyword">where</span> <span class="type">T</span>.<span class="type">Element</span>: <span class="type">Equatable</span>, <span class="type">T</span>.<span class="type">Element</span> <span class="operator">==</span> <span class="type">U</span>.<span class="type">Element</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span> lhsItem <span class="keyword">in</span> lhs &#123;</span><br><span class="line">        <span class="keyword">for</span> rhsItem <span class="keyword">in</span> rhs &#123;</span><br><span class="line">            <span class="keyword">if</span> lhsItem <span class="operator">==</span> rhsItem &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line">anyCommonElements([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">3</span>])</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language">The Swift Programming Language</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Swift/" rel="tag"><i class="fa fa-tag"></i> Swift</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/ProgrammingLanguage/Go/StandardLibrary.html" rel="prev" title="Go标准库">
+                  <i class="fa fa-chevron-left"></i> Go标准库
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/DeepLearning/Basic.html" rel="next" title="深度学习基础">
+                  深度学习基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-burn"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ssyang</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:27</span>
+  </span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>/<a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="/lib/animejs/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="/lib/@next-theme/pjax/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="/lib/jquery/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="/lib/@fancyapps/fancybox/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="/lib/medium-zoom/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="/lib/lozad/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="/lib/pangu/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/lib/hexo-generator-searchdb/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"/lib/pdfobject/pdfobject.min.js","integrity":"sha256-ph3Dk89VmuTVXG6x/RDzk53SU9LPdAh1tpv0UvnDZ2I="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"/lib/mermaid/dist/mermaid.min.js","integrity":"sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"/lib/mathjax/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="/lib/quicklink/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://blog.imssyang.com/ProgrammingLanguage/Swift/Basic.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<link rel="stylesheet" href="/lib/disqusjs/dist/disqusjs.css" integrity="sha256-GxdCIOyfxQ1OBfS99qAIJDoGK1ADuBsxhMTqXG82fAY=" crossorigin="anonymous">
+
+<script class="next-config" data-name="disqusjs" type="application/json">{"enable":true,"api":"https://disqus.com/api/","apikey":"9zaN2jW6zXMHxC3NctLnrVsVuNe4yZ8CyZ1rWAJQKcIc7JMaHNPP9m4vra2AJeIA","shortname":"imssyang","js":{"url":"/lib/disqusjs/dist/disqus.js","integrity":"sha256-LVaMHPQ2zLqOc5rXSAfr4d1PIkEGNLyyUTDNPZmTtUw="}}</script>
+<script src="/js/third-party/comments/disqusjs.js"></script>
+
+</body>
+</html>
